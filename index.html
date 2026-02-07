@@ -1,128 +1,521 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تهنئة رمضان - أصفري برو</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0; padding: 10px;
-            font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #0a1a3a, #1e3c72);
-            color: white; text-align: center;
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-        }
-        h1 { margin: 10px 0; font-size: 1.5em; color: #f1c40f; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .controls {
-            background: rgba(20, 30, 50, 0.9); padding: 15px; border-radius: 15px;
-            width: 100%; max-width: 400px; margin-bottom: 15px;
-            border: 1px solid rgba(241, 196, 15, 0.3);
-        }
-        input {
-            width: 100%; padding: 12px; border-radius: 8px; border: none;
-            text-align: center; font-size: 1.1em; margin-bottom: 10px; background: #f8f9fa; color: #333;
-        }
-        button {
-            width: 100%; padding: 12px; border-radius: 8px; border: none;
-            font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
-        .btn-generate { background: linear-gradient(45deg, #f39c12, #d35400); color: white; margin-bottom: 8px; }
-        .action-btns { display: none; gap: 10px; flex-direction: column; width: 100%; }
-        .btn-download { background: linear-gradient(45deg, #27ae60, #2ecc71); color: white; }
-        .btn-share { background: linear-gradient(45deg, #3498db, #2980b9); color: white; }
-        
-        canvas {
-            max-width: 85%; max-height: 45vh; 
-            border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-top: 10px; border: 2px solid #d4af37;
-        }
-        .footer-link { margin-top: 20px; font-size: 0.9em; padding-bottom: 30px; }
-        .footer-link a { color: #f39c12; text-decoration: none; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#c0392b">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23c0392b%22/><text x=%2250%22 y=%2250%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2270%22>🕌</text></svg>">
+
+  <title>مواقيت الصلاة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      font-family: 'Tajawal', sans-serif;
+      overflow: hidden; 
+      background-color: #f0f2f5;
+      transition: background 1s ease;
+    }
+
+    body.morning { background: linear-gradient(135deg, #e0f7fa, #81d4fa); }
+    body.sunrise { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+    body.day { background: linear-gradient(135deg, #f0f2f5, #e3f2fd); }
+    body.sunset { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
+    body.night { background: linear-gradient(135deg, #eceff1, #cfd8dc); }
+
+    .container {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      padding: 10px 15px 0 15px;
+      max-width: 500px; margin: 0 auto;
+      position: relative;
+    }
+
+    /* --- Header --- */
+    .header-row {
+        display: flex; justify-content: space-between; align-items: center;
+        flex: 0 0 auto; margin-bottom: 5px;
+    }
+    .tool-btn {
+        background: none; border: none; font-size: 1.5em; cursor: pointer; color: #555;
+        padding: 5px; border-radius: 50%;
+    }
+    #installBtn { display: none; color: #27ae60; }
+
+    .header-section { text-align: center; flex: 0 0 auto; margin-bottom: 5px; }
+    h1 { color: #2c3e50; font-size: 1.4em; margin: 0; font-weight: 900; }
+    .city-subtitle { font-size: 0.9em; color: #7f8c8d; }
+    
+    .countdown-box {
+        flex: 0 0 auto;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        padding: 10px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(199, 56, 43, 0.2);
+    }
+    .next-prayer-label { font-size: 0.8em; opacity: 0.9; }
+    .next-prayer-name { font-size: 1.8em; font-weight: 900; margin: 0; line-height: 1.1; }
+    .timer-display { 
+        font-size: 2.5em; font-weight: 800; 
+        font-family: 'Courier New', monospace; 
+        direction: ltr; line-height: 1; letter-spacing: -1px;
+    }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 5px; flex: 0 0 auto; }
+    .tab-btn { 
+        flex: 1; background: rgba(255,255,255,0.6); border: none; padding: 8px; border-radius: 10px; 
+        font-family: inherit; font-weight: bold; font-size: 0.9em; color: #666; cursor: pointer; 
+    }
+    .tab-btn.active { background: #2c3e50; color: white; }
+
+    .input-group { display: none; width: 100%; margin-bottom: 5px; flex: 0 0 auto; }
+    .input-group.show { display: block; }
+    input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
+
+    .date-display { 
+        flex: 0 0 auto; text-align: center; color: #555; 
+        font-size: 0.8em; font-weight: bold; margin-bottom: 5px; 
+    }
+
+    /* --- List & Quotes --- */
+    #prayers-list-container {
+        flex: 1; 
+        overflow-y: auto; 
+        background: rgba(255,255,255,0.6); 
+        border-radius: 15px 15px 0 0; 
+        padding-bottom: 70px;
+    }
+
+    .prayer-row { 
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); 
+    }
+    
+    .highlight-row { 
+        background-color: #fff8e1; border-radius: 0; 
+        border-left: 5px solid #f39c12; 
+    }
+    .name { font-weight: bold; color: #444; font-size: 1em; }
+    .time { color: #27ae60; font-weight: bold; font-size: 1.1em; }
+
+    .quote-box {
+        margin: 15px; padding: 15px;
+        background-color: rgba(255,248,225, 0.7);
+        border: 2px dashed #e67e22; border-radius: 15px;
+        text-align: center;
+    }
+    .quote-text {
+        color: #d35400; font-weight: bold; font-size: 1.1em;
+        line-height: 1.5; font-family: 'Tajawal', sans-serif;
+    }
+
+    /* --- Night Info --- */
+    .night-info-box {
+        flex: 0 0 auto; 
+        padding: 12px; 
+        background-color: #2c3e50; color: #ecf0f1; 
+        border-radius: 15px 15px 0 0; 
+        font-size: 0.8em; 
+        display: flex; justify-content: space-around; align-items: center;
+        margin: 0 -15px; z-index: 50;
+    }
+    .night-item { text-align: center; }
+    .night-label { display: block; color: #bbb; margin-bottom: 2px; }
+    .night-val { color: #f1c40f; font-weight: bold; font-size: 1.1em; }
+
+    /* --- Adhkar Button --- */
+    .fab-adhkar {
+        position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); 
+        background: linear-gradient(45deg, #8e44ad, #9b59b6); color: white; border: none; 
+        padding: 10px 35px; border-radius: 50px; 
+        font-family: inherit; font-weight: bold; font-size: 1.1em; 
+        box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4); 
+        z-index: 100; cursor: pointer; 
+        display: flex; align-items: center; gap: 8px; white-space: nowrap;
+    }
+
+    /* Modals */
+    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
+    .modal-content { 
+        background-color: white; margin: 0; position: absolute; bottom: 0; width: 100%; 
+        max-height: 70vh; overflow-y: auto; border-radius: 25px 25px 0 0; 
+        padding: 25px; box-sizing: border-box; text-align: right; animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .close-modal { float: left; font-size: 20px; background: #f0f0f0; width: 35px; height: 35px; border-radius: 50%; text-align: center; line-height: 35px; cursor: pointer; }
+    .modal-title { color: #8e44ad; text-align: center; margin-bottom: 15px; font-size: 1.2em; font-weight: 800; }
+    .dhikr-item { padding: 12px 0; border-bottom: 1px solid #f0f0f0; line-height: 1.5; font-size: 0.95em; color: #444; }
+    .dhikr-count { color: white; background: #e74c3c; font-size: 0.8em; float: left; font-weight: bold; padding: 2px 10px; border-radius: 10px; }
+    .btn-adj { background: #eee; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1.2em; cursor: pointer; }
+  </style>
 </head>
 <body>
 
-    <h1>مبارك عليكم الشهر 🌙</h1>
+  <audio id="adhanAudio" src="https://media.sd.ma/assabile/adhan/3849/03849.mp3" preload="auto"></audio>
 
-    <div class="controls">
-        <input type="text" id="nameInput" placeholder="اكتب الاسم هنا مثال : أخوكم / يحيى الأصفري ">
-        <button class="btn-generate" onclick="generateCard()">✨ معاينة البطاقة</button>
+  <div class="container">
+    <div class="header-row">
+        <button class="tool-btn" onclick="openModal('settingsModal')">⚙️</button>
+        <button id="installBtn" class="tool-btn" onclick="installApp()">⬇️</button>
         
-        <div id="actionArea" class="action-btns">
-            <button class="btn-download" onclick="downloadCard()">⬇️ تحميل الصورة</button>
-            <button class="btn-share" onclick="shareCard()">📤 مشاركة التهنئة</button>
+        <div class="header-section" style="flex:1;">
+            <h1>مواقيت الصلاة</h1>
+            <div id="city-subtitle" class="city-subtitle">جاري التحديث...</div>
+        </div>
+        <button class="tool-btn" onclick="toggleSound()" id="soundBtn">🔊</button>
+    </div>
+
+    <div id="countdown-area" class="countdown-box" style="display:none;">
+        <div class="next-prayer-label">متبقي على</div>
+        <div id="next-prayer-name" class="next-prayer-name">...</div>
+        <div id="timer" class="timer-display">00:00:00</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchMode('auto')" id="btn-auto">موقعي</button>
+      <button class="tab-btn" onclick="switchMode('manual')" id="btn-manual">بحث يدوي</button>
+    </div>
+
+    <div id="manual-input" class="input-group">
+      <input type="text" id="city" placeholder="المدينة">
+      <input type="text" id="country" placeholder="الدولة">
+      <button class="tab-btn active" style="width:100%; margin-top:5px; background:#27ae60; color:white;" onclick="runManualSearch()">بحث</button>
+    </div>
+
+    <div id="date-area" class="date-display" style="display:none;"></div>
+
+    <div id="prayers-list-container">
+        <div id="prayers-list-content">
+            <div style="text-align:center; padding:20px; color:#888;">جاري التحميل...</div>
+        </div>
+        <div class="quote-box">
+            <div id="daily-quote" class="quote-text">...</div>
         </div>
     </div>
+    
+    <button class="fab-adhkar" onclick="openModal('adhkarModal')"><span>📿</span> الأذكار</button>
 
-    <canvas id="cardCanvas"></canvas>
-
-    <div class="footer-link">
-        العودة لتطبيق <a href="index.html">مواقيت الصلاة</a>
+    <div id="night-area" class="night-info-box" style="display:none;">
+        <div class="night-item">
+            <span class="night-label">منتصف الليل</span>
+            <span id="midnight-time" class="night-val">--:--</span>
+        </div>
+        <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+        <div class="night-item">
+            <span class="night-label">الثلث الأخير</span>
+            <span id="last-third-time" class="night-val">--:--</span>
+        </div>
     </div>
+  </div>
 
-    <script>
-        const canvas = document.getElementById('cardCanvas');
-        const ctx = canvas.getContext('2d');
-        const image = new Image();
-        image.crossOrigin = "anonymous"; 
-        image.src = "ramadan-bg.png"; 
+  <div id="adhkarModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('adhkarModal')">✕</span>
+      <h2 class="modal-title">أذكار بعد الصلاة</h2>
+      <div class="dhikr-item">أستغفر الله، أستغفر الله، أستغفر الله.<span class="dhikr-count">3</span></div>
+      <div class="dhikr-item">اللهم أنت السلام ومنك السلام.<span class="dhikr-count">1</span></div>
+      <div class="dhikr-item">لا إله إلا الله وحده لا شريك له.<span class="dhikr-count">1</span></div>
+      <div class="dhikr-item">سبحان الله (33)، والحمد لله (33)، والله أكبر (33).<span class="dhikr-count">99</span></div>
+      <div class="dhikr-item">تمام المئة: لا إله إلا الله وحده لا شريك له.<span class="dhikr-count">1</span></div>
+      <div class="dhikr-item">آية الكرسي + المعوذات.<span class="dhikr-count">1</span></div>
+    </div>
+  </div>
 
-        let imageLoaded = false;
-        image.onload = () => { imageLoaded = true; canvas.width = image.width; canvas.height = image.height; drawText(""); };
+  <div id="settingsModal" class="modal">
+    <div class="modal-content" style="max-height:50vh;">
+      <span class="close-modal" onclick="closeModal('settingsModal')">✕</span>
+      <h2 class="modal-title" style="color:#2c3e50">الإعدادات</h2>
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid #eee;">
+        <span>تعديل الهجري:</span>
+        <div>
+            <button class="btn-adj" onclick="adjustHijri(-1)">-</button>
+            <span id="hijri-val" style="margin:0 15px; font-weight:bold;">0</span>
+            <button class="btn-adj" onclick="adjustHijri(1)">+</button>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0;">
+        <span>الموقع:</span>
+        <button class="tab-btn" style="width:auto; background:#3498db; color:white;" onclick="resetLocation()">تحديث</button>
+      </div>
+    </div>
+  </div>
 
-        function generateCard() {
-            if (!imageLoaded) return alert("جاري تحميل التصميم...");
-            const name = document.getElementById('nameInput').value.trim();
-            if (!name) return alert("الرجاء كتابة الاسم");
-            drawText(name);
-            document.getElementById('actionArea').style.display = 'flex';
-            setTimeout(() => { canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+  <script>
+    let timerInterval; 
+    let soundEnabled = true; // تم تفعيل الصوت افتراضياً
+    let hijriOffset = parseInt(localStorage.getItem('hijriOffset') || 0);
+    let deferredPrompt; 
+
+    const quotes = [
+        "اللهم أعني على ذكرك وشكرك وحسن عبادتك", "سبحان الله وبحمده، سبحان الله العظيم",
+        "لا حول ولا قوة إلا بالله كنز من كنوز الجنة", "اللهم صلِّ وسلم على نبينا محمد",
+        "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِن ذُرِّيَّتِي", "أستغفر الله العظيم وأتوب إليه",
+        "اللهم إنك عفو تحب العفو فاعفُ عنا", "يا حي يا قيوم برحمتك أستغيث",
+        "رضيت بالله رباً، وبالإسلام ديناً، وبمحمد نبياً", "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر",
+        "اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة", "لا إله إلا أنت سبحانك إني كنت من الظالمين",
+        "الحمد لله على كل حال", "اللهم ارحم موتانا وموتى المسلمين",
+        "الصلاة نور، والصدقة برهان", "الدعاء هو العبادة",
+        "من صلى عليّ صلاة صلى الله عليه بها عشراً", "اللهم إني أسألك الهدى والتقى والعفاف والغنى",
+        "حسبنا الله سيؤتينا الله من فضله", "اللهم ارزقنا حسن الخاتمة"
+    ];
+
+    window.onload = function() {
+      document.getElementById('hijri-val').innerText = hijriOffset;
+      updateBackground(); setInterval(updateBackground, 60000);
+      document.getElementById('daily-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+      
+      // --- الحيلة لفك حظر الصوت (Unlock Audio on First Touch) ---
+      document.body.addEventListener('touchstart', unlockAudio, {once: true});
+      document.body.addEventListener('click', unlockAudio, {once: true});
+
+      const savedMode = localStorage.getItem('mode');
+      if (savedMode === 'manual') {
+        const savedCity = localStorage.getItem('savedCity');
+        const savedCountry = localStorage.getItem('savedCountry');
+        if (savedCity && savedCountry) {
+            document.getElementById('city').value = savedCity;
+            document.getElementById('country').value = savedCountry;
+            switchMode('manual');
+            runManualSearch(); 
+        } else { switchMode('manual'); }
+      } else { getLocation(); }
+    };
+
+    // دالة فك الحظر الصامت
+    function unlockAudio() {
+        const audio = document.getElementById('adhanAudio');
+        audio.play().then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+        }).catch((e) => {});
+    }
+
+    // --- منطق PWA ---
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').style.display = 'block';
+    });
+
+    async function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          document.getElementById('installBtn').style.display = 'none';
         }
+        deferredPrompt = null;
+      }
+    }
 
-        function drawText(text) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(image, 0, 0);
-            if(text) {
-                // --- الضبط "البرو" لمنع الخروج عن الإطار ---
-                const maxAllowedWidth = canvas.width * 0.45; // تقليل المساحة المتاحة لضمان الاحتواء
-                let fontSize = Math.floor(canvas.width / 16); 
-                ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
+    function updateBackground() {
+        const h = new Date().getHours();
+        document.body.className = ''; 
+        if(h>=4 && h<6) document.body.classList.add('morning');
+        else if(h>=6 && h<11) document.body.classList.add('sunrise');
+        else if(h>=11 && h<16) document.body.classList.add('day');
+        else if(h>=16 && h<19) document.body.classList.add('sunset');
+        else document.body.classList.add('night');
+    }
 
-                while (ctx.measureText(text).width > maxAllowedWidth && fontSize > 15) {
-                    fontSize -= 1;
-                    ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
+    function switchMode(mode) {
+      document.getElementById('btn-auto').className = mode === 'auto' ? 'tab-btn active' : 'tab-btn';
+      document.getElementById('btn-manual').className = mode === 'manual' ? 'tab-btn active' : 'tab-btn';
+      if (mode === 'manual') {
+        document.getElementById('manual-input').classList.add('show');
+        document.getElementById('prayers-list-content').innerHTML = '';
+        document.getElementById('date-area').style.display = 'none';
+        document.getElementById('countdown-area').style.display = 'none';
+        document.getElementById('night-area').style.display = 'none';
+        document.querySelector('.fab-adhkar').style.display = 'none'; 
+        document.querySelector('.quote-box').style.display = 'none'; 
+        clearInterval(timerInterval);
+        localStorage.setItem('mode', 'manual');
+        document.getElementById('city-subtitle').innerText = "أدخل المدينة";
+      } else {
+        document.getElementById('manual-input').classList.remove('show');
+        document.querySelector('.fab-adhkar').style.display = 'flex'; 
+        document.querySelector('.quote-box').style.display = 'block'; 
+        localStorage.setItem('mode', 'auto');
+        getLocation();
+      }
+    }
+
+    function getLocation() {
+      document.getElementById('prayers-list-content').innerHTML = '<div style="text-align:center; padding:20px;">جاري طلب الموقع...</div>';
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            fetchPrayerTimes(position.coords.latitude, position.coords.longitude, null, null);
+            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=ar`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('city-subtitle').innerText = data.city || data.locality || "موقعي الحالي";
+                });
+          },
+          (error) => { switchMode('manual'); }
+        );
+      } else { switchMode('manual'); }
+    }
+
+    function resetLocation() {
+        localStorage.removeItem('mode');
+        closeModal('settingsModal');
+        switchMode('auto');
+    }
+
+    function runManualSearch() {
+      const city = document.getElementById('city').value.trim();
+      const country = document.getElementById('country').value.trim();
+      if(!city || !country) { alert('الرجاء تعبئة الحقول'); return; }
+      localStorage.setItem('savedCity', city);
+      localStorage.setItem('savedCountry', country);
+      document.getElementById('city-subtitle').innerText = `حسب مدينة: ${city}`;
+      fetchPrayerTimes(null, null, city, country);
+    }
+
+    function fetchPrayerTimes(lat, lng, city, country) {
+        let url = '';
+        if (lat && lng) url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4`;
+        else url = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=4`;
+        fetch(url).then(res => res.json()).then(data => {
+            if(data.code === 200) onSuccess(data); else onFailure();
+        }).catch(err => onFailure());
+    }
+
+    function onSuccess(response) {
+      displayTimes(response.data);
+      startCountdown(response.data.timings); 
+      calculateNightTimes(response.data.timings);
+    }
+
+    function onFailure() {
+      document.getElementById('prayers-list-content').innerHTML = '<div style="text-align:center; padding:20px; color:red;">خطأ في جلب البيانات</div>';
+    }
+
+    function convertTo12H(time24) {
+      let [h, m] = time24.split(':');
+      h = parseInt(h); let p = h >= 12 ? 'م' : 'ص';
+      h = h % 12 || 12; return `${h}:${m} ${p}`;
+    }
+
+    function displayTimes(data) {
+      const timings = data.timings;
+      const dateHijri = data.date.hijri;
+      const dateEl = document.getElementById('date-area');
+      let hDay = parseInt(dateHijri.day) + hijriOffset;
+      dateEl.style.display = 'block';
+      dateEl.innerText = `${data.date.gregorian.date} م | ${hDay} ${dateHijri.month.ar} ${dateHijri.year} هـ`;
+      const namesMap = { 'Fajr': 'الفجر', 'Sunrise': 'الشروق', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء' };
+      let html = '';
+      for (const [key, arName] of Object.entries(namesMap)) {
+        html += `<div class="prayer-row" id="row-${key}"><span class="name">${arName}</span><span class="time">${convertTo12H(timings[key])}</span></div>`;
+      }
+      document.getElementById('prayers-list-content').innerHTML = html;
+    }
+
+    function startCountdown(timings) {
+        clearInterval(timerInterval); 
+        document.getElementById('countdown-area').style.display = 'block';
+        const prayersOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+        const arNames = {'Fajr': 'الفجر', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء'};
+        function updateTimer() {
+            const now = new Date();
+            let nextPrayerTime = null;
+            let nextPrayerName = '';
+            let nextPrayerKey = '';
+            document.querySelectorAll('.prayer-row').forEach(row => row.classList.remove('highlight-row'));
+            for (let prayer of prayersOrder) {
+                let timeStr = timings[prayer];
+                let pDate = new Date();
+                let [h, m] = timeStr.split(':');
+                pDate.setHours(parseInt(h), parseInt(m), 0);
+                if (pDate > now) {
+                    nextPrayerTime = pDate; nextPrayerName = arNames[prayer]; nextPrayerKey = prayer; break;
                 }
-
-                ctx.fillStyle = "#4b3621"; 
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle"; 
-                
-                // الموقع العمودي الموزون بدقة في وسط اللمعة
-                ctx.fillText(text, canvas.width / 2, canvas.height * 0.666); 
-
-                // علامة الموقع
-                ctx.font = `${Math.floor(canvas.width / 45)}px 'Tajawal', sans-serif`;
-                ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-                ctx.textAlign = "left";
-                ctx.fillText("asfari.net", canvas.width * 0.08, canvas.height * 0.95);
             }
-        }
+            if (!nextPrayerTime) {
+                let timeStr = timings['Fajr'];
+                nextPrayerTime = new Date();
+                nextPrayerTime.setDate(nextPrayerTime.getDate() + 1); 
+                let [h, m] = timeStr.split(':');
+                nextPrayerTime.setHours(parseInt(h), parseInt(m), 0);
+                nextPrayerName = arNames['Fajr']; nextPrayerKey = 'Fajr';
+            }
+            const rowToHighlight = document.getElementById(`row-${nextPrayerKey}`);
+            if(rowToHighlight) rowToHighlight.classList.add('highlight-row');
+            document.getElementById('next-prayer-name').innerText = nextPrayerName;
+            const diff = nextPrayerTime - now;
+            
+            // تشغيل الأذان
+            if (diff <= 1000 && diff > -1000 && soundEnabled) {
+                document.getElementById('adhanAudio').play().catch((e)=>{console.log("Audio prevented by browser policy")});
+            }
 
-        function downloadCard() {
-            const link = document.createElement('a');
-            link.download = `Ramadan-${document.getElementById('nameInput').value}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            if (diff > 0) {
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById('timer').innerText = `${hours < 10 ? '0'+hours : hours}:${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+            } else { document.getElementById('timer').innerText = "00:00:00"; }
         }
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+    }
 
-        async function shareCard() {
-            const blob = await (await fetch(canvas.toDataURL())).blob();
-            const file = new File([blob], 'Ramadan.png', { type: 'image/png' });
-            if (navigator.share) {
-                await navigator.share({ files: [file], title: 'تهنئة رمضان', text: 'مبارك عليكم الشهر 🌙' });
-            } else { alert("حمل الصورة وشاركها يدوياً."); }
-        }
-    </script>
+    function calculateNightTimes(timings) {
+        document.getElementById('night-area').style.display = 'flex';
+        let maghribTime = new Date();
+        let [mH, mM] = timings['Maghrib'].split(':');
+        maghribTime.setHours(parseInt(mH), parseInt(mM), 0);
+        let fajrTime = new Date();
+        fajrTime.setDate(fajrTime.getDate() + 1);
+        let [fH, fM] = timings['Fajr'].split(':');
+        fajrTime.setHours(parseInt(fH), parseInt(fM), 0);
+        let diff = fajrTime - maghribTime;
+        let midnight = new Date(maghribTime.getTime() + (diff / 2));
+        let lastThird = new Date(fajrTime.getTime() - (diff / 3));
+        let format = (d) => {
+            let h = d.getHours(); let m = d.getMinutes(); let p = h >= 12 ? 'م' : 'ص';
+            h = h % 12 || 12; return `${h}:${m < 10 ? '0'+m : m}`;
+        };
+        document.getElementById('midnight-time').innerText = format(midnight);
+        document.getElementById('last-third-time').innerText = format(lastThird);
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = "block"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    window.onclick = function(e) { if(e.target.classList.contains('modal')) e.target.style.display="none"; }
+    
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        const btn = document.getElementById('soundBtn');
+        if (soundEnabled) {
+            btn.innerText = '🔊';
+            document.getElementById('adhanAudio').play().catch(()=>{});
+            document.getElementById('adhanAudio').pause();
+        } else { btn.innerText = '🔇'; }
+    }
+
+    function adjustHijri(val) {
+        hijriOffset += val;
+        localStorage.setItem('hijriOffset', hijriOffset);
+        document.getElementById('hijri-val').innerText = hijriOffset;
+        if (localStorage.getItem('mode') !== 'manual') getLocation();
+        else runManualSearch();
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تهنئة رمضان - أصفري برو</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 10px;
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0a1a3a, #1e3c72);
+            color: white; text-align: center;
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+        }
+        h1 { margin: 10px 0; font-size: 1.5em; color: #f1c40f; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .controls {
+            background: rgba(20, 30, 50, 0.9); padding: 15px; border-radius: 15px;
+            width: 100%; max-width: 400px; margin-bottom: 15px;
+            border: 1px solid rgba(241, 196, 15, 0.3);
+        }
+        input {
+            width: 100%; padding: 12px; border-radius: 8px; border: none;
+            text-align: center; font-size: 1.1em; margin-bottom: 10px; background: #f8f9fa; color: #333;
+        }
+        button {
+            width: 100%; padding: 12px; border-radius: 8px; border: none;
+            font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-generate { background: linear-gradient(45deg, #f39c12, #d35400); color: white; margin-bottom: 8px; }
+        .action-btns { display: none; gap: 10px; flex-direction: column; width: 100%; }
+        .btn-download { background: linear-gradient(45deg, #27ae60, #2ecc71); color: white; }
+        .btn-share { background: linear-gradient(45deg, #3498db, #2980b9); color: white; }
+        
+        canvas {
+            max-width: 85%; max-height: 45vh; 
+            border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-top: 10px; border: 2px solid #d4af37;
+        }
+        .footer-link { margin-top: 20px; font-size: 0.9em; padding-bottom: 30px; }
+        .footer-link a { color: #f39c12; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>مبارك عليكم الشهر 🌙</h1>
+
+    <div class="controls">
+        <input type="text" id="nameInput" placeholder="اكتب الاسم هنا مثال : أخوكم / يحيى الأصفري ">
+        <button class="btn-generate" onclick="generateCard()">✨ معاينة البطاقة</button>
+        
+        <div id="actionArea" class="action-btns">
+            <button class="btn-download" onclick="downloadCard()">⬇️ تحميل الصورة</button>
+            <button class="btn-share" onclick="shareCard()">📤 مشاركة التهنئة</button>
+        </div>
+    </div>
+
+    <canvas id="cardCanvas"></canvas>
+
+    <div class="footer-link">
+        العودة لتطبيق <a href="index.html">مواقيت الصلاة</a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('cardCanvas');
+        const ctx = canvas.getContext('2d');
+        const image = new Image();
+        image.crossOrigin = "anonymous"; 
+        image.src = "ramadan-bg.png"; 
+
+        let imageLoaded = false;
+        image.onload = () => { imageLoaded = true; canvas.width = image.width; canvas.height = image.height; drawText(""); };
+
+        function generateCard() {
+            if (!imageLoaded) return alert("جاري تحميل التصميم...");
+            const name = document.getElementById('nameInput').value.trim();
+            if (!name) return alert("الرجاء كتابة الاسم");
+            drawText(name);
+            document.getElementById('actionArea').style.display = 'flex';
+            setTimeout(() => { canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+        }
+
+        function drawText(text) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0);
+            if(text) {
+                // --- الضبط "البرو" لمنع الخروج عن الإطار ---
+                const maxAllowedWidth = canvas.width * 0.45; // تقليل المساحة المتاحة لضمان الاحتواء
+                let fontSize = Math.floor(canvas.width / 16); 
+                ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
+
+                while (ctx.measureText(text).width > maxAllowedWidth && fontSize > 15) {
+                    fontSize -= 1;
+                    ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
+                }
+
+                ctx.fillStyle = "#4b3621"; 
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle"; 
+                
+                // الموقع العمودي الموزون بدقة في وسط اللمعة
+                ctx.fillText(text, canvas.width / 2, canvas.height * 0.666); 
+
+                // علامة الموقع
+                ctx.font = `${Math.floor(canvas.width / 45)}px 'Tajawal', sans-serif`;
+                ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+                ctx.textAlign = "left";
+                ctx.fillText("asfari.net", canvas.width * 0.08, canvas.height * 0.95);
+            }
+        }
+
+        function downloadCard() {
+            const link = document.createElement('a');
+            link.download = `Ramadan-${document.getElementById('nameInput').value}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        async function shareCard() {
+            const blob = await (await fetch(canvas.toDataURL())).blob();
+            const file = new File([blob], 'Ramadan.png', { type: 'image/png' });
+            if (navigator.share) {
+                await navigator.share({ files: [file], title: 'تهنئة رمضان', text: 'مبارك عليكم الشهر 🌙' });
+            } else { alert("حمل الصورة وشاركها يدوياً."); }
+        }
+    </script>
+</body>
+</html>
