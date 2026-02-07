@@ -1,232 +1,134 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>تهنئة رمضان - أصفري</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 10px;
-      font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(135deg, #0a1a3a, #1e3c72);
-      color: white;
-      text-align: center;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    h1 {
-      margin: 10px 0;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      font-size: 1.5em;
-      color: #f1c40f;
-    }
-
-    p {
-      color: #ccc;
-      margin-bottom: 15px;
-      font-size: 0.9em;
-    }
-
-    .controls {
-      background: rgba(20, 30, 50, 0.9);
-      padding: 15px;
-      border-radius: 15px;
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 15px;
-      border: 1px solid rgba(241, 196, 15, 0.3);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      text-align: center;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1em;
-      margin-bottom: 10px;
-      background: #f8f9fa;
-      color: #333;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      font-family: 'Tajawal', sans-serif;
-      font-weight: bold;
-      font-size: 1em;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-generate { background: linear-gradient(45deg, #f39c12, #d35400); color: white; margin-bottom: 8px; }
-    .btn-download { background: linear-gradient(45deg, #27ae60, #2ecc71); color: white; display: none; }
-
-    canvas {
-      max-width: 85%;
-      max-height: 50vh;
-      width: auto;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      margin-top: 5px;
-      border: 2px solid #d4af37;
-    }
-
-    .footer-link { margin-top: 20px; font-size: 0.9em; opacity: 0.9; padding-bottom: 30px; }
-    .footer-link a { color: #f39c12; text-decoration: none; font-weight: bold; border-bottom: 1px dashed #f39c12; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تهنئة رمضان - أصفري برو</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 10px;
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0a1a3a, #1e3c72);
+            color: white; text-align: center;
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+        }
+        h1 { margin: 10px 0; font-size: 1.5em; color: #f1c40f; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        p { color: #ccc; margin-bottom: 15px; font-size: 0.9em; }
+        .controls {
+            background: rgba(20, 30, 50, 0.9); padding: 15px; border-radius: 15px;
+            width: 100%; max-width: 400px; margin-bottom: 15px;
+            border: 1px solid rgba(241, 196, 15, 0.3);
+        }
+        input {
+            width: 100%; padding: 10px; border-radius: 8px; border: none;
+            text-align: center; font-size: 1em; margin-bottom: 10px; background: #f8f9fa;
+        }
+        button {
+            width: 100%; padding: 10px; border-radius: 8px; border: none;
+            font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-generate { background: linear-gradient(45deg, #f39c12, #d35400); color: white; margin-bottom: 8px; }
+        .btn-download { background: linear-gradient(45deg, #27ae60, #2ecc71); color: white; display: none; }
+        
+        /* ضبط المعاينة لتناسب الشاشة */
+        canvas {
+            max-width: 85%; max-height: 45vh; /* تصغير العرض في الصفحة فقط */
+            width: auto; height: auto;
+            border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-top: 5px; border: 2px solid #d4af37;
+        }
+        .footer-link { margin-top: 20px; font-size: 0.9em; padding-bottom: 30px; }
+        .footer-link a { color: #f39c12; text-decoration: none; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-  <h1>مبارك عليكم الشهر 🌙</h1>
-  <p>اكتب الاسم ليظهر داخل الإطار الذهبي</p>
+    <h1>مبارك عليكم الشهر 🌙</h1>
+    <p>اكتب اسمك ليتم تنسيقه آلياً داخل الإطار</p>
 
-  <div class="controls">
-    <input type="text" id="nameInput" placeholder="اكتب الاسم (مثال: أخوكم / يحيى الأصفري)">
-    <button class="btn-generate" onclick="generateCard()">✨ معاينة البطاقة</button>
-    <button class="btn-download" id="downloadBtn" onclick="downloadCard()">⬇️ تحميل الصورة</button>
-  </div>
+    <div class="controls">
+        <input type="text" id="nameInput" placeholder="اكتب الاسم (مثال: يحيى الأصفري)">
+        <button class="btn-generate" onclick="generateCard()">✨ معاينة البطاقة</button>
+        <button class="btn-download" id="downloadBtn" onclick="downloadCard()">⬇️ تحميل الصورة</button>
+    </div>
 
-  <canvas id="cardCanvas"></canvas>
+    <canvas id="cardCanvas"></canvas>
 
-  <div class="footer-link">
-    العودة لتطبيق <a href="index.html">مواقيت الصلاة</a>
-  </div>
+    <div class="footer-link">
+        العودة لتطبيق <a href="index.html">مواقيت الصلاة</a>
+    </div>
 
-  <script>
-    const canvas = document.getElementById('cardCanvas');
-    const ctx = canvas.getContext('2d');
-    const image = new Image();
+    <script>
+        const canvas = document.getElementById('cardCanvas');
+        const ctx = canvas.getContext('2d');
+        const image = new Image();
+        
+        image.crossOrigin = "anonymous"; 
+        image.src = "ramadan-bg.png"; // تأكد من وجود الصورة بهذا الاسم في المجلد
 
-    image.crossOrigin = "anonymous";
-    image.src = "./ramadan-bg.png"; // تأكد أن الصورة بنفس المجلد
+        let imageLoaded = false;
 
-    let imageLoaded = false;
+        image.onload = function() {
+            imageLoaded = true;
+            canvas.width = image.width;
+            canvas.height = image.height;
+            drawText(""); 
+        };
 
-    image.onload = function() {
-      imageLoaded = true;
-      canvas.width = image.width;
-      canvas.height = image.height;
-      drawText("");
-    };
+        function generateCard() {
+            if (!imageLoaded) return alert("جاري تحميل التصميم...");
+            const name = document.getElementById('nameInput').value.trim();
+            if (!name) return alert("الرجاء كتابة الاسم");
+            
+            drawText(name);
+            document.getElementById('downloadBtn').style.display = 'block';
+            setTimeout(() => { canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+        }
 
-    image.onerror = function() {
-      alert("لم يتم العثور على الصورة. تأكد من وجود ملف ramadan-bg.png");
-    };
+        function drawText(text) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0);
 
-    function generateCard() {
-      if (!imageLoaded) return alert("جاري تحميل التصميم...");
-      const name = document.getElementById('nameInput').value.trim();
-      if (!name) return alert("الرجاء كتابة الاسم");
+            if(text) {
+                // خوارزمية الاحتواء التلقائي للنص
+                const maxTextWidth = canvas.width * 0.55; // عرض الإطار الذهبي
+                let fontSize = Math.floor(canvas.width / 14);
+                ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
 
-      drawText(name);
-      document.getElementById('downloadBtn').style.display = 'block';
+                while (ctx.measureText(text).width > maxTextWidth && fontSize > 20) {
+                    fontSize -= 2;
+                    ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
+                }
 
-      setTimeout(() => {
-        canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-    }
+                ctx.fillStyle = "#4b3621"; // لون بني داكن فاخر
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle"; 
 
-    // ✅ سطر واحد دائمًا + بدون هوامش إضافية + منع خروج النص عن اللوحة
-    function drawText(text) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(image, 0, 0);
+                // الموقع الموزون بدقة
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height * 0.668; 
 
-  // الشعار دائماً
-  drawFooterMark_();
+                ctx.fillText(text, centerX, centerY);
 
-  if (!text) return;
+                // إضافة asfari.net كعلامة مائية احترافية
+                const adSize = Math.floor(canvas.width / 45);
+                ctx.font = `${adSize}px 'Tajawal', sans-serif`;
+                ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+                ctx.textAlign = "left";
+                ctx.fillText("asfari.net", canvas.width * 0.05, canvas.height - (canvas.height * 0.03));
+            }
+        }
 
-  const cleaned = String(text).replace(/\s+/g, " ").trim();
-
-  // 1) صندوق اللوحة الذهبية (للـ clip فقط)
-  const plateW = canvas.width * 0.64;
-  const plateH = canvas.height * 0.10;
-  const plateX = (canvas.width - plateW) / 2;
-  const centerY = canvas.height * 0.668;
-  const plateY = centerY - (plateH / 2);
-
-  // 2) ✅ منطقة كتابة “صافية” داخل اللوحة (تستبعد الزخارف/الأسود على الطرفين)
-  // الرقم 0.74 مناسب جدًا حسب لقطة شاشتك
-  const safeTextW = plateW * 0.74;
-
-  // (اختياري) قصّ عمودي بسيط حتى لا يلمس الحدود العلوية/السفلية داخل اللوحة
-  const safeTextH = plateH * 0.78;
-
-  const safeX = (canvas.width - safeTextW) / 2;
-  const safeY = centerY - (safeTextH / 2);
-
-  // 3) قصّ للحماية (نقص على المنطقة الصافية نفسها، أدق من قصّ اللوحة كاملة)
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(safeX, safeY, safeTextW, safeTextH);
-  ctx.clip();
-
-  // تنسيق النص
-  ctx.fillStyle = "#4b3621";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  // 4) بحث ثنائي لأكبر حجم خط يدخل ضمن العرض الصافي
-  const maxFont = Math.floor(canvas.width / 12);
-  const minFont = 8;
-
-  let lo = minFont, hi = maxFont, best = minFont;
-
-  while (lo <= hi) {
-    const mid = Math.floor((lo + hi) / 2);
-    ctx.font = `bold ${mid}px 'Tajawal', sans-serif`;
-    const w = ctx.measureText(cleaned).width;
-
-    if (w <= safeTextW) {
-      best = mid;
-      lo = mid + 1;
-    } else {
-      hi = mid - 1;
-    }
-  }
-
-  // 5) رسم النص
-  ctx.font = `bold ${best}px 'Tajawal', sans-serif`;
-  const centerX = canvas.width / 2;
-  ctx.fillText(cleaned, centerX, centerY);
-
-  ctx.restore();
-}
-
-
-    function drawFooterMark_() {
-      const adFontSize = Math.floor(canvas.width / 45);
-      ctx.font = `${adFontSize}px 'Tajawal', sans-serif`;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "alphabetic";
-      ctx.fillText("asfari.net", canvas.width * 0.08, canvas.height - (canvas.height * 0.05));
-    }
-
-    function downloadCard() {
-      try {
-        const link = document.createElement('a');
-        const name = document.getElementById('nameInput').value.trim() || "Ramadan";
-        link.download = `تهنئة-رمضان-${name}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      } catch (e) {
-        alert("اضغط مطولاً على الصورة لحفظها.");
-      }
-    }
-  </script>
-
+        function downloadCard() {
+            try {
+                const link = document.createElement('a');
+                const name = document.getElementById('nameInput').value.trim() || "Ramadan";
+                link.download = `Ramadan-${name}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (e) { alert("اضغط مطولاً على الصورة لحفظها."); }
+        }
+    </script>
 </body>
 </html>
