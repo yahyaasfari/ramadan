@@ -140,61 +140,71 @@
 
     // ✅ سطر واحد دائمًا + بدون هوامش إضافية + منع خروج النص عن اللوحة
     function drawText(text) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(image, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(image, 0, 0);
 
-      // الشعار دائماً (حتى لو ما في اسم)
-      drawFooterMark_();
+  // الشعار دائماً
+  drawFooterMark_();
 
-      if (!text) return;
+  if (!text) return;
 
-      const cleaned = String(text).replace(/\s+/g, " ").trim();
+  const cleaned = String(text).replace(/\s+/g, " ").trim();
 
-      // صندوق اللوحة الذهبية (بدون padding)
-      // عدّل النسب هنا فقط إذا احتجت تحريك بسيط:
-      const boxW = canvas.width * 0.64;
-      const boxH = canvas.height * 0.10;
-      const boxX = (canvas.width - boxW) / 2;
-      const centerY = canvas.height * 0.668;
-      const boxY = centerY - (boxH / 2);
+  // 1) صندوق اللوحة الذهبية (للـ clip فقط)
+  const plateW = canvas.width * 0.64;
+  const plateH = canvas.height * 0.10;
+  const plateX = (canvas.width - plateW) / 2;
+  const centerY = canvas.height * 0.668;
+  const plateY = centerY - (plateH / 2);
 
-      // قصّ للحماية حتى لا يخرج النص خارج اللوحة
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(boxX, boxY, boxW, boxH);
-      ctx.clip();
+  // 2) ✅ منطقة كتابة “صافية” داخل اللوحة (تستبعد الزخارف/الأسود على الطرفين)
+  // الرقم 0.74 مناسب جدًا حسب لقطة شاشتك
+  const safeTextW = plateW * 0.74;
 
-      // تنسيق النص
-      ctx.fillStyle = "#4b3621";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+  // (اختياري) قصّ عمودي بسيط حتى لا يلمس الحدود العلوية/السفلية داخل اللوحة
+  const safeTextH = plateH * 0.78;
 
-      // بحث ثنائي لأكبر حجم خط يدخل تمامًا داخل عرض اللوحة
-      const maxFont = Math.floor(canvas.width / 12);
-      const minFont = 8;
+  const safeX = (canvas.width - safeTextW) / 2;
+  const safeY = centerY - (safeTextH / 2);
 
-      let lo = minFont, hi = maxFont, best = minFont;
+  // 3) قصّ للحماية (نقص على المنطقة الصافية نفسها، أدق من قصّ اللوحة كاملة)
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(safeX, safeY, safeTextW, safeTextH);
+  ctx.clip();
 
-      while (lo <= hi) {
-        const mid = Math.floor((lo + hi) / 2);
-        ctx.font = `bold ${mid}px 'Tajawal', sans-serif`;
-        const w = ctx.measureText(cleaned).width;
+  // تنسيق النص
+  ctx.fillStyle = "#4b3621";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
 
-        if (w <= boxW) {
-          best = mid;
-          lo = mid + 1;
-        } else {
-          hi = mid - 1;
-        }
-      }
+  // 4) بحث ثنائي لأكبر حجم خط يدخل ضمن العرض الصافي
+  const maxFont = Math.floor(canvas.width / 12);
+  const minFont = 8;
 
-      // رسم النص بالحجم النهائي
-      ctx.font = `bold ${best}px 'Tajawal', sans-serif`;
-      const centerX = canvas.width / 2;
-      ctx.fillText(cleaned, centerX, centerY);
+  let lo = minFont, hi = maxFont, best = minFont;
 
-      ctx.restore();
+  while (lo <= hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    ctx.font = `bold ${mid}px 'Tajawal', sans-serif`;
+    const w = ctx.measureText(cleaned).width;
+
+    if (w <= safeTextW) {
+      best = mid;
+      lo = mid + 1;
+    } else {
+      hi = mid - 1;
     }
+  }
+
+  // 5) رسم النص
+  ctx.font = `bold ${best}px 'Tajawal', sans-serif`;
+  const centerX = canvas.width / 2;
+  ctx.fillText(cleaned, centerX, centerY);
+
+  ctx.restore();
+}
+
 
     function drawFooterMark_() {
       const adFontSize = Math.floor(canvas.width / 45);
