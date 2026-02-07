@@ -7,7 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Tajawal', sans-serif; overflow: hidden; background-color: #f0f2f5; transition: background 1s ease; }
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Tajawal', sans-serif; overflow: hidden; }
+    
     body.morning { background: linear-gradient(135deg, #e0f7fa, #81d4fa); }
     body.sunrise { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
     body.day { background: linear-gradient(135deg, #f0f2f5, #e3f2fd); }
@@ -32,24 +33,30 @@
     .input-group { display: none; width: 100%; margin-bottom: 5px; }
     input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
 
-    #prayers-list-container { flex: 1; overflow-y: auto; background: rgba(255,255,255,0.6); border-radius: 15px 15px 0 0; padding-bottom: 140px; }
+    #prayers-list-container { flex: 1; overflow-y: auto; background: rgba(255,255,255,0.6); border-radius: 15px 15px 0 0; padding-bottom: 160px; } /* زيادة المساحة هنا لعدم التعارض */
     .prayer-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
     .highlight-row { background-color: #fff8e1; border-left: 5px solid #f39c12; }
     .time { color: #27ae60; font-weight: bold; font-size: 1.1em; }
 
-    .bottom-actions { position: absolute; bottom: 85px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 100; }
-    .btn-ramadan { background: linear-gradient(45deg, #d4af37, #f1c40f); color: #0a1a3a !important; text-decoration: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9em; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); border: 1px solid #fff; animation: pulse 2s infinite; }
-    .btn-fab { background: linear-gradient(45deg, #8e44ad, #9b59b6); color: white; border: none; padding: 10px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    /* صندوق العبارات/الأدعية */
+    .quote-box { margin: 15px; padding: 15px; background-color: rgba(255,248,225, 0.7); border: 2px dashed #e67e22; border-radius: 15px; text-align: center; }
+    .quote-text { color: #d35400; font-weight: bold; font-size: 1.1em; line-height: 1.5; }
 
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    /* الأزرار السفلية بوزن جديد */
+    .bottom-actions { position: absolute; bottom: 70px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 100; }
+    .btn-ramadan { background: linear-gradient(45deg, #d4af37, #f1c40f); color: #0a1a3a !important; text-decoration: none; padding: 8px 15px; border-radius: 50px; font-weight: bold; font-size: 0.85em; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); border: 1px solid #fff; animation: pulse 2s infinite; }
+    .btn-fab { background: linear-gradient(45deg, #8e44ad, #9b59b6); color: white; border: none; padding: 8px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9em; }
+
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
     .night-info-box { flex: 0 0 auto; padding: 12px; background-color: #2c3e50; color: #ecf0f1; border-radius: 15px 15px 0 0; font-size: 0.8em; display: flex; justify-content: space-around; align-items: center; margin: 0 -15px; z-index: 50; }
     .night-val { color: #f1c40f; font-weight: bold; font-size: 1.1em; }
 
-    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
-    .modal-content { background-color: white; position: absolute; bottom: 0; width: 100%; max-height: 70vh; overflow-y: auto; border-radius: 25px 25px 0 0; padding: 25px; animation: slideUp 0.3s ease; }
+    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); }
+    .modal-content { background-color: white; position: absolute; bottom: 0; width: 100%; max-height: 70vh; overflow-y: auto; border-radius: 25px 25px 0 0; padding: 25px; animation: slideUp 0.3s ease; text-align: right; }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     .close-modal { float: left; background: #f0f0f0; width: 35px; height: 35px; border-radius: 50%; text-align: center; line-height: 35px; cursor: pointer; }
+    .dhikr-item { padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
   </style>
 </head>
 <body>
@@ -60,32 +67,55 @@
       <div class="header-section"><h1>مواقيت الصلاة</h1><div id="city-subtitle" class="city-subtitle">جاري التحديث...</div></div>
       <button class="tool-btn" onclick="toggleSound()" id="soundBtn">🔊</button>
     </div>
-    <div id="countdown-area" class="countdown-box" style="display:none;"><div id="next-prayer-name" style="font-size: 0.8em; opacity: 0.9;">متبقي على</div><div id="p-name" class="next-prayer-name">...</div><div id="timer" class="timer-display">00:00:00</div></div>
+    
+    <div id="countdown-area" class="countdown-box" style="display:none;">
+      <div style="font-size: 0.8em; opacity: 0.9;">متبقي على</div>
+      <div id="p-name" class="next-prayer-name">...</div>
+      <div id="timer" class="timer-display">00:00:00</div>
+    </div>
+
     <div class="tabs"><button class="tab-btn active" onclick="switchMode('auto')" id="btn-auto">موقعي</button><button class="tab-btn" onclick="switchMode('manual')" id="btn-manual">بحث يدوي</button></div>
     <div id="manual-input" class="input-group"><input type="text" id="city" placeholder="المدينة"><input type="text" id="country" placeholder="الدولة"><button class="tab-btn active" style="width:100%; margin-top:5px; background:#27ae60; color:white;" onclick="runManualSearch()">بحث</button></div>
+    
     <div id="date-area" style="text-align:center; font-size:0.8em; margin-bottom:5px; color:#555;"></div>
-    <div id="prayers-list-container"><div id="prayers-list-content"></div></div>
+
+    <div id="prayers-list-container">
+      <div id="prayers-list-content"></div>
+      <div class="quote-box"><div id="daily-quote" class="quote-text">جاري جلب الذكر...</div></div>
+    </div>
+
     <div class="bottom-actions">
       <a href="ramadan.html" class="btn-ramadan">🌙 بطاقة تهنئة بمناسبة شهر رمضان</a>
       <button class="btn-fab" onclick="openModal('adhkarModal')">📿 الأذكار</button>
     </div>
+
     <div id="night-area" class="night-info-box">
       <div class="night-item"><span style="display:block; color:#bbb;">منتصف الليل</span><span id="midnight-time" class="night-val">--:--</span></div>
       <div class="night-item"><span style="display:block; color:#bbb;">الثلث الأخير</span><span id="last-third-time" class="night-val">--:--</span></div>
     </div>
   </div>
 
-  <div id="adhkarModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('adhkarModal')">✕</span><h2 style="text-align:center; color:#8e44ad;">أذكار بعد الصلاة</h2><div id="adhkar-list">أستغفر الله (3)، اللهم أنت السلام..</div></div></div>
+  <div id="adhkarModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('adhkarModal')">✕</span><h2 style="color:#8e44ad; text-align:center;">أذكار بعد الصلاة</h2><div class="dhikr-item">أستغفر الله (3 مرات)</div><div class="dhikr-item">اللهم أنت السلام ومنك السلام</div><div class="dhikr-item">سبحان الله (33) والحمد لله (33) والله أكبر (33)</div></div></div>
   <div id="settingsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('settingsModal')">✕</span><h2 style="text-align:center;">الإعدادات</h2><button onclick="adjustHijri(1)" style="width:100%; padding:10px; margin-bottom:10px;">تقديم التاريخ الهجري +1</button><button onclick="adjustHijri(-1)" style="width:100%; padding:10px;">تأخير التاريخ الهجري -1</button></div></div>
 
   <script>
     let timerInterval, soundEnabled = true, hijriOffset = parseInt(localStorage.getItem('hijriOffset') || 0);
-    window.onload = () => { updateBackground(); setInterval(updateBackground, 60000); const savedMode = localStorage.getItem('mode'); if (savedMode === 'manual') runManualSearch(); else getLocation(); };
+    const quotes = ["اللهم أعني على ذكرك وشكرك وحسن عبادتك", "سبحان الله وبحمده، سبحان الله العظيم", "لا حول ولا قوة إلا بالله كنز من كنوز الجنة", "اللهم صلِّ وسلم على نبينا محمد", "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِن ذُرِّيَّتِي", "أستغفر الله العظيم وأتوب إليه"];
+
+    window.onload = () => { 
+      updateBackground(); setInterval(updateBackground, 60000); 
+      document.getElementById('daily-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+      const savedMode = localStorage.getItem('mode'); 
+      if (savedMode === 'manual') runManualSearch(); else getLocation(); 
+    };
 
     function getLocation() { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(p => fetchPrayerTimes(p.coords.latitude, p.coords.longitude), () => switchMode('manual')); else switchMode('manual'); }
+    
     function fetchPrayerTimes(lat, lng, city, country) {
       let url = lat ? `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4` : `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=4`;
-      fetch(url).then(res => res.json()).then(data => { if(data.code === 200) { displayTimes(data.data); startCountdown(data.data.timings); calculateNightTimes(data.data.timings); } });
+      fetch(url).then(res => res.json()).then(data => { 
+        if(data.code === 200) { displayTimes(data.data); startCountdown(data.data.timings); calculateNightTimes(data.data.timings); } 
+      });
     }
 
     function displayTimes(data) {
