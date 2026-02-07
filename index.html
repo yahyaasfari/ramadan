@@ -15,28 +15,35 @@
         }
         h1 { margin: 10px 0; font-size: 1.5em; color: #f1c40f; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         p { color: #ccc; margin-bottom: 15px; font-size: 0.9em; }
+        
         .controls {
             background: rgba(20, 30, 50, 0.9); padding: 15px; border-radius: 15px;
             width: 100%; max-width: 400px; margin-bottom: 15px;
             border: 1px solid rgba(241, 196, 15, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         input {
-            width: 100%; padding: 10px; border-radius: 8px; border: none;
-            text-align: center; font-size: 1em; margin-bottom: 10px; background: #f8f9fa;
+            width: 100%; padding: 12px; border-radius: 8px; border: none;
+            text-align: center; font-family: 'Tajawal', sans-serif;
+            font-size: 1.1em; margin-bottom: 10px; background: #f8f9fa; color: #333;
         }
         button {
-            width: 100%; padding: 10px; border-radius: 8px; border: none;
-            font-weight: bold; cursor: pointer; transition: 0.2s;
+            width: 100%; padding: 12px; border-radius: 8px; border: none;
+            font-family: 'Tajawal', sans-serif; font-weight: bold;
+            font-size: 1em; cursor: pointer; transition: 0.2s;
         }
         .btn-generate { background: linear-gradient(45deg, #f39c12, #d35400); color: white; margin-bottom: 8px; }
-        .btn-download { background: linear-gradient(45deg, #27ae60, #2ecc71); color: white; display: none; }
         
-        /* ضبط المعاينة لتناسب الشاشة */
+        /* حاوية أزرار النتيجة */
+        .action-btns { display: none; gap: 10px; flex-direction: column; width: 100%; }
+        .btn-download { background: linear-gradient(45deg, #27ae60, #2ecc71); color: white; }
+        .btn-share { background: linear-gradient(45deg, #3498db, #2980b9); color: white; }
+        
         canvas {
-            max-width: 85%; max-height: 45vh; /* تصغير العرض في الصفحة فقط */
+            max-width: 85%; max-height: 45vh; 
             width: auto; height: auto;
             border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-top: 5px; border: 2px solid #d4af37;
+            margin-top: 10px; border: 2px solid #d4af37;
         }
         .footer-link { margin-top: 20px; font-size: 0.9em; padding-bottom: 30px; }
         .footer-link a { color: #f39c12; text-decoration: none; font-weight: bold; }
@@ -48,9 +55,13 @@
     <p>اكتب اسمك ليتم تنسيقه آلياً داخل الإطار</p>
 
     <div class="controls">
-        <input type="text" id="nameInput" placeholder="اكتب الاسم (مثال: يحيى الأصفري)">
+        <input type="text" id="nameInput" placeholder="اكتب الاسم هنا">
         <button class="btn-generate" onclick="generateCard()">✨ معاينة البطاقة</button>
-        <button class="btn-download" id="downloadBtn" onclick="downloadCard()">⬇️ تحميل الصورة</button>
+        
+        <div id="actionArea" class="action-btns">
+            <button class="btn-download" onclick="downloadCard()">⬇️ تحميل الصورة</button>
+            <button class="btn-share" onclick="shareCard()">📤 مشاركة التهنئة</button>
+        </div>
     </div>
 
     <canvas id="cardCanvas"></canvas>
@@ -65,7 +76,7 @@
         const image = new Image();
         
         image.crossOrigin = "anonymous"; 
-        image.src = "ramadan-bg.png"; // تأكد من وجود الصورة بهذا الاسم في المجلد
+        image.src = "ramadan-bg.png"; // تأكد من وجود الصورة بهذا الاسم
 
         let imageLoaded = false;
 
@@ -82,7 +93,7 @@
             if (!name) return alert("الرجاء كتابة الاسم");
             
             drawText(name);
-            document.getElementById('downloadBtn').style.display = 'block';
+            document.getElementById('actionArea').style.display = 'flex';
             setTimeout(() => { canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
         }
 
@@ -92,7 +103,7 @@
 
             if(text) {
                 // خوارزمية الاحتواء التلقائي للنص
-                const maxTextWidth = canvas.width * 0.55; // عرض الإطار الذهبي
+                const maxTextWidth = canvas.width * 0.55; 
                 let fontSize = Math.floor(canvas.width / 14);
                 ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
 
@@ -101,17 +112,16 @@
                     ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
                 }
 
-                ctx.fillStyle = "#4b3621"; // لون بني داكن فاخر
+                ctx.fillStyle = "#4b3621"; // لون بني داكن لتباين مثالي
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle"; 
 
-                // الموقع الموزون بدقة
                 const centerX = canvas.width / 2;
-                const centerY = canvas.height * 0.668; 
+                const centerY = canvas.height * 0.668; // الموقع الموزون بدقة
 
                 ctx.fillText(text, centerX, centerY);
 
-                // إضافة asfari.net كعلامة مائية احترافية
+                // إضافة العلامة المائية
                 const adSize = Math.floor(canvas.width / 45);
                 ctx.font = `${adSize}px 'Tajawal', sans-serif`;
                 ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
@@ -121,13 +131,31 @@
         }
 
         function downloadCard() {
-            try {
-                const link = document.createElement('a');
-                const name = document.getElementById('nameInput').value.trim() || "Ramadan";
-                link.download = `Ramadan-${name}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            } catch (e) { alert("اضغط مطولاً على الصورة لحفظها."); }
+            const link = document.createElement('a');
+            const name = document.getElementById('nameInput').value.trim() || "Ramadan";
+            link.download = `Ramadan-${name}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        async function shareCard() {
+            const dataUrl = canvas.toDataURL('image/png');
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], 'Ramadan-Greeting.png', { type: 'image/png' });
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'تهنئة رمضان',
+                        text: 'مبارك عليكم الشهر الفضيل 🌙',
+                    });
+                } catch (err) {
+                    console.log("Share failed", err);
+                }
+            } else {
+                alert("ميزة المشاركة المباشرة مدعومة بشكل أفضل على الجوال. يمكنك تحميل الصورة وإرسالها يدوياً.");
+            }
         }
     </script>
 </body>
