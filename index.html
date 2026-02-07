@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تهنئة رمضان - أصفري برو</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0; padding: 10px;
@@ -21,8 +21,7 @@
         }
         input {
             width: 100%; padding: 12px; border-radius: 8px; border: none;
-            text-align: center; font-family: 'Tajawal', sans-serif;
-            font-size: 1.1em; margin-bottom: 10px; background: #f8f9fa; color: #333;
+            text-align: center; font-size: 1.1em; margin-bottom: 10px; background: #f8f9fa; color: #333;
         }
         button {
             width: 100%; padding: 12px; border-radius: 8px; border: none;
@@ -47,7 +46,7 @@
     <h1>مبارك عليكم الشهر 🌙</h1>
 
     <div class="controls">
-        <input type="text" id="nameInput" placeholder="اكتب الاسم هنا">
+        <input type="text" id="nameInput" placeholder="اكتب الاسم هنا مثال : أخوكم / يحيى الأصفري ">
         <button class="btn-generate" onclick="generateCard()">✨ معاينة البطاقة</button>
         
         <div id="actionArea" class="action-btns">
@@ -67,53 +66,42 @@
         const ctx = canvas.getContext('2d');
         const image = new Image();
         image.crossOrigin = "anonymous"; 
-        image.src = "ramadan-bg.png"; // تأكد من وجود الصورة بهذا الاسم بجانب الملف
+        image.src = "ramadan-bg.png"; 
 
         let imageLoaded = false;
-        image.onload = () => { 
-            imageLoaded = true; 
-            canvas.width = image.width; 
-            canvas.height = image.height; 
-            drawText(""); 
-        };
+        image.onload = () => { imageLoaded = true; canvas.width = image.width; canvas.height = image.height; drawText(""); };
 
         function generateCard() {
             if (!imageLoaded) return alert("جاري تحميل التصميم...");
             const name = document.getElementById('nameInput').value.trim();
             if (!name) return alert("الرجاء كتابة الاسم");
-            
-            // التأكد من تحميل الخط قبل الرسم
-            document.fonts.load("bold 10px 'Amiri'").then(() => {
-                drawText(name);
-                document.getElementById('actionArea').style.display = 'flex';
-                setTimeout(() => { canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
-            });
+            drawText(name);
+            document.getElementById('actionArea').style.display = 'flex';
+            setTimeout(() => { canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
         }
 
         function drawText(text) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image, 0, 0);
-            
             if(text) {
-                // --- إعدادات الخط الأميري الفخم ---
-                const maxAllowedWidth = canvas.width * 0.40; // منطقة أمان مشددة لمنع خروج النص
-                let fontSize = Math.floor(canvas.width / 13); // الخط الأميري يحتاج حجم أكبر قليلاً ليظهر جماله
-                ctx.font = `bold ${fontSize}px 'Amiri', serif`;
+                // --- الضبط "البرو" لمنع الخروج عن الإطار ---
+                const maxAllowedWidth = canvas.width * 0.45; // تقليل المساحة المتاحة لضمان الاحتواء
+                let fontSize = Math.floor(canvas.width / 16); 
+                ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
 
-                // خوارزمية الاحتواء التلقائي
                 while (ctx.measureText(text).width > maxAllowedWidth && fontSize > 15) {
                     fontSize -= 1;
-                    ctx.font = `bold ${fontSize}px 'Amiri', serif`;
+                    ctx.font = `bold ${fontSize}px 'Tajawal', sans-serif`;
                 }
 
-                ctx.fillStyle = "#4b3621"; // لون بني داكن كلاسيكي
+                ctx.fillStyle = "#4b3621"; 
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle"; 
                 
-                // التوسط العمودي الدقيق
+                // الموقع العمودي الموزون بدقة في وسط اللمعة
                 ctx.fillText(text, canvas.width / 2, canvas.height * 0.666); 
 
-                // العلامة المائية
+                // علامة الموقع
                 ctx.font = `${Math.floor(canvas.width / 45)}px 'Tajawal', sans-serif`;
                 ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
                 ctx.textAlign = "left";
@@ -129,13 +117,11 @@
         }
 
         async function shareCard() {
-            try {
-                const blob = await (await fetch(canvas.toDataURL())).blob();
-                const file = new File([blob], 'Ramadan.png', { type: 'image/png' });
-                if (navigator.share) {
-                    await navigator.share({ files: [file], title: 'تهنئة رمضان', text: 'مبارك عليكم الشهر 🌙' });
-                } else { alert("حمل الصورة وشاركها يدوياً."); }
-            } catch (err) { alert("حدث خطأ في المشاركة."); }
+            const blob = await (await fetch(canvas.toDataURL())).blob();
+            const file = new File([blob], 'Ramadan.png', { type: 'image/png' });
+            if (navigator.share) {
+                await navigator.share({ files: [file], title: 'تهنئة رمضان', text: 'مبارك عليكم الشهر 🌙' });
+            } else { alert("حمل الصورة وشاركها يدوياً."); }
         }
     </script>
 </body>
