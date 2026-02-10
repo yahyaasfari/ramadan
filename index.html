@@ -33,22 +33,17 @@
     .input-group { display: none; width: 100%; margin-bottom: 5px; }
     input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
 
-    #prayers-list-container { flex: 1; overflow-y: auto; background: rgba(255,255,255,0.6); border-radius: 15px 15px 0 0; padding-bottom: 180px; } /* زيادة الحشوة السفلية لاستيعاب الأزرار الجديدة */
+    #prayers-list-container { flex: 1; overflow-y: auto; background: rgba(255,255,255,0.6); border-radius: 15px 15px 0 0; padding-bottom: 180px; }
     .prayer-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
     .highlight-row { background-color: #fff8e1; border-left: 5px solid #f39c12; }
-    .time { color: #27ae60; font-weight: bold; font-size: 1.1em; }
+    .time { color: #27ae60; font-weight: bold; font-size: 1.1em; direction: ltr; } /* Direction LTR fixes formatting issues */
 
     .quote-box { margin: 10px 15px; padding: 12px; background-color: rgba(255,248,225, 0.7); border: 1px dashed #e67e22; border-radius: 12px; text-align: center; }
     .quote-text { color: #d35400; font-weight: bold; font-size: 1em; line-height: 1.4; }
 
-    /* الأزرار السفلية */
     .bottom-actions { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 100; }
-    
     .btn-ramadan { background: linear-gradient(45deg, #d4af37, #f1c40f); color: #0a1a3a !important; text-decoration: none; padding: 6px 15px; border-radius: 50px; font-weight: bold; font-size: 0.8em; border: 1px solid #fff; box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3); }
-    
     .btn-fab { background: #8e44ad; color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 0.85em; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3); }
-    
-    /* ستايل زر القرآن الجديد */
     .btn-quran { background: linear-gradient(45deg, #2ecc71, #27ae60); color: white !important; text-decoration: none; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 5px; border: none; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3); }
 
     .night-info-box { flex: 0 0 auto; padding: 10px; background-color: #2c3e50; color: #ecf0f1; border-radius: 15px 15px 0 0; font-size: 0.75em; display: flex; justify-content: space-around; align-items: center; margin: 0 -15px; z-index: 50; }
@@ -87,7 +82,6 @@
 
     <div class="bottom-actions">
       <a href="ramadan.html" class="btn-ramadan">🌙 بطاقة تهنئة رمضان</a>
-      
       <div style="display:flex; gap:10px; margin-top: 5px;">
         <button class="btn-fab" onclick="openModal('adhkarModal')">📿 الأذكار</button>
         <a href="https://qurancomplex.gov.sa/quran-hafs/" target="_blank" class="btn-quran">📖 القرآن</a>
@@ -110,59 +104,4 @@
     window.onload = () => { 
       updateBackground(); setInterval(updateBackground, 60000); 
       document.getElementById('daily-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
-      const savedMode = localStorage.getItem('mode'); 
-      if (savedMode === 'manual') runManualSearch(); else getLocation(); 
-    };
-
-    function getLocation() { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(p => fetchPrayerTimes(p.coords.latitude, p.coords.longitude), () => switchMode('manual')); else switchMode('manual'); }
-    
-    function fetchPrayerTimes(lat, lng, city, country) {
-      let url = lat ? `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4` : `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=4`;
-      fetch(url).then(res => res.json()).then(data => { 
-        if(data.code === 200) { displayTimes(data.data); startCountdown(data.data.timings); calculateNightTimes(data.data.timings); } 
-      });
-    }
-
-    function displayTimes(data) {
-      const t = data.timings, h = data.date.hijri;
-      document.getElementById('date-area').innerText = `${data.date.gregorian.date} م | ${parseInt(h.day)+hijriOffset} ${h.month.ar} ${h.year} هـ`;
-      const m = { 'Fajr': 'الفجر', 'Sunrise': 'الشروق', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء' };
-      let html = ''; for (const [k, v] of Object.entries(m)) html += `<div class="prayer-row" id="row-${k}"><span>${v}</span><span class="time">${t[k]}</span></div>`;
-      document.getElementById('prayers-list-content').innerHTML = html;
-    }
-
-    function startCountdown(timings) {
-      clearInterval(timerInterval); document.getElementById('countdown-area').style.display = 'block';
-      const pOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'], ar = {'Fajr': 'الفجر', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء'};
-      timerInterval = setInterval(() => {
-        const now = new Date(); let nextP = null, nextK = '';
-        for (let p of pOrder) { let d = new Date(); let [h, m] = timings[p].split(':'); d.setHours(h, m, 0); if (d > now) { nextP = d; nextK = p; break; } }
-        if (!nextP) { nextP = new Date(); nextP.setDate(nextP.getDate()+1); let [h, m] = timings['Fajr'].split(':'); nextP.setHours(h, m, 0); nextK = 'Fajr'; }
-        document.getElementById('p-name').innerText = ar[nextK];
-        const diff = nextP - now;
-        const hh = Math.floor(diff/3600000), mm = Math.floor((diff%3600000)/60000), ss = Math.floor((diff%60000)/1000);
-        document.getElementById('timer').innerText = `${hh < 10 ? '0'+hh : hh}:${mm < 10 ? '0'+mm : mm}:${ss < 10 ? '0'+ss : ss}`;
-      }, 1000);
-    }
-
-    function calculateNightTimes(timings) {
-      let maghrib = new Date(); let [mH, mM] = timings['Maghrib'].split(':'); maghrib.setHours(mH, mM, 0);
-      let fajr = new Date(); fajr.setDate(fajr.getDate()+1); let [fH, fM] = timings['Fajr'].split(':'); fajr.setHours(fH, fM, 0);
-      let diff = fajr - maghrib;
-      let midnight = new Date(maghrib.getTime() + (diff / 2));
-      let lastThird = new Date(fajr.getTime() - (diff / 3));
-      let fmt = d => { let h = d.getHours() % 12 || 12; let m = d.getMinutes(); return `${h}:${m < 10 ? '0'+m : m} ${d.getHours() >= 12 ? 'م' : 'ص'}`; };
-      document.getElementById('midnight-time').innerText = fmt(midnight);
-      document.getElementById('last-third-time').innerText = fmt(lastThird);
-    }
-
-    function switchMode(m) { document.getElementById('manual-input').style.display = m==='manual'?'block':'none'; localStorage.setItem('mode', m); if(m==='auto') getLocation(); }
-    function runManualSearch() { fetchPrayerTimes(null, null, document.getElementById('city').value, document.getElementById('country').value); }
-    function openModal(id) { document.getElementById(id).style.display = "block"; }
-    function closeModal(id) { document.getElementById(id).style.display = "none"; }
-    function toggleSound() { soundEnabled = !soundEnabled; document.getElementById('soundBtn').innerText = soundEnabled ? '🔊' : '🔇'; }
-    function adjustHijri(v) { hijriOffset += v; localStorage.setItem('hijriOffset', hijriOffset); location.reload(); }
-    function updateBackground() { const h = new Date().getHours(); document.body.className = h>=4&&h<6?'morning':h>=6&&h<11?'sunrise':h>=11&&h<16?'day':h>=16&&h<19?'sunset':'night'; }
-  </script>
-</body>
-</html>
+      const
