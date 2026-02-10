@@ -104,4 +104,83 @@
     window.onload = () => { 
       updateBackground(); setInterval(updateBackground, 60000); 
       document.getElementById('daily-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
-      const
+      const savedMode = localStorage.getItem('mode'); 
+      if (savedMode === 'manual') runManualSearch(); else getLocation(); 
+    };
+
+    function getLocation() { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(p => fetchPrayerTimes(p.coords.latitude, p.coords.longitude), () => switchMode('manual')); else switchMode('manual'); }
+    
+    function fetchPrayerTimes(lat, lng, city, country) {
+      // تم التعديل هنا: جلبنا البيانات
+      let url = lat ? `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4` : `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=4`;
+      fetch(url).then(res => res.json()).then(data => { 
+        if(data.code === 200) { displayTimes(data.data); startCountdown(data.data.timings); calculateNightTimes(data.data.timings); } 
+      });
+    }
+
+    // دالة جديدة لتحويل الوقت لنظام 12 ساعة
+    function formatTime12(time24) {
+      if (!time24) return "";
+      let [h, m] = time24.split(':');
+      h = parseInt(h);
+      const suffix = h >= 12 ? 'م' : 'ص';
+      h = h % 12 || 12; // تحويل 0 إلى 12
+      return `${h}:${m} ${suffix}`;
+    }
+
+    function displayTimes(data) {
+      const t = data.timings, h = data.date.hijri;
+      document.getElementById('date-area').innerText = `${data.date.gregorian.date} م | ${parseInt(h.day)+hijriOffset} ${h.month.ar} ${h.year} هـ`;
+      const m = { 'Fajr': 'الفجر', 'Sunrise': 'الشروق', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء' };
+      
+      let html = ''; 
+      for (const [k, v] of Object.entries(m)) {
+          // هنا نستخدم الدالة الجديدة لتحويل الوقت قبل عرضه
+          let time12 = formatTime12(t[k]); 
+          html += `<div class="prayer-row" id="row-${k}"><span>${v}</span><span class="time">${time12}</span></div>`;
+      }
+      document.getElementById('prayers-list-content').innerHTML = html;
+      
+      // تحديث المدينة
+      if (data.meta && data.meta.timezone) {
+          const cityDisplay = data.meta.timezone.split('/')[1] || 'تم تحديد الموقع';
+          document.getElementById('city-subtitle').innerText = cityDisplay.replace('_', ' ');
+      }
+    }
+
+    function startCountdown(timings) {
+      clearInterval(timerInterval); document.getElementById('countdown-area').style.display = 'block';
+      const pOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'], ar = {'Fajr': 'الفجر', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء'};
+      timerInterval = setInterval(() => {
+        const now = new Date(); let nextP = null, nextK = '';
+        for (let p of pOrder) { let d = new Date(); let [h, m] = timings[p].split(':'); d.setHours(h, m, 0); if (d > now) { nextP = d; nextK = p; break; } }
+        if (!nextP) { nextP = new Date(); nextP.setDate(nextP.getDate()+1); let [h, m] = timings['Fajr'].split(':'); nextP.setHours(h, m, 0); nextK = 'Fajr'; }
+        document.getElementById('p-name').innerText = ar[nextK];
+        const diff = nextP - now;
+        const hh = Math.floor(diff/3600000), mm = Math.floor((diff%3600000)/60000), ss = Math.floor((diff%60000)/1000);
+        document.getElementById('timer').innerText = `${hh < 10 ? '0'+hh : hh}:${mm < 10 ? '0'+mm : mm}:${ss < 10 ? '0'+ss : ss}`;
+      }, 1000);
+    }
+
+    function calculateNightTimes(timings) {
+      let maghrib = new Date(); let [mH, mM] = timings['Maghrib'].split(':'); maghrib.setHours(mH, mM, 0);
+      let fajr = new Date(); fajr.setDate(fajr.getDate()+1); let [fH, fM] = timings['Fajr'].split(':'); fajr.setHours(fH, fM, 0);
+      let diff = fajr - maghrib;
+      let midnight = new Date(maghrib.getTime() + (diff / 2));
+      let lastThird = new Date(fajr.getTime() - (diff / 3));
+      // تنسيق 12 ساعة للأوقات الليلية أيضاً
+      let fmt = d => { let h = d.getHours() % 12 || 12; let m = d.getMinutes(); return `${h}:${m < 10 ? '0'+m : m} ${d.getHours() >= 12 ? 'م' : 'ص'}`; };
+      document.getElementById('midnight-time').innerText = fmt(midnight);
+      document.getElementById('last-third-time').innerText = fmt(lastThird);
+    }
+
+    function switchMode(m) { document.getElementById('manual-input').style.display = m==='manual'?'block':'none'; localStorage.setItem('mode', m); if(m==='auto') getLocation(); }
+    function runManualSearch() { fetchPrayerTimes(null, null, document.getElementById('city').value, document.getElementById('country').value); }
+    function openModal(id) { document.getElementById(id).style.display = "block"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    function toggleSound() { soundEnabled = !soundEnabled; document.getElementById('soundBtn').innerText = soundEnabled ? '🔊' : '🔇'; }
+    function adjustHijri(v) { hijriOffset += v; localStorage.setItem('hijriOffset', hijriOffset); location.reload(); }
+    function updateBackground() { const h = new Date().getHours(); document.body.className = h>=4&&h<6?'morning':h>=6&&h<11?'sunrise':h>=11&&h<16?'day':h>=16&&h<19?'sunset':'night'; }
+  </script>
+</body>
+</html>
