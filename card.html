@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>صانع التهنئة الذكي | asfari.net</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&family=Amiri:wght@700&family=Reem+Kufi:wght@700&family=Cairo:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&family=Cairo:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -134,8 +134,6 @@
         }
         
         #cardCanvas { display: none; }
-
-        [lang="en"] .home-btn { flex-direction: row-reverse; }
     </style>
 </head>
 <body>
@@ -182,8 +180,8 @@
                 dlBtn: "تحميل", shBtn: "واتساب", homeBtn: "الرئيسية",
                 placeholder: "أدخل الاسم هنا", langBtn: "English",
                 events: {
-                    ramadan: "🌙 رمضان", fitr: "🍬 عيد الفطر", adha: "🐑 عيد الأضحى",
-                    hijri: "🕌 هجري", newyear: "🎄 رأس السنة", birthday: "🎂 ميلاد"
+                    ramadan: "🌙 تهنئة رمضان", fitr: "🍬 تهنئة عيد الفطر", adha: "🐑 تهنئة عيد الأضحى",
+                    hijri: "🕌 تهنئة العام الهجري", newyear: "🎄 تهنئة رأس السنة", birthday: "🎂 تهنئة عيد ميلاد"
                 }
             },
             en: {
@@ -192,18 +190,18 @@
                 placeholder: "Enter name", langBtn: "عربي",
                 events: {
                     ramadan: "🌙 Ramadan", fitr: "🍬 Eid Fitr", adha: "🐑 Eid Adha",
-                    hijri: "🕌 Hijri", newyear: "🎄 New Year", birthday: "🎂 Birthday"
+                    hijri: "🕌 New year Hijri", newyear: "🎄 New Year", birthday: "🎂 Birthday"
                 }
             }
         };
 
         const configs = {
-            ramadan: { bg: 'ramadan-bg.png', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white' },
-            fitr: { bg: 'eid-fitr.png', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white' },
-            adha: { bg: 'eid-adha.png', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black' },
-            hijri: { bg: 'hijri.png', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white' },
-            newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'black' },
-            birthday: { bg: 'birthday.png', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black' }
+            ramadan: { bg: 'ramadan-bg.png', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+            fitr: { bg: 'eid-fitr.png', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+            adha: { bg: 'eid-adha.png', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            hijri: { bg: 'hijri.png', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
+            newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'عام جديد سعيد 🎄' },
+            birthday: { bg: 'birthday.png', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'أتمنى لك عيد ميلاد سعيد 🎂' }
         };
 
         function renderButtons() {
@@ -227,61 +225,57 @@
 
         function updateLiveView() {
             const name = document.getElementById('nameInput').value.trim();
-            
             if (bgImage.complete && bgImage.width > 0) {
                 canvas.width = bgImage.width;
                 canvas.height = bgImage.height;
-                
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(bgImage, 0, 0);
 
                 const config = configs[currentEvent];
                 
-                // 1. رسم الاسم مع "الاحتواء الذكي الصارم"
                 if (name) {
-                    let fontSize = Math.floor(canvas.width * 0.075); // حجم ابتدائي متوازن
+                    // تحديد إطار النص (60% من عرض الصورة لضمان البقاء داخل الزخارف)
+                    const safeWidth = canvas.width * 0.60;
+                    let fontSize = Math.floor(canvas.width * 0.08); 
                     ctx.font = `bold ${fontSize}px ${config.font}`;
                     ctx.fillStyle = config.color;
                     ctx.textAlign = "center";
                     
-                    const maxAllowedWidth = canvas.width * 0.75; // منطقة أمان 75%
                     let metrics = ctx.measureText(name);
-                    
-                    while (metrics.width > maxAllowedWidth && fontSize > 12) {
-                        fontSize -= 1;
+                    // تصغير الخط حتى يتناسب مع الإطار المحدد
+                    while (metrics.width > safeWidth && fontSize > 10) {
+                        fontSize -= 2;
                         ctx.font = `bold ${fontSize}px ${config.font}`;
                         metrics = ctx.measureText(name);
                     }
                     ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
                 }
 
-                // 2. العلامة المائية في الزاوية اليسرى السفلية
-                const watermarkSize = Math.floor(canvas.width * 0.022);
-                ctx.font = `bold ${watermarkSize}px 'Tajawal'`;
-                ctx.textAlign = "left"; 
-                
-                // تحديد اللون حسب المناسبة
+                // العلامة المائية في الزاوية اليسرى السفلية
+                const wmSize = Math.floor(canvas.width * 0.025);
+                ctx.font = `bold ${wmSize}px 'Tajawal'`;
+                ctx.textAlign = "left";
                 ctx.fillStyle = (config.wm === 'white') ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.6)";
-                
-                // إحداثيات الزاوية اليسرى السفلية مع هامش بسيط (3%)
-                const margin = canvas.width * 0.03;
+                const margin = canvas.width * 0.04;
                 ctx.fillText("asfari.net", margin, canvas.height - margin);
             }
         }
 
         function downloadCard() {
             const name = document.getElementById('nameInput').value.trim();
-            if(!name) {
-                alert(currentLang === 'ar' ? "يرجى كتابة الاسم أولاً" : "Please enter a name first");
-                return;
-            }
-            updateLiveView();
-            setTimeout(() => {
-                const link = document.createElement('a');
-                link.download = `Asfari-${currentEvent}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }, 150);
+            if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم" : "Please enter name"); return; }
+            const link = document.createElement('a');
+            link.download = `Asfari-${currentEvent}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function shareWhatsApp() {
+            const config = configs[currentEvent];
+            const name = document.getElementById('nameInput').value.trim();
+            const greeting = name ? `${config.waMsg} من ${name}` : config.waMsg;
+            const text = `${greeting}\n\n`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         }
 
         function toggleLanguage() {
@@ -290,19 +284,9 @@
             document.getElementById('mainHtml').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
             document.getElementById('mainTitle').innerText = translations[currentLang].mainTitle;
             document.getElementById('chooseText').innerText = translations[currentLang].chooseText;
-            document.getElementById('homeBtn').innerHTML = `<i class="fas fa-home"></i> ${translations[currentLang].homeBtn}`;
-            document.getElementById('dlBtn').innerHTML = `<i class="fas fa-download"></i> ${translations[currentLang].dlBtn}`;
-            document.getElementById('shBtn').innerHTML = `<i class="fab fa-whatsapp"></i> ${translations[currentLang].shBtn}`;
             document.getElementById('nameInput').placeholder = translations[currentLang].placeholder;
             document.querySelector('.lang-btn').innerText = translations[currentLang].langBtn;
             renderButtons();
-        }
-
-        function shareWhatsApp() {
-            const text = currentLang === 'ar' 
-                ? `اصنع تهنئتك باسمك عبر موقع المهندس يحيى أصفري: https://asfari.net` 
-                : `Create your greeting card: https://asfari.net`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         }
 
         window.onload = () => setEvent('ramadan');
