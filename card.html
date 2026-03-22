@@ -133,7 +133,6 @@
             gap: 8px;
         }
         
-        /* إخفاء الكانفاس برمجياً */
         #cardCanvas { display: none; }
 
         [lang="en"] .home-btn { flex-direction: row-reverse; }
@@ -198,12 +197,11 @@
             }
         };
 
-        // تم ضبط المسارات لتطابق صورك الـ PNG تماماً
         const configs = {
-            ramadan: { bg: 'ramadan-bg.png', color: '#f1c40f', y: 0.669, font: "'Amiri', serif" },
-            fitr: { bg: 'eid-fitr.png', color: '#4b3621', y: 0.76, font: "'Reem Kufi', sans-serif" },
-            adha: { bg: 'eid-adha.png', color: '#5d4037', y: 0.81, font: "'Reem Kufi', sans-serif" },
-            hijri: { bg: 'hijri.png', color: '#f1c40f', y: 0.73, font: "'Amiri', serif" },
+            ramadan: { bg: 'ramadan-bg.png', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif" },
+            fitr: { bg: 'eid-fitr.png', color: '#FFD700', y: 0.76, font: "'Cairo', sans-serif" },
+            adha: { bg: 'eid-adha.png', color: '#E5B49E', y: 0.81, font: "'Cairo', sans-serif" },
+            hijri: { bg: 'hijri.png', color: '#C5A021', y: 0.73, font: "'Cairo', sans-serif" },
             newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif" },
             birthday: { bg: 'birthday.png', color: '#2c3e50', y: 0.88, font: "'Tajawal', sans-serif" }
         };
@@ -229,24 +227,41 @@
 
         function updateLiveView() {
             const name = document.getElementById('nameInput').value.trim();
-            canvas.width = bgImage.width || 1000; // قيمة افتراضية لحين التحميل
-            canvas.height = bgImage.height || 1000;
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (bgImage.complete) {
+            if (bgImage.complete && bgImage.width > 0) {
+                canvas.width = bgImage.width;
+                canvas.height = bgImage.height;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(bgImage, 0, 0);
+
+                const config = configs[currentEvent];
+                
+                // 1. رسم الاسم مع الاحتواء الذكي
                 if (name) {
-                    const config = configs[currentEvent];
-                    let fontSize = Math.floor(canvas.width / 13);
+                    let fontSize = Math.floor(canvas.width * 0.08); 
                     ctx.font = `bold ${fontSize}px ${config.font}`;
                     ctx.fillStyle = config.color;
                     ctx.textAlign = "center";
+                    
+                    const maxAllowedWidth = canvas.width * 0.85; 
+                    let metrics = ctx.measureText(name);
+                    
+                    while (metrics.width > maxAllowedWidth && fontSize > 20) {
+                        fontSize -= 2;
+                        ctx.font = `bold ${fontSize}px ${config.font}`;
+                        metrics = ctx.measureText(name);
+                    }
+
                     ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
                 }
-                // حقوق الموقع
-                ctx.font = `500 ${Math.floor(canvas.width / 45)}px 'Tajawal'`;
-                ctx.fillStyle = "rgba(0,0,0,0.3)";
-                ctx.fillText("asfari.net", canvas.width / 2, canvas.height * 0.96);
+
+                // 2. رسم العلامة المائية asfari.net في أسفل كل صورة بشكل ثابت
+                const watermarkSize = Math.floor(canvas.width * 0.025);
+                ctx.font = `500 ${watermarkSize}px 'Tajawal'`;
+                ctx.fillStyle = "rgba(0,0,0,0.4)";
+                ctx.textAlign = "center";
+                ctx.fillText("asfari.net", canvas.width / 2, canvas.height * 0.95);
             }
         }
 
