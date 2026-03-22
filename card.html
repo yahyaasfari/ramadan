@@ -133,13 +133,9 @@
             gap: 8px;
         }
         
-        canvas { 
-            max-width: 100%; 
-            height: auto; 
-            border-radius: 20px; 
-            margin-top: 25px; 
-            border: 3px solid var(--secondary-turquoise); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        /* إخفاء الكانفاس تماماً بناءً على طلبك */
+        #cardCanvas { 
+            display: none; 
         }
 
         [lang="en"] .home-btn { flex-direction: row-reverse; }
@@ -180,8 +176,8 @@
         let currentEvent = 'ramadan';
         const canvas = document.getElementById('cardCanvas');
         const ctx = canvas.getContext('2d');
-        const image = new Image();
-        image.crossOrigin = "anonymous";
+        const bgImage = new Image();
+        bgImage.crossOrigin = "anonymous";
 
         const translations = {
             ar: {
@@ -235,16 +231,24 @@
 
         function setEvent(ev) {
             currentEvent = ev;
-            image.src = configs[ev].bg;
-            image.onload = () => updateLiveView();
+            bgImage.src = configs[ev].bg;
+            // ننتظر تحميل الصورة الجديدة تماماً قبل الرسم
+            bgImage.onload = () => {
+                updateLiveView();
+            };
             renderButtons();
         }
 
         function updateLiveView() {
             const name = document.getElementById('nameInput').value.trim();
-            canvas.width = image.width;
-            canvas.height = image.height;
-            ctx.drawImage(image, 0, 0);
+            
+            // ضبط أبعاد الكانفاس لتطابق الصورة المحملة حالياً
+            canvas.width = bgImage.width;
+            canvas.height = bgImage.height;
+            
+            // مسح الكانفاس ورسم الصورة الحالية
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(bgImage, 0, 0);
             
             if (name) {
                 const config = configs[currentEvent];
@@ -256,7 +260,8 @@
                 ctx.textAlign = "center";
                 ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
             }
-            // علامة مائية
+            
+            // علامة مائية احترافية
             ctx.font = `500 ${Math.floor(canvas.width / 45)}px 'Tajawal'`;
             ctx.fillStyle = "rgba(0,0,0,0.2)";
             ctx.fillText("asfari.net", canvas.width / 2, canvas.height * 0.96);
@@ -277,22 +282,29 @@
         }
 
         function downloadCard() {
+            const name = document.getElementById('nameInput').value.trim();
+            if(!name) {
+                alert(currentLang === 'ar' ? "يرجى إدخال الاسم أولاً" : "Please enter a name first");
+                return;
+            }
+            updateLiveView(); // تأكيد أخير للرسم قبل التحميل
             const link = document.createElement('a');
-            link.download = `Asfari-Greeting.png`;
+            link.download = `Asfari-Greeting-${currentEvent}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
 
         function shareWhatsApp() {
-            const name = document.getElementById('nameInput').value.trim();
             const text = currentLang === 'ar' 
-                ? `تفضل بإنشاء تهنئتك الخاصة باسمك مثلي عبر موقع المهندس يحيى أصفري: https://asfari.net` 
-                : `Create your own greeting card like mine via: https://asfari.net`;
+                ? `تفضل بإنشاء تهنئتك الخاصة باسمك عبر موقع المهندس يحيى أصفري: https://asfari.net` 
+                : `Create your own greeting card via: https://asfari.net`;
             window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        // تشغيل افتراضي
-        setEvent('ramadan');
+        // بدء التشغيل الافتراضي بمناسبة رمضان
+        window.onload = () => {
+            setEvent('ramadan');
+        };
     </script>
 </body>
 </html>
