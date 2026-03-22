@@ -1,186 +1,246 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl" id="mainHtml">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>مواقيت الصلاة - أصفري</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Tajawal', sans-serif; overflow: hidden; }
+    <meta property="og:type" content="website">
+<meta property="og:url" content="https://asfari.net/">
+<meta property="og:title" content="يحيى أصفري | خبير الحلول الرقمية والمونتاج">
+<meta property="og:description" content="نحول رؤيتك إلى واقع بصري. خدمات احترافية في المونتاج، إدارة الحملات، وصناعة المحتوى الرقمي.">
+<meta property="og:image" content="https://asfari.net/assets/og-preview.jpg"> <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="يحيى أصفري | asfari.net">
+<meta name="twitter:description" content="خبير المونتاج وإدارة الحملات الإعلانية - حلول رقمية متكاملة.">
+<meta name="twitter:image" content="https://asfari.net/assets/og-preview.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>asfari.net | أدوات وخدمات رقمية</title>
     
-    body.morning { background: linear-gradient(135deg, #e0f7fa, #81d4fa); }
-    body.sunrise { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
-    body.day { background: linear-gradient(135deg, #f0f2f5, #e3f2fd); }
-    body.sunset { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
-    body.night { background: linear-gradient(135deg, #eceff1, #cfd8dc); }
+    <meta name="description" content="الموقع الشخصي للمهندس يحيى أصفري - خدمات المونتاج، إدارة الحملات، وكتابة المحتوى.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "يحيى أصفري",
+      "url": "https://asfari.net",
+      "jobTitle": "Full-Stack Developer & Media Expert"
+    }
+    </script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "يحيى أصفري | Yahya Asfari",
+  "url": "https://asfari.net",
+  "jobTitle": "Digital Solutions Expert & Video Editor",
+  "description": "خبير متخصص في المونتاج الإبداعي، إدارة الحملات الإعلانية، وكتابة المحتوى التسويقي.",
+  "sameAs": [
+    "https://wa.me/966583161972"
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "خدمات يحيى أصفري الرقمية",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "المونتاج وصناعة الأفلام"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "إدارة الحملات الإعلانية الممولة"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "كتابة المحتوى التسويقي"
+        }
+      }
+    ]
+  }
+}
+</script>
 
-    .container { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 10px 15px 0 15px; max-width: 500px; margin: 0 auto; position: relative; }
-    .header-row { display: flex; justify-content: space-between; align-items: center; flex: 0 0 auto; margin-bottom: 5px; }
-    .tool-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; color: #555; padding: 5px; }
-    .header-section { text-align: center; flex: 1; }
-    h1 { color: #2c3e50; font-size: 1.3em; margin: 0; font-weight: 900; }
-    .city-subtitle { font-size: 0.85em; color: #7f8c8d; }
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    .countdown-box { flex: 0 0 auto; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px; border-radius: 15px; margin-bottom: 10px; text-align: center; }
-    .next-prayer-name { font-size: 1.6em; font-weight: 900; margin: 0; }
-    .timer-display { font-size: 2.3em; font-weight: 800; font-family: monospace; direction: ltr; }
+    <style>
+        :root {
+            --primary-purple: #6c5ce7;
+            --secondary-turquoise: #00cec9;
+            --dark-bg: #0f0c29;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
 
-    .tabs { display: flex; gap: 8px; margin-bottom: 5px; flex: 0 0 auto; }
-    .tab-btn { flex: 1; background: rgba(255,255,255,0.6); border: none; padding: 8px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85em; }
-    .tab-btn.active { background: #2c3e50; color: white; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: all 0.3s ease; }
+        body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: #ffffff; min-height: 100vh; overflow-x: hidden; }
 
-    .input-group { display: none; width: 100%; margin-bottom: 5px; }
-    input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
+        header { padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--glass-border); }
+        .logo { font-size: 20px; font-weight: 800; background: linear-gradient(to left, var(--primary-purple), var(--secondary-turquoise)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .lang-btn { background: var(--glass-bg); border: 1px solid var(--secondary-turquoise); color: var(--secondary-turquoise); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; }
 
-    #prayers-list-container { flex: 1; overflow-y: auto; background: rgba(255,255,255,0.6); border-radius: 15px 15px 0 0; padding-bottom: 180px; }
-    .prayer-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-    .highlight-row { background-color: #fff8e1; border-left: 5px solid #f39c12; }
-    .time { color: #27ae60; font-weight: bold; font-size: 1.1em; direction: ltr; } /* Direction LTR fixes formatting issues */
+        /* منطقة الأدوات العلوية - كما طلبتها يا باشمهندس */
+        .tools-section { padding: 30px 5% 10px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 10px 5%; }
+        
+        /* قسم التعريف - تحت الأدوات */
+        .hero { text-align: center; padding: 40px 5%; background: rgba(255,255,255,0.02); margin: 30px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+        .hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; background: linear-gradient(to right, #fff, var(--secondary-turquoise)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 0.95rem; font-weight: 300; max-width: 600px; margin: 0 auto 20px; color: #ccc; }
 
-    .quote-box { margin: 10px 15px; padding: 12px; background-color: rgba(255,248,225, 0.7); border: 1px dashed #e67e22; border-radius: 12px; text-align: center; }
-    .quote-text { color: #d35400; font-weight: bold; font-size: 1em; line-height: 1.4; }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; text-align: center; display: flex; flex-direction: column; position: relative; }
+        .glass-card:hover { transform: translateY(-5px); border-color: var(--secondary-turquoise); }
+        .glass-card i { font-size: 35px; margin-bottom: 15px; background: linear-gradient(45deg, var(--primary-purple), var(--secondary-turquoise)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card h3 { font-weight: 800; margin-bottom: 10px; font-size: 1.2rem; }
+        .glass-card p { font-weight: 300; font-size: 0.85rem; color: #ddd; margin-bottom: 20px; }
 
-    .bottom-actions { position: absolute; bottom: 65px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 100; }
-    .btn-ramadan { background: linear-gradient(45deg, #d4af37, #f1c40f); color: #0a1a3a !important; text-decoration: none; padding: 6px 15px; border-radius: 50px; font-weight: bold; font-size: 0.8em; border: 1px solid #fff; box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3); }
-    .btn-fab { background: #8e44ad; color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 0.85em; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3); }
-    .btn-quran { background: linear-gradient(45deg, #2ecc71, #27ae60); color: white !important; text-decoration: none; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 5px; border: none; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3); }
+        .cta-btn { display: inline-block; padding: 10px 30px; background: linear-gradient(135deg, var(--primary-purple), var(--secondary-turquoise)); color: white; text-decoration: none; border-radius: 50px; font-weight: 800; font-size: 0.9rem; }
+        .tool-btn { background: transparent; border: 1px solid var(--secondary-turquoise); color: var(--secondary-turquoise); margin-top: auto; padding: 8px 15px; font-size: 0.85rem; border-radius: 50px; text-decoration: none; display: inline-block; }
+        .tool-btn:hover { background: var(--secondary-turquoise); color: var(--dark-bg); }
 
-    .night-info-box { flex: 0 0 auto; padding: 10px; background-color: #2c3e50; color: #ecf0f1; border-radius: 15px 15px 0 0; font-size: 0.75em; display: flex; justify-content: space-around; align-items: center; margin: 0 -15px; z-index: 50; }
-    .night-val { color: #f1c40f; font-weight: bold; font-size: 1.05em; }
+        footer { text-align: center; padding: 30px; font-size: 0.8rem; border-top: 1px solid var(--glass-border); opacity: 0.7; }
 
-    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); }
-    .modal-content { background-color: white; position: absolute; bottom: 0; width: 100%; max-height: 70vh; overflow-y: auto; border-radius: 20px 20px 0 0; padding: 20px; text-align: right; }
-    .close-modal { float: left; background: #f0f0f0; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; cursor: pointer; }
-    .dhikr-item { padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.9em; }
-  </style>
+        @media (max-width: 768px) {
+            .tools-section { padding: 20px 3% 5px; }
+            .hero h1 { font-size: 1.5rem; }
+            .grid-container { gap: 15px; }
+        }
+    </style>
 </head>
 <body>
-  <audio id="adhanAudio" src="https://media.sd.ma/assabile/adhan/3849/03849.mp3" preload="auto"></audio>
-  <div class="container">
-    <div class="header-row">
-      <button class="tool-btn" onclick="openModal('settingsModal')">⚙️</button>
-      <div class="header-section"><h1>مواقيت الصلاة</h1><div id="city-subtitle" class="city-subtitle">جاري التحديث...</div></div>
-      <button class="tool-btn" onclick="toggleSound()" id="soundBtn">🔊</button>
-    </div>
-    
-    <div id="countdown-area" class="countdown-box" style="display:none;">
-      <div style="font-size: 0.75em; opacity: 0.9;">متبقي على</div>
-      <div id="p-name" class="next-prayer-name">...</div>
-      <div id="timer" class="timer-display">00:00:00</div>
-    </div>
 
-    <div class="tabs"><button class="tab-btn active" onclick="switchMode('auto')" id="btn-auto">موقعي</button><button class="tab-btn" onclick="switchMode('manual')" id="btn-manual">بحث يدوي</button></div>
-    <div id="manual-input" class="input-group"><input type="text" id="city" placeholder="المدينة"><input type="text" id="country" placeholder="الدولة"><button class="tab-btn active" style="width:100%; margin-top:5px; background:#27ae60; color:white;" onclick="runManualSearch()">بحث</button></div>
-    
-    <div id="date-area" style="text-align:center; font-size:0.75em; margin-bottom:5px; color:#555;"></div>
+    <header>
+        <div class="logo">asfari.net</div>
+        <button class="lang-btn" onclick="toggleLanguage()" id="langSwitcher">English</button>
+    </header>
 
-    <div id="prayers-list-container">
-      <div id="prayers-list-content"></div>
-      <div class="quote-box"><div id="daily-quote" class="quote-text">...</div></div>
-    </div>
+    <section class="tools-section">
+        <div class="grid-container">
+            <div class="glass-card" style="border-top: 3px solid var(--secondary-turquoise);">
+                <div>
+                    <i class="fas fa-mosque"></i>
+                    <h3 id="tool2Title">مواقيت الصلاة</h3>
+                    <p id="tool2Desc">خدمة ذكية لمواقيت الصلاة بناءً على موقعك الحالي.</p>
+                </div>
+                <a href="prayer.html" class="tool-btn" id="tool2Btn">عرض المواقيت</a>
+            </div>
 
-    <div class="bottom-actions">
-      <a href="ramadan.html" class="btn-ramadan">🌙 بطاقة تهنئة رمضان</a>
-      <div style="display:flex; gap:10px; margin-top: 5px;">
-        <button class="btn-fab" onclick="openModal('adhkarModal')">📿 الأذكار</button>
-        <a href="https://qurancomplex.gov.sa/quran-hafs/" target="_blank" class="btn-quran">📖 القرآن</a>
-      </div>
-    </div>
+            <div class="glass-card" style="border-top: 3px solid var(--primary-purple);">
+                <div>
+                    <i class="fas fa-magic"></i>
+                    <h3 id="tool1Title">بطاقات التهنئة</h3>
+                    <p id="tool1Desc">صمم بطاقة مناسبتك بلمسة فنية فريدة الآن.</p>
+                </div>
+                <a href="card.html" class="tool-btn" id="tool1Btn">ابدأ التصميم</a>
+            </div>
+        </div>
+    </section>
 
-    <div id="night-area" class="night-info-box">
-      <div class="night-item"><span style="display:block; opacity:0.8;">منتصف الليل</span><span id="midnight-time" class="night-val">--:--</span></div>
-      <div class="night-item"><span style="display:block; opacity:0.8;">الثلث الأخير</span><span id="last-third-time" class="night-val">--:--</span></div>
-    </div>
-  </div>
+    <section class="hero">
+        <h1 id="heroTitle">يحيى أصفري | حلول رقمية</h1>
+        <p id="heroDesc">خبير في المونتاج، التصميم، وإدارة الحملات الإعلانية الاحترافية.</p>
+        <a href="https://wa.me/966583161972" target="_blank" class="cta-btn" id="heroBtn">تواصل معي مباشر</a>
+    </section>
 
-  <div id="adhkarModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('adhkarModal')">✕</span><h2 style="color:#8e44ad; text-align:center; font-size:1.1em;">أذكار بعد الصلاة</h2><div class="dhikr-item">أستغفر الله (3 مرات)</div><div class="dhikr-item">اللهم أنت السلام ومنك السلام</div><div class="dhikr-item">سبحان الله (33) والحمد لله (33) والله أكبر (33)</div></div></div>
-  <div id="settingsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('settingsModal')">✕</span><h2 style="text-align:center; font-size:1.1em;">الإعدادات</h2><button onclick="adjustHijri(1)" style="width:100%; padding:8px; margin-bottom:10px;">تقديم التاريخ الهجري +1</button><button onclick="adjustHijri(-1)" style="width:100%; padding:8px;">تأخير التاريخ الهجري -1</button></div></div>
+    <section class="services-section">
+        <div class="grid-container">
+            <div class="glass-card">
+                <div>
+                    <i class="fas fa-palette"></i>
+                    <h3 id="srv1Title">المونتاج والتصميم</h3>
+                    <p id="srv1Desc">محتوى مرئي يخطف الأنظار ويعزز هويتك التجارية.</p>
+                </div>
+                <a href="https://wa.me/966583161972?text=طلب المونتاج" class="tool-btn" id="srv1Btn">اطلب الخدمة</a>
+            </div>
 
-  <script>
-    let timerInterval, soundEnabled = true, hijriOffset = parseInt(localStorage.getItem('hijriOffset') || 0);
-    const quotes = ["اللهم أعني على ذكرك وشكرك وحسن عبادتك", "سبحان الله وبحمده، سبحان الله العظيم", "لا حول ولا قوة إلا بالله كنز من كنوز الجنة", "اللهم صلِّ وسلم على نبينا محمد", "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِن ذُرِّيَّتِي", "أستغفر الله العظيم وأتوب إليه"];
+            <div class="glass-card">
+                <div>
+                    <i class="fas fa-chart-line"></i>
+                    <h3 id="srv2Title">إدارة الحملات</h3>
+                    <p id="srv2Desc">تحسين الوصول وتحقيق أعلى معدلات التحويل الرقمي.</p>
+                </div>
+                <a href="https://wa.me/966583161972?text=إدارة حملات" class="tool-btn" id="srv2Btn">اطلب الخدمة</a>
+            </div>
 
-    window.onload = () => { 
-      updateBackground(); setInterval(updateBackground, 60000); 
-      document.getElementById('daily-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
-      const savedMode = localStorage.getItem('mode'); 
-      if (savedMode === 'manual') runManualSearch(); else getLocation(); 
-    };
+            <div class="glass-card">
+                <div>
+                    <i class="fas fa-feather-alt"></i>
+                    <h3 id="srv3Title">كتابة المحتوى والتدقيق اللغوي</h3>
+                    <p id="srv3Desc">نصوص تسويقية وتدقيق لغوي لضمان احترافية رسالتك.</p>
+                </div>
+                <a href="https://wa.me/966583161972?text=كتابة محتوى" class="tool-btn" id="srv3Btn">استشارة مجانية</a>
+            </div>
+        </div>
+    </section>
 
-    function getLocation() { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(p => fetchPrayerTimes(p.coords.latitude, p.coords.longitude), () => switchMode('manual')); else switchMode('manual'); }
-    
-    function fetchPrayerTimes(lat, lng, city, country) {
-      // تم التعديل هنا: جلبنا البيانات
-      let url = lat ? `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4` : `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=4`;
-      fetch(url).then(res => res.json()).then(data => { 
-        if(data.code === 200) { displayTimes(data.data); startCountdown(data.data.timings); calculateNightTimes(data.data.timings); } 
-      });
-    }
+    <footer>
+        <p id="footerText">جميع الحقوق محفوظة &copy; 2026 | يحيى أصفري</p>
+    </footer>
 
-    // دالة جديدة لتحويل الوقت لنظام 12 ساعة
-    function formatTime12(time24) {
-      if (!time24) return "";
-      let [h, m] = time24.split(':');
-      h = parseInt(h);
-      const suffix = h >= 12 ? 'م' : 'ص';
-      h = h % 12 || 12; // تحويل 0 إلى 12
-      return `${h}:${m} ${suffix}`;
-    }
+    <script>
+        let currentLang = 'ar';
+        const translations = {
+            ar: {
+                heroTitle: "يحيى أصفري | حلول رقمية",
+                heroDesc: "خبير في المونتاج، التصميم، وإدارة الحملات الإعلانية الاحترافية.",
+                heroBtn: "تواصل معي مباشر",
+                srv1Title: "المونتاج والتصميم",
+                srv1Desc: "محتوى مرئي يخطف الأنظار ويعزز هويتك التجارية.",
+                srv1Btn: "اطلب الخدمة",
+                srv2Title: "إدارة الحملات",
+                srv2Desc: "تحسين الوصول وتحقيق أعلى معدلات التحويل الرقمي.",
+                srv2Btn: "اطلب الخدمة",
+                srv3Title: "كتابة المحتوى والتدقيق",
+                srv3Desc: "نصوص تسويقية وتدقيق لغوي لضمان احترافية رسالتك.",
+                srv3Btn: "استشارة مجانية",
+                tool1Title: "بطاقات التهنئة",
+                tool1Desc: "صمم بطاقة مناسبتك بلمسة فنية فريدة الآن.",
+                tool1Btn: "ابدأ التصميم",
+                tool2Title: "مواقيت الصلاة",
+                tool2Desc: "خدمة ذكية لمواقيت الصلاة بناءً على موقعك الحالي.",
+                tool2Btn: "عرض المواقيت",
+                footerText: "جميع الحقوق محفوظة © 2026 | يحيى أصفري",
+                langSwitcher: "English"
+            },
+            en: {
+                heroTitle: "Yahya Asfari | Digital Solutions",
+                heroDesc: "Expert in Video Editing, Design, and Professional Ad Campaigns.",
+                heroBtn: "Direct Contact",
+                srv1Title: "Editing & Design",
+                srv1Desc: "Visual content that captures attention and boosts your brand.",
+                srv1Btn: "Order Now",
+                srv2Title: "Ads Management",
+                srv2Desc: "Optimizing reach and maximizing digital conversion rates.",
+                srv2Btn: "Order Now",
+                srv3Title: "Content & Proofreading",
+                srv3Desc: "Marketing copy and proofreading for a professional message.",
+                srv3Btn: "Free Consult",
+                tool1Title: "Greeting Cards",
+                tool1Desc: "Design your occasion card with a unique artistic touch.",
+                tool1Btn: "Start Now",
+                tool2Title: "Prayer Times",
+                tool2Desc: "Accurate prayer times based on your current location.",
+                tool2Btn: "View Times",
+                footerText: "All Rights Reserved © 2026 | Yahya Asfari",
+                langSwitcher: "عربي"
+            }
+        };
 
-    function displayTimes(data) {
-      const t = data.timings, h = data.date.hijri;
-      document.getElementById('date-area').innerText = `${data.date.gregorian.date} م | ${parseInt(h.day)+hijriOffset} ${h.month.ar} ${h.year} هـ`;
-      const m = { 'Fajr': 'الفجر', 'Sunrise': 'الشروق', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء' };
-      
-      let html = ''; 
-      for (const [k, v] of Object.entries(m)) {
-          // هنا نستخدم الدالة الجديدة لتحويل الوقت قبل عرضه
-          let time12 = formatTime12(t[k]); 
-          html += `<div class="prayer-row" id="row-${k}"><span>${v}</span><span class="time">${time12}</span></div>`;
-      }
-      document.getElementById('prayers-list-content').innerHTML = html;
-      
-      // تحديث المدينة
-      if (data.meta && data.meta.timezone) {
-          const cityDisplay = data.meta.timezone.split('/')[1] || 'تم تحديد الموقع';
-          document.getElementById('city-subtitle').innerText = cityDisplay.replace('_', ' ');
-      }
-    }
-
-    function startCountdown(timings) {
-      clearInterval(timerInterval); document.getElementById('countdown-area').style.display = 'block';
-      const pOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'], ar = {'Fajr': 'الفجر', 'Dhuhr': 'الظهر', 'Asr': 'العصر', 'Maghrib': 'المغرب', 'Isha': 'العشاء'};
-      timerInterval = setInterval(() => {
-        const now = new Date(); let nextP = null, nextK = '';
-        for (let p of pOrder) { let d = new Date(); let [h, m] = timings[p].split(':'); d.setHours(h, m, 0); if (d > now) { nextP = d; nextK = p; break; } }
-        if (!nextP) { nextP = new Date(); nextP.setDate(nextP.getDate()+1); let [h, m] = timings['Fajr'].split(':'); nextP.setHours(h, m, 0); nextK = 'Fajr'; }
-        document.getElementById('p-name').innerText = ar[nextK];
-        const diff = nextP - now;
-        const hh = Math.floor(diff/3600000), mm = Math.floor((diff%3600000)/60000), ss = Math.floor((diff%60000)/1000);
-        document.getElementById('timer').innerText = `${hh < 10 ? '0'+hh : hh}:${mm < 10 ? '0'+mm : mm}:${ss < 10 ? '0'+ss : ss}`;
-      }, 1000);
-    }
-
-    function calculateNightTimes(timings) {
-      let maghrib = new Date(); let [mH, mM] = timings['Maghrib'].split(':'); maghrib.setHours(mH, mM, 0);
-      let fajr = new Date(); fajr.setDate(fajr.getDate()+1); let [fH, fM] = timings['Fajr'].split(':'); fajr.setHours(fH, fM, 0);
-      let diff = fajr - maghrib;
-      let midnight = new Date(maghrib.getTime() + (diff / 2));
-      let lastThird = new Date(fajr.getTime() - (diff / 3));
-      // تنسيق 12 ساعة للأوقات الليلية أيضاً
-      let fmt = d => { let h = d.getHours() % 12 || 12; let m = d.getMinutes(); return `${h}:${m < 10 ? '0'+m : m} ${d.getHours() >= 12 ? 'م' : 'ص'}`; };
-      document.getElementById('midnight-time').innerText = fmt(midnight);
-      document.getElementById('last-third-time').innerText = fmt(lastThird);
-    }
-
-    function switchMode(m) { document.getElementById('manual-input').style.display = m==='manual'?'block':'none'; localStorage.setItem('mode', m); if(m==='auto') getLocation(); }
-    function runManualSearch() { fetchPrayerTimes(null, null, document.getElementById('city').value, document.getElementById('country').value); }
-    function openModal(id) { document.getElementById(id).style.display = "block"; }
-    function closeModal(id) { document.getElementById(id).style.display = "none"; }
-    function toggleSound() { soundEnabled = !soundEnabled; document.getElementById('soundBtn').innerText = soundEnabled ? '🔊' : '🔇'; }
-    function adjustHijri(v) { hijriOffset += v; localStorage.setItem('hijriOffset', hijriOffset); location.reload(); }
-    function updateBackground() { const h = new Date().getHours(); document.body.className = h>=4&&h<6?'morning':h>=6&&h<11?'sunrise':h>=11&&h<16?'day':h>=16&&h<19?'sunset':'night'; }
-  </script>
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const html = document.getElementById('mainHtml');
+            html.setAttribute('lang', currentLang);
+            html.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            
+            Object.keys(translations[currentLang]).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) el.innerText = translations[currentLang][key];
+            });
+        }
+    </script>
 </body>
 </html>

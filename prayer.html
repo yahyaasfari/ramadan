@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar" id="mainHtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مواقيت الصلاة | asfari.net</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #1e293b; 
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --accent-red: #ff4757; 
+            --accent-cyan: #00cec9; 
+            --accent-gold: #f1c40f; 
+        }
+
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
+        body { 
+            margin: 0; background-color: var(--bg-color); color: white; 
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 10px;
+        }
+
+        .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
+
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .city-info h1 { font-size: 1.1rem; margin: 0; color: var(--accent-cyan); }
+        .btn-top { background: var(--card-bg); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 5px 10px; border-radius: 15px; text-decoration: none; font-size: 0.8rem; }
+
+        /* Countdown */
+        .countdown-section { 
+            background: rgba(255, 71, 87, 0.05); border: 2px solid var(--accent-red); 
+            border-radius: 20px; padding: 10px; text-align: center;
+        }
+        .timer { 
+            font-size: 2.8rem; font-weight: 900; color: var(--accent-red); 
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.4); font-family: monospace;
+        }
+
+        /* Prayer List */
+        .prayer-list { background: var(--card-bg); border-radius: 15px; overflow: hidden; }
+        .prayer-row { display: flex; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.95rem; }
+        .prayer-row.highlight { background: rgba(0, 206, 201, 0.15); font-weight: 800; border-right: 4px solid var(--accent-cyan); }
+        .time-val { color: var(--accent-cyan); font-weight: 800; }
+
+        /* Night Section */
+        .night-section {
+            background: rgba(241, 196, 15, 0.05); border: 1px dashed var(--accent-gold);
+            border-radius: 15px; padding: 10px; text-align: center;
+        }
+        .night-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; }
+        .night-val { color: var(--accent-gold); font-weight: 800; font-size: 1rem; }
+
+        /* Action Buttons */
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn { 
+            padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+            background: var(--card-bg); color: white; text-decoration: none; text-align: center; font-size: 0.8rem;
+        }
+        .btn-main { background: var(--accent-cyan); color: #000; font-weight: 800; border: none; }
+        
+        /* زر العودة الصريح والواضح */
+        .btn-back-home { 
+            grid-column: span 2; background: rgba(255,255,255,0.15); 
+            border: 1px solid white; font-weight: bold; margin-top: 5px;
+        }
+
+        [lang="en"] { direction: ltr; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="btn-top"><i class="fas fa-home"></i></a>
+            <div class="city-info" style="text-align:center">
+                <h1 id="city-display">تحديد الموقع...</h1>
+                <small id="gregorian-date" style="opacity:0.6"></small>
+            </div>
+            <button class="btn-top" onclick="toggleLanguage()" id="langBtn">English</button>
+        </div>
+
+        <div class="countdown-section">
+            <div id="next-label" style="font-size:0.8rem">متبقي لصلاة <span id="p-name" style="color:white">...</span></div>
+            <div id="timer" class="timer">00:00:00</div>
+        </div>
+
+        <div class="prayer-list" id="list-container"></div>
+
+        <div class="night-section">
+            <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:bold"></div>
+            <div class="night-grid">
+                <div><small id="mid-label">منتصف الليل</small><br><span class="night-val" id="midnight">--:--</span></div>
+                <div><small id="third-label">الثلث الأخير</small><br><span class="night-val" id="last-third">--:--</span></div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <a href="card.html" class="btn btn-main" id="card-btn">بطاقات التهنئة</a>
+            <button class="btn" onclick="manualSearch()" id="search-btn">تغيير المدينة</button>
+            <a href="https://qurancomplex.gov.sa/quran-hafs/" target="_blank" class="btn" style="grid-column: span 2;" id="quran-btn">المصحف الشريف</a>
+            
+
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'ar';
+        let prayerTimings = {};
+        const dictionary = {
+            ar: { wait: "جاري التحديد...", next: "متبقي لصلاة", mid: "منتصف الليل", third: "الثلث الأخير", card: "بطاقات التهنئة", search: "تغيير المدينة", quran: "المصحف الشريف", home: "العودة للرئيسية", prayers: { Fajr: "الفجر", Sunrise: "الشروق", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" } },
+            en: { wait: "Locating...", next: "Time to", mid: "Midnight", third: "Last Third", card: "Greeting Cards", search: "Change City", quran: "Holy Quran", home: "Back to Home", prayers: { Fajr: "Fajr", Sunrise: "Sunrise", Dhuhr: "Dhuhr", Asr: "Asr", Maghrib: "Maghrib", Isha: "Isha" } }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.getElementById('mainHtml').lang = currentLang;
+            document.getElementById('mainHtml').dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('langBtn').innerText = currentLang === 'ar' ? "English" : "عربي";
+            document.getElementById('mid-label').innerText = dictionary[currentLang].mid;
+            document.getElementById('third-label').innerText = dictionary[currentLang].third;
+            document.getElementById('card-btn').innerText = dictionary[currentLang].card;
+            document.getElementById('search-btn').innerText = dictionary[currentLang].search;
+            document.getElementById('quran-btn').innerText = dictionary[currentLang].quran;
+            document.getElementById('home-btn-text').innerHTML = currentLang === 'ar' ? `<i class="fas fa-arrow-right"></i> العودة للرئيسية` : `Back to Home <i class="fas fa-arrow-left"></i>`;
+            if(prayerTimings.Fajr) renderUI();
+        }
+
+        function init() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(p => fetchAPI(p.coords.latitude, p.coords.longitude), () => fetchAPI(null, null, "Mecca"));
+            } else fetchAPI(null, null, "Mecca");
+        }
+
+        function fetchAPI(lat, lng, city) {
+            let url = lat ? `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4` : `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=SA&method=4`;
+            fetch(url).then(res => res.json()).then(res => {
+                prayerTimings = res.data.timings;
+                window.fullData = res.data;
+                renderUI();
+                startTimer();
+            });
+        }
+
+        function renderUI() {
+            const names = dictionary[currentLang].prayers;
+            let html = '';
+            const nextK = getNextPrayerKey();
+            for (let [key, name] of Object.entries(names)) {
+                let isNext = (key === nextK) ? 'highlight' : '';
+                html += `<div class="prayer-row ${isNext}"><span>${name}</span><span class="time-val">${formatTime(prayerTimings[key])}</span></div>`;
+            }
+            document.getElementById('list-container').innerHTML = html;
+            document.getElementById('city-display').innerText = window.fullData.meta.timezone.split('/')[1] || "Mecca";
+            document.getElementById('gregorian-date').innerText = window.fullData.date.gregorian.date;
+            calculateNight();
+        }
+
+        function formatTime(t) {
+            let [h, m] = t.split(':');
+            h = parseInt(h);
+            let s = currentLang === 'ar' ? (h >= 12 ? 'م' : 'ص') : (h >= 12 ? 'PM' : 'AM');
+            h = h % 12 || 12;
+            return `${h}:${m} ${s}`;
+        }
+
+        function getNextPrayerKey() {
+            const now = new Date();
+            const keys = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            for (let k of keys) {
+                let d = new Date(); let [h, m] = prayerTimings[k].split(':');
+                d.setHours(h, m, 0); if (d > now) return k;
+            }
+            return 'Fajr';
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                const now = new Date();
+                const nextK = getNextPrayerKey();
+                let target = new Date();
+                let [h, m] = prayerTimings[nextK].split(':');
+                target.setHours(h, m, 0);
+                if (target < now) target.setDate(target.getDate() + 1);
+                const diff = target - now;
+                const hh = Math.floor(diff/3600000).toString().padStart(2,'0');
+                const mm = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+                const ss = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+                document.getElementById('timer').innerText = `${hh}:${mm}:${ss}`;
+                document.getElementById('p-name').innerText = dictionary[currentLang].prayers[nextK];
+            }, 1000);
+        }
+
+        function calculateNight() {
+            let m = new Date(); let [mh, mm] = prayerTimings.Maghrib.split(':'); m.setHours(mh, mm, 0);
+            let f = new Date(); f.setDate(f.getDate()+1); let [fh, fm] = prayerTimings.Fajr.split(':'); f.setHours(fh, fm, 0);
+            let diff = f - m;
+            let mid = new Date(m.getTime() + (diff/2));
+            let thi = new Date(f.getTime() - (diff/3));
+            document.getElementById('midnight').innerText = formatTime(`${mid.getHours()}:${mid.getMinutes()}`);
+            document.getElementById('last-third').innerText = formatTime(`${thi.getHours()}:${thi.getMinutes()}`);
+        }
+
+        function manualSearch() {
+            let c = prompt(currentLang === 'ar' ? "أدخل اسم المدينة بالإنجليزية:" : "Enter city name:");
+            if(c) fetchAPI(null, null, c);
+        }
+        init();
+    </script>
+</body>
+</html>
