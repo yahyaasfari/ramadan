@@ -199,7 +199,7 @@
 
         const configs = {
             ramadan: { bg: 'ramadan-bg.png', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif" },
-            fitr: { bg: 'eid-fitr.png', color: '#ffffff', y: 0.90, font: "'Cairo', sans-serif" },
+            fitr: { bg: 'eid-fitr.png', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif" },
             adha: { bg: 'eid-adha.png', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif" },
             hijri: { bg: 'hijri.png', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif" },
             newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif" },
@@ -237,18 +237,20 @@
 
                 const config = configs[currentEvent];
                 
-                // 1. رسم الاسم مع الاحتواء الذكي
                 if (name) {
+                    // ضبط حجم الخط الابتدائي ليكون متناسباً (بحد أقصى 8% من عرض الصورة)
                     let fontSize = Math.floor(canvas.width * 0.08); 
                     ctx.font = `bold ${fontSize}px ${config.font}`;
                     ctx.fillStyle = config.color;
                     ctx.textAlign = "center";
                     
-                    const maxAllowedWidth = canvas.width * 0.85; 
+                    // تحديد منطقة الأمان (80% من عرض الصورة) لضمان عدم الخروج عن الإطار
+                    const maxAllowedWidth = canvas.width * 0.80; 
                     let metrics = ctx.measureText(name);
                     
-                    while (metrics.width > maxAllowedWidth && fontSize > 20) {
-                        fontSize -= 2;
+                    // تصغير الخط تدريجياً إذا تجاوز العرض المحدد
+                    while (metrics.width > maxAllowedWidth && fontSize > 15) {
+                        fontSize -= 1;
                         ctx.font = `bold ${fontSize}px ${config.font}`;
                         metrics = ctx.measureText(name);
                     }
@@ -256,11 +258,18 @@
                     ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
                 }
 
-                // 2. رسم العلامة المائية asfari.net في أسفل كل صورة بشكل ثابت
+                // إصلاح العلامة المائية لتظهر في كل الظروف
                 const watermarkSize = Math.floor(canvas.width * 0.025);
-                ctx.font = `500 ${watermarkSize}px 'Tajawal'`;
-                ctx.fillStyle = "rgba(0,0,0,0.4)";
+                ctx.font = `bold ${watermarkSize}px 'Tajawal'`;
                 ctx.textAlign = "center";
+                
+                // رسم هالة بيضاء خفيفة (Stroke) لضمان الوضوح على الخلفيات الغامقة
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+                ctx.lineWidth = 2;
+                ctx.strokeText("asfari.net", canvas.width / 2, canvas.height * 0.95);
+                
+                // رسم النص الأساسي باللون الغامق
+                ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
                 ctx.fillText("asfari.net", canvas.width / 2, canvas.height * 0.95);
             }
         }
