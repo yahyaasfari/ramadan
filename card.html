@@ -200,7 +200,7 @@
             fitr: { bg: 'eid-fitr.png', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
             adha: { bg: 'eid-adha.png', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
             hijri: { bg: 'hijri.png', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
-            newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'عام جديد سعيد 🎄' },
+            newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
             birthday: { bg: 'birthday.png', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'أتمنى لك عيد ميلاد سعيد 🎂' }
         };
 
@@ -233,16 +233,17 @@
 
                 const config = configs[currentEvent];
                 
+                // 1. رسم الاسم مع "الاحتواء الذكي الصارم جداً"
                 if (name) {
-                    // تحديد إطار النص (60% من عرض الصورة لضمان البقاء داخل الزخارف)
-                    const safeWidth = canvas.width * 0.60;
+                    // تحديد إطار النص (55% من عرض الصورة لضمان البقاء داخل الزخارف)
+                    const safeWidth = canvas.width * 0.55;
                     let fontSize = Math.floor(canvas.width * 0.08); 
                     ctx.font = `bold ${fontSize}px ${config.font}`;
                     ctx.fillStyle = config.color;
                     ctx.textAlign = "center";
                     
                     let metrics = ctx.measureText(name);
-                    // تصغير الخط حتى يتناسب مع الإطار المحدد
+                    // تصغير الخط حتى يتناسب مع الإطار الضيق المحدد
                     while (metrics.width > safeWidth && fontSize > 10) {
                         fontSize -= 2;
                         ctx.font = `bold ${fontSize}px ${config.font}`;
@@ -251,13 +252,17 @@
                     ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
                 }
 
-                // العلامة المائية في الزاوية اليسرى السفلية
+                // 2. العلامة المائية في الزاوية اليسرى السفلية (بدون هوامش)
                 const wmSize = Math.floor(canvas.width * 0.025);
                 ctx.font = `bold ${wmSize}px 'Tajawal'`;
                 ctx.textAlign = "left";
+                
+                // تحديد اللون حسب المناسبة (تم تعديل السنة الجديدة لتصبح بيضاء)
                 ctx.fillStyle = (config.wm === 'white') ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.6)";
-                const margin = canvas.width * 0.04;
-                ctx.fillText("asfari.net", margin, canvas.height - margin);
+                
+                // رسم النص في الزاوية الصفرية تماماً
+                // نستخدم wmSize لرفع النص قليلاً عن الحافة السفلية ليظهر بالكامل
+                ctx.fillText("asfari.net", 0, canvas.height - (wmSize / 4));
             }
         }
 
@@ -270,7 +275,7 @@
             link.click();
         }
 
-        function shareWhatsApp() {
+          function shareWhatsApp() {
             const config = configs[currentEvent];
             const name = document.getElementById('nameInput').value.trim();
             const greeting = name ? `${config.waMsg} من ${name}` : config.waMsg;
