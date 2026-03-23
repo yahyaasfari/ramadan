@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <title>مواقيت الصلاة | asfari.net</title>
+    <meta name="description" content="مواقيت الصلاة الدقيقة، منتصف الليل، والثلث الأخير بتحديد تلقائي لموقعك. أداة تقنية بسيطة وسريعة من تطوير م. يحيى الأصفري.">
+    <meta name="keywords" content="مواقيت الصلاة، الثلث الأخير، منتصف الليل، أصفري، يحيى الأصفري، حساب الصلاة، asfari">
+    
+    <meta property="og:title" content="مواقيت الصلاة والثلث الأخير | أصفري">
+    <meta property="og:description" content="أداة تفاعلية دقيقة لحساب مواقيت الصلاة والثلث الأخير من الليل بناءً على موقعك الجغرافي الحالي.">
+    <meta property="og:image" content="https://asfari.net/og-image.jpg">
+    <meta property="og:url" content="https://asfari.net/pray">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -27,7 +37,7 @@
         /* Header */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .city-info h1 { font-size: 1.1rem; margin: 0; color: var(--accent-cyan); }
-        .btn-top { background: var(--card-bg); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 5px 10px; border-radius: 15px; text-decoration: none; font-size: 0.8rem; }
+        .btn-top { background: var(--card-bg); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 5px 10px; border-radius: 15px; text-decoration: none; font-size: 0.8rem; cursor: pointer; }
 
         /* Countdown */
         .countdown-section { 
@@ -57,15 +67,9 @@
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .btn { 
             padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
-            background: var(--card-bg); color: white; text-decoration: none; text-align: center; font-size: 0.8rem;
+            background: var(--card-bg); color: white; text-decoration: none; text-align: center; font-size: 0.8rem; cursor: pointer;
         }
         .btn-main { background: var(--accent-cyan); color: #000; font-weight: 800; border: none; }
-        
-        /* زر العودة الصريح والواضح */
-        .btn-back-home { 
-            grid-column: span 2; background: rgba(255,255,255,0.15); 
-            border: 1px solid white; font-weight: bold; margin-top: 5px;
-        }
 
         [lang="en"] { direction: ltr; }
     </style>
@@ -76,7 +80,7 @@
         <div class="header">
             <a href="index.html" class="btn-top"><i class="fas fa-home"></i></a>
             <div class="city-info" style="text-align:center">
-                <h1 id="city-display">تحديد الموقع...</h1>
+                <h1 id="city-display">جاري التحديد...</h1>
                 <small id="gregorian-date" style="opacity:0.6"></small>
             </div>
             <button class="btn-top" onclick="toggleLanguage()" id="langBtn">English</button>
@@ -90,7 +94,6 @@
         <div class="prayer-list" id="list-container"></div>
 
         <div class="night-section">
-            <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:bold"></div>
             <div class="night-grid">
                 <div><small id="mid-label">منتصف الليل</small><br><span class="night-val" id="midnight">--:--</span></div>
                 <div><small id="third-label">الثلث الأخير</small><br><span class="night-val" id="last-third">--:--</span></div>
@@ -101,9 +104,6 @@
             <a href="card.html" class="btn btn-main" id="card-btn">بطاقات التهنئة</a>
             <button class="btn" onclick="manualSearch()" id="search-btn">تغيير المدينة</button>
             <a href="https://qurancomplex.gov.sa/quran-hafs/" target="_blank" class="btn" style="grid-column: span 2;" id="quran-btn">المصحف الشريف</a>
-            
-
-            </a>
         </div>
     </div>
 
@@ -125,8 +125,10 @@
             document.getElementById('card-btn').innerText = dictionary[currentLang].card;
             document.getElementById('search-btn').innerText = dictionary[currentLang].search;
             document.getElementById('quran-btn').innerText = dictionary[currentLang].quran;
-            document.getElementById('home-btn-text').innerHTML = currentLang === 'ar' ? `<i class="fas fa-arrow-right"></i> العودة للرئيسية` : `Back to Home <i class="fas fa-arrow-left"></i>`;
-            if(prayerTimings.Fajr) renderUI();
+            if(prayerTimings.Fajr) {
+                renderUI();
+                updateTimer(); 
+            }
         }
 
         function init() {
@@ -142,7 +144,7 @@
                 window.fullData = res.data;
                 renderUI();
                 startTimer();
-            });
+            }).catch(err => console.error("Error fetching data:", err));
         }
 
         function renderUI() {
@@ -177,21 +179,24 @@
             return 'Fajr';
         }
 
+        function updateTimer() {
+            const now = new Date();
+            const nextK = getNextPrayerKey();
+            let target = new Date();
+            let [h, m] = prayerTimings[nextK].split(':');
+            target.setHours(h, m, 0);
+            if (target < now) target.setDate(target.getDate() + 1);
+            const diff = target - now;
+            const hh = Math.floor(diff/3600000).toString().padStart(2,'0');
+            const mm = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+            const ss = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+            document.getElementById('timer').innerText = `${hh}:${mm}:${ss}`;
+            document.getElementById('next-label').innerHTML = `${dictionary[currentLang].next} <span style="color:white">${dictionary[currentLang].prayers[nextK]}</span>`;
+        }
+
         function startTimer() {
-            setInterval(() => {
-                const now = new Date();
-                const nextK = getNextPrayerKey();
-                let target = new Date();
-                let [h, m] = prayerTimings[nextK].split(':');
-                target.setHours(h, m, 0);
-                if (target < now) target.setDate(target.getDate() + 1);
-                const diff = target - now;
-                const hh = Math.floor(diff/3600000).toString().padStart(2,'0');
-                const mm = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-                const ss = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-                document.getElementById('timer').innerText = `${hh}:${mm}:${ss}`;
-                document.getElementById('p-name').innerText = dictionary[currentLang].prayers[nextK];
-            }, 1000);
+            updateTimer();
+            setInterval(updateTimer, 1000);
         }
 
         function calculateNight() {
