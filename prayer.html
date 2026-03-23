@@ -5,15 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>مواقيت الصلاة | asfari.net</title>
-    <meta name="description" content="مواقيت الصلاة الدقيقة، منتصف الليل، والثلث الأخير بتحديد تلقائي لموقعك. أداة تقنية بسيطة وسريعة من تطوير م. يحيى الأصفري.">
-    <meta name="keywords" content="مواقيت الصلاة، الثلث الأخير، منتصف الليل، أصفري، يحيى الأصفري، حساب الصلاة، asfari">
-    
+    <meta name="description" content="مواقيت الصلاة الدقيقة، منتصف الليل، والثلث الأخير بتحديد تلقائي لموقعك وفق تقويم أم القرى. أداة تقنية من تطوير م. يحيى الأصفري.">
+    <meta name="keywords" content="مواقيت الصلاة، الثلث الأخير، منتصف الليل، أم القرى، أصفري، يحيى الأصفري، asfari">
+    <meta name="author" content="Eng. Yahya Al-Asfari">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://asfari.net/">
     <meta property="og:title" content="مواقيت الصلاة والثلث الأخير | أصفري">
     <meta property="og:description" content="أداة تفاعلية دقيقة لحساب مواقيت الصلاة والثلث الأخير من الليل بناءً على موقعك الجغرافي الحالي.">
-    <meta property="og:image" content="https://asfari.net/og-image.jpg">
-    <meta property="og:url" content="https://asfari.net/pray">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image" content="https://asfari.net/og-image.webp">
 
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://asfari.net/">
+    <meta name="twitter:title" content="مواقيت الصلاة والثلث الأخير | أصفري">
+    <meta name="twitter:description" content="أداة تفاعلية دقيقة لحساب مواقيت الصلاة والثلث الأخير من الليل.">
+    <meta name="twitter:image" content="https://asfari.net/og-image.webp">
+
+    
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -25,52 +33,28 @@
             --accent-cyan: #00cec9; 
             --accent-gold: #f1c40f; 
         }
-
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
         body { 
             margin: 0; background-color: var(--bg-color); color: white; 
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 10px;
         }
-
         .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
-
-        /* Header */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .city-info h1 { font-size: 1.1rem; margin: 0; color: var(--accent-cyan); }
-        .btn-top { background: var(--card-bg); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 5px 10px; border-radius: 15px; text-decoration: none; font-size: 0.8rem; cursor: pointer; }
-
-        /* Countdown */
-        .countdown-section { 
-            background: rgba(255, 71, 87, 0.05); border: 2px solid var(--accent-red); 
-            border-radius: 20px; padding: 10px; text-align: center;
-        }
-        .timer { 
-            font-size: 2.8rem; font-weight: 900; color: var(--accent-red); 
-            text-shadow: 0 0 10px rgba(255, 71, 87, 0.4); font-family: monospace;
-        }
-
-        /* Prayer List */
-        .prayer-list { background: var(--card-bg); border-radius: 15px; overflow: hidden; }
-        .prayer-row { display: flex; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.95rem; }
+        .btn-top { background: var(--card-bg); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 5px 12px; border-radius: 15px; text-decoration: none; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .countdown-section { background: rgba(255, 71, 87, 0.05); border: 2px solid var(--accent-red); border-radius: 20px; padding: 15px 10px; text-align: center; }
+        .timer { font-size: 3rem; font-weight: 900; color: var(--accent-red); text-shadow: 0 0 15px rgba(255, 71, 87, 0.3); font-family: 'Courier New', monospace; margin-top: 5px; }
+        .prayer-list { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .prayer-row { display: flex; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 1rem; }
         .prayer-row.highlight { background: rgba(0, 206, 201, 0.15); font-weight: 800; border-right: 4px solid var(--accent-cyan); }
         .time-val { color: var(--accent-cyan); font-weight: 800; }
-
-        /* Night Section */
-        .night-section {
-            background: rgba(241, 196, 15, 0.05); border: 1px dashed var(--accent-gold);
-            border-radius: 15px; padding: 10px; text-align: center;
-        }
-        .night-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; }
-        .night-val { color: var(--accent-gold); font-weight: 800; font-size: 1rem; }
-
-        /* Action Buttons */
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .btn { 
-            padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
-            background: var(--card-bg); color: white; text-decoration: none; text-align: center; font-size: 0.8rem; cursor: pointer;
-        }
+        .night-section { background: rgba(241, 196, 15, 0.05); border: 1px dashed var(--accent-gold); border-radius: 15px; padding: 12px; text-align: center; }
+        .night-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+        .night-val { color: var(--accent-gold); font-weight: 800; font-size: 1.1rem; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+        .btn { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: var(--card-bg); color: white; text-decoration: none; text-align: center; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-main { background: var(--accent-cyan); color: #000; font-weight: 800; border: none; }
-
+        .btn-main:hover { background: #01b2ad; transform: translateY(-2px); }
         [lang="en"] { direction: ltr; }
     </style>
 </head>
@@ -83,11 +67,11 @@
                 <h1 id="city-display">جاري التحديد...</h1>
                 <small id="gregorian-date" style="opacity:0.6"></small>
             </div>
-            <button class="btn-top" onclick="toggleLanguage()" id="langBtn">English</button>
+            <button class="btn-top" onclick="toggleLanguage()" id="langBtn"><i class="fas fa-globe"></i> English</button>
         </div>
 
         <div class="countdown-section">
-            <div id="next-label" style="font-size:0.8rem">متبقي لصلاة <span id="p-name" style="color:white">...</span></div>
+            <div id="next-label-container" style="font-size:0.9rem; letter-spacing: 0.5px;"></div>
             <div id="timer" class="timer">00:00:00</div>
         </div>
 
@@ -101,9 +85,9 @@
         </div>
 
         <div class="btn-group">
-            <a href="card.html" class="btn btn-main" id="card-btn">بطاقات التهنئة</a>
-            <button class="btn" onclick="manualSearch()" id="search-btn">تغيير المدينة</button>
-            <a href="https://qurancomplex.gov.sa/quran-hafs/" target="_blank" class="btn" style="grid-column: span 2;" id="quran-btn">المصحف الشريف</a>
+            <a href="card.html" class="btn btn-main" id="card-btn"><i class="fas fa-palette"></i> بطاقات التهنئة</a>
+            <button class="btn" onclick="manualSearch()" id="search-btn"><i class="fas fa-city"></i> تغيير المدينة</button>
+            <a href="https://qurancomplex.gov.sa/quran-hafs/" target="_blank" class="btn" style="grid-column: span 2;" id="quran-btn"><i class="fas fa-book-quran"></i> المصحف الشريف</a>
         </div>
     </div>
 
@@ -111,22 +95,22 @@
         let currentLang = 'ar';
         let prayerTimings = {};
         const dictionary = {
-            ar: { wait: "جاري التحديد...", next: "متبقي لصلاة", mid: "منتصف الليل", third: "الثلث الأخير", card: "بطاقات التهنئة", search: "تغيير المدينة", quran: "المصحف الشريف", home: "العودة للرئيسية", prayers: { Fajr: "الفجر", Sunrise: "الشروق", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" } },
-            en: { wait: "Locating...", next: "Time to", mid: "Midnight", third: "Last Third", card: "Greeting Cards", search: "Change City", quran: "Holy Quran", home: "Back to Home", prayers: { Fajr: "Fajr", Sunrise: "Sunrise", Dhuhr: "Dhuhr", Asr: "Asr", Maghrib: "Maghrib", Isha: "Isha" } }
+            ar: { wait: "جاري التحديد...", next: "متبقي لصلاة", mid: "منتصف الليل", third: "الثلث الأخير", card: "بطاقات التهنئة", search: "تغيير المدينة", quran: "المصحف الشريف", prayers: { Fajr: "الفجر", Sunrise: "الشروق", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" } },
+            en: { wait: "Locating...", next: "Time to", mid: "Midnight", third: "Last Third", card: "Greeting Cards", search: "Change City", quran: "Holy Quran", prayers: { Fajr: "Fajr", Sunrise: "Sunrise", Dhuhr: "Dhuhr", Asr: "Asr", Maghrib: "Maghrib", Isha: "Isha" } }
         };
 
         function toggleLanguage() {
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             document.getElementById('mainHtml').lang = currentLang;
             document.getElementById('mainHtml').dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-            document.getElementById('langBtn').innerText = currentLang === 'ar' ? "English" : "عربي";
+            document.getElementById('langBtn').innerHTML = currentLang === 'ar' ? '<i class="fas fa-globe"></i> English' : '<i class="fas fa-globe"></i> عربي';
             document.getElementById('mid-label').innerText = dictionary[currentLang].mid;
             document.getElementById('third-label').innerText = dictionary[currentLang].third;
-            document.getElementById('card-btn').innerText = dictionary[currentLang].card;
-            document.getElementById('search-btn').innerText = dictionary[currentLang].search;
-            document.getElementById('quran-btn').innerText = dictionary[currentLang].quran;
+            document.getElementById('card-btn').innerHTML = `<i class="fas fa-palette"></i> ${dictionary[currentLang].card}`;
+            document.getElementById('search-btn').innerHTML = `<i class="fas fa-city"></i> ${dictionary[currentLang].search}`;
+            document.getElementById('quran-btn').innerHTML = `<i class="fas fa-book-quran"></i> ${dictionary[currentLang].quran}`;
             if(prayerTimings.Fajr) {
-                renderUI();
+                renderUI(); 
                 updateTimer(); 
             }
         }
@@ -144,7 +128,7 @@
                 window.fullData = res.data;
                 renderUI();
                 startTimer();
-            }).catch(err => console.error("Error fetching data:", err));
+            });
         }
 
         function renderUI() {
@@ -156,7 +140,7 @@
                 html += `<div class="prayer-row ${isNext}"><span>${name}</span><span class="time-val">${formatTime(prayerTimings[key])}</span></div>`;
             }
             document.getElementById('list-container').innerHTML = html;
-            document.getElementById('city-display').innerText = window.fullData.meta.timezone.split('/')[1] || "Mecca";
+            document.getElementById('city-display').innerText = window.fullData.meta.timezone.split('/')[1]?.replace('_', ' ') || "Mecca";
             document.getElementById('gregorian-date').innerText = window.fullData.date.gregorian.date;
             calculateNight();
         }
@@ -180,6 +164,7 @@
         }
 
         function updateTimer() {
+            if(!prayerTimings.Fajr) return;
             const now = new Date();
             const nextK = getNextPrayerKey();
             let target = new Date();
@@ -191,7 +176,7 @@
             const mm = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
             const ss = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
             document.getElementById('timer').innerText = `${hh}:${mm}:${ss}`;
-            document.getElementById('next-label').innerHTML = `${dictionary[currentLang].next} <span style="color:white">${dictionary[currentLang].prayers[nextK]}</span>`;
+            document.getElementById('next-label-container').innerHTML = `${dictionary[currentLang].next} <span style="color:var(--accent-cyan); font-weight:900;">${dictionary[currentLang].prayers[nextK]}</span>`;
         }
 
         function startTimer() {
@@ -210,7 +195,7 @@
         }
 
         function manualSearch() {
-            let c = prompt(currentLang === 'ar' ? "أدخل اسم المدينة بالإنجليزية:" : "Enter city name:");
+            let c = prompt(currentLang === 'ar' ? "أدخل اسم المدينة بالإنجليزية (مثلاً: Riyadh):" : "Enter city name (e.g., Riyadh):");
             if(c) fetchAPI(null, null, c);
         }
         init();
