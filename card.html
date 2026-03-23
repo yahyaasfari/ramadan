@@ -196,12 +196,12 @@
         };
 
         const configs = {
-            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
-            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
-            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
-            hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
-            newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
-            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'أتمنى لك عيد ميلاد سعيد 🎂' }
+            ramadan: { bg: 'ramadan-bg.png', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+            fitr: { bg: 'eid-fitr.png', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+            adha: { bg: 'eid-adha.png', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            hijri: { bg: 'hijri.png', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
+            newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
+            birthday: { bg: 'birthday.png', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'أتمنى لك عيد ميلاد سعيد 🎂' }
         };
 
         function renderButtons() {
@@ -234,8 +234,8 @@
                 const config = configs[currentEvent];
                 
                 if (name) {
-                    // تم تحديد عرض أضيق (45%) لضمان البقاء داخل حدود الإطارات الزخرفية بدقة
-                    const maxAllowedWidth = canvas.width * 0.45;
+                    // تم تضييق المساحة إلى 35% لضمان البقاء داخل الأطر الزخرفية الدقيقة
+                    const maxAllowedWidth = canvas.width * 0.35;
                     let fontSize = Math.floor(canvas.width * 0.08); 
                     ctx.font = `bold ${fontSize}px ${config.font}`;
                     ctx.fillStyle = config.color;
@@ -243,9 +243,9 @@
                     
                     let metrics = ctx.measureText(name);
                     
-                    // منطق الاحتواء الذكي: تقليل حجم الخط حتى يتناسب مع المساحة الداخلية للإطار
+                    // تقليص حجم الخط بسرعة أكبر لضمان الالتزام بالإطار
                     while (metrics.width > maxAllowedWidth && fontSize > 10) {
-                        fontSize -= 1;
+                        fontSize -= 2;
                         ctx.font = `bold ${fontSize}px ${config.font}`;
                         metrics = ctx.measureText(name);
                     }
