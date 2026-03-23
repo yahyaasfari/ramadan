@@ -158,8 +158,8 @@
             <button id="dlBtn" onclick="downloadCard()" style="background: #27ae60;">
                 <i class="fas fa-download"></i> تحميل
             </button>
-            <button id="shBtn" onclick="shareWhatsApp()" style="background: #25D366;">
-                <i class="fab fa-whatsapp"></i> واتساب
+            <button id="shBtn" onclick="shareCard()" style="background: #25D366;">
+                <i class="fas fa-share-alt"></i> مشاركة
             </button>
         </div>
     </div>
@@ -177,7 +177,7 @@
         const translations = {
             ar: {
                 mainTitle: "اصنع تهنئتك الخاصة", chooseText: "اختر المناسبة:",
-                dlBtn: "تحميل", shBtn: "واتساب", homeBtn: "الرئيسية",
+                dlBtn: "تحميل", shBtn: "مشاركة", homeBtn: "الرئيسية",
                 placeholder: "أدخل الاسم هنا", langBtn: "English",
                 events: {
                     ramadan: "🌙 تهنئة رمضان", fitr: "🍬 تهنئة عيد الفطر", adha: "🐑 تهنئة عيد الأضحى",
@@ -186,7 +186,7 @@
             },
             en: {
                 mainTitle: "Greeting Maker", chooseText: "Choose Occasion:",
-                dlBtn: "Download", shBtn: "WhatsApp", homeBtn: "Home",
+                dlBtn: "Download", shBtn: "Share", homeBtn: "Home",
                 placeholder: "Enter name", langBtn: "عربي",
                 events: {
                     ramadan: "🌙 Ramadan", fitr: "🍬 Eid Fitr", adha: "🐑 Eid Adha",
@@ -196,12 +196,12 @@
         };
 
         const configs = {
-            ramadan: { bg: 'ramadan-bg.png', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
-            fitr: { bg: 'eid-fitr.png', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
-            adha: { bg: 'eid-adha.png', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
-            hijri: { bg: 'hijri.png', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
-            newyear: { bg: 'new-year.png', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
-            birthday: { bg: 'birthday.png', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'أتمنى لك عيد ميلاد سعيد 🎂' }
+            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
+            newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
+            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'أتمنى لك عيد ميلاد سعيد 🎂' }
         };
 
         function renderButtons() {
@@ -234,7 +234,6 @@
                 const config = configs[currentEvent];
                 
                 if (name) {
-                    // تم تضييق المساحة إلى 35% لضمان البقاء داخل الأطر الزخرفية الدقيقة
                     const maxAllowedWidth = canvas.width * 0.35;
                     let fontSize = Math.floor(canvas.width * 0.08); 
                     ctx.font = `bold ${fontSize}px ${config.font}`;
@@ -242,14 +241,11 @@
                     ctx.textAlign = "center";
                     
                     let metrics = ctx.measureText(name);
-                    
-                    // تقليص حجم الخط بسرعة أكبر لضمان الالتزام بالإطار
                     while (metrics.width > maxAllowedWidth && fontSize > 10) {
                         fontSize -= 2;
                         ctx.font = `bold ${fontSize}px ${config.font}`;
                         metrics = ctx.measureText(name);
                     }
-                    
                     ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
                 }
 
@@ -270,12 +266,32 @@
             link.click();
         }
 
-        function shareWhatsApp() {
-            const config = configs[currentEvent];
+        async function shareCard() {
             const name = document.getElementById('nameInput').value.trim();
-            const greeting = name ? `${config.waMsg} من ${name}` : config.waMsg;
-            const text = `${greeting}\n\n`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم أولاً" : "Please enter name first"); return; }
+            
+            const config = configs[currentEvent];
+            const dataUrl = canvas.toDataURL('image/png');
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], `Asfari-${currentEvent}.png`, { type: blob.type });
+
+            // استخدام Web Share API لمشاركة الصورة كملف
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'تهنئة من asfari.net',
+                        text: name ? `${config.waMsg} من ${name}` : config.waMsg,
+                    });
+                } catch (err) {
+                    console.log('Share failed:', err);
+                }
+            } else {
+                // حل احتياطي: فتح واتساب بالنص في حال عدم دعم المتصفح لمشاركة الملفات
+                const greeting = name ? `${config.waMsg} من ${name}` : config.waMsg;
+                const text = `${greeting}\nقم بتحميل صورتك من هنا: ${window.location.href}`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            }
         }
 
         function toggleLanguage() {
