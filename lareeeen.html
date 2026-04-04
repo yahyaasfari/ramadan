@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English for Larin</title>
+    <title>English for Lareen</title>
     <style>
         body { 
             text-align: center; 
@@ -93,7 +93,7 @@
 </head>
 <body>
 
-    <h1>Welcome, Larin! 👋</h1>
+    <h1>Welcome, Lareen! 👋</h1>
 
     <div class="container">
         <div class="word-card bg-1" onclick="speak('Seep')"><h2>Seep</h2></div>
@@ -152,7 +152,7 @@
             
             if (val === word.toLowerCase()) {
                 input.className = 'correct';
-                speak("Well done Larin!");
+                speak("Well done Lareen!");
             } else {
                 input.className = 'incorrect';
                 speak("Try again");
@@ -163,7 +163,7 @@
         // الترحيب عند التفاعل
         document.body.addEventListener('click', function() {
             if (!window.welcomed) {
-                speak("Hello Larin, let's practice your words!");
+                speak("Hello Lareen, let's practice your words!");
                 window.welcomed = true;
             }
         }, { once: false });
