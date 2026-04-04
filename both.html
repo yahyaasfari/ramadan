@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asfari Kids Learning Portal</title>
+    <style>
+        /* التنسيقات العامة */
+        body { 
+            text-align: center; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f0f4f8;
+            padding: 20px; 
+            direction: ltr;
+            margin: 0;
+        }
+
+        .page { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 20px; }
+        h2 { color: #34495e; }
+
+        /* أزرار الشاشة الرئيسية (الاختيار) */
+        .portal-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 100px;
+            flex-wrap: wrap;
+        }
+
+        .kids-btn {
+            width: 200px;
+            padding: 40px 20px;
+            font-size: 1.8rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .kids-btn:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .btn-lareen { background: linear-gradient(135deg, #ff6b6b, #ee5253); }
+        .btn-taleen { background: linear-gradient(135deg, #ba68c8, #9c27b0); }
+
+        /* أزرار المواد */
+        .subject-btn {
+            width: 280px;
+            padding: 20px;
+            font-size: 1.4rem;
+            margin: 10px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            display: block;
+            margin: 15px auto;
+        }
+        .bg-english { background-color: #3498db; }
+        .bg-math { background-color: #9b59b6; opacity: 0.6; cursor: not-allowed; }
+        .bg-science { background-color: #2ecc71; opacity: 0.6; cursor: not-allowed; }
+
+        /* تنسيق الكلمات والبطاقات */
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 900px; margin: 20px auto; }
+        .word-card { 
+            padding: 25px 15px; border-radius: 20px; cursor: pointer;
+            transition: 0.2s; width: 130px; color: white; font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .word-card:hover { transform: scale(1.1); }
+
+        /* ألوان بطاقات لارين */
+        .l1 { background-color: #ff6b6b; } .l2 { background-color: #4ecdc4; } .l3 { background-color: #45b7d1; }
+        .l4 { background-color: #96ceb4; } .l5 { background-color: #ffeead; color: #333; }
+
+        /* ألوان بطاقات تالين */
+        .t1 { background-color: #ff8a65; } .t2 { background-color: #ba68c8; } .t3 { background-color: #4db6ac; }
+        .t4 { background-color: #7986cb; } .t5 { background-color: #f06292; } .t6 { background-color: #aed581; }
+
+        /* قسم الإملاء */
+        .spelling-section {
+            margin-top: 30px; padding: 25px; background: white; border-radius: 25px;
+            display: inline-block; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 2px solid #eee;
+        }
+        .spelling-row { margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        input { padding: 10px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 10px; width: 150px; text-align: center; }
+        input.correct { border-color: #2ecc71; background-color: #e8f5e9; }
+        input.incorrect { border-color: #e74c3c; background-color: #fdeaea; animation: shake 0.3s; }
+
+        .btn-act { padding: 10px 18px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; color: white; }
+        .btn-listen { background-color: #3498db; }
+        .btn-check { background-color: #f1c40f; color: #333; }
+        .btn-back { background-color: #95a5a6; color: white; margin-top: 30px; padding: 10px 25px; border-radius: 10px; border: none; cursor: pointer; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    </style>
+</head>
+<body>
+
+    <div id="portal-page" class="page active">
+        <h1>Asfari Kids Learning 👋</h1>
+        <div class="portal-container">
+            <button class="kids-btn btn-lareen" onclick="showPage('lareen-subjects')">Lareen 🌸</button>
+            <button class="kids-btn btn-taleen" onclick="showPage('taleen-subjects')">Taleen ✨</button>
+        </div>
+    </div>
+
+    <div id="lareen-subjects" class="page">
+        <h1>Lareen's Classes 🌸</h1>
+        <button class="subject-btn bg-english" onclick="showPage('lareen-english')">English Language 📚</button>
+        <button class="subject-btn bg-math">Mathematics (Soon)</button>
+        <button class="subject-btn bg-science">Science (Soon)</button>
+        <button class="btn-back" onclick="showPage('portal-page')">Back to Home</button>
+    </div>
+
+    <div id="taleen-subjects" class="page">
+        <h1>Taleen's Classes ✨</h1>
+        <button class="subject-btn bg-english" onclick="showPage('taleen-english')">English Language 📚</button>
+        <button class="subject-btn bg-math">Mathematics (Soon)</button>
+        <button class="subject-btn bg-science">Science (Soon)</button>
+        <button class="btn-back" onclick="showPage('portal-page')">Back to Home</button>
+    </div>
+
+    <div id="lareen-english" class="page">
+        <h1>English for Lareen 🌸</h1>
+        <div class="container">
+            <div class="word-card l1" onclick="speak('Seep')"><h2>Seep</h2></div>
+            <div class="word-card l2" onclick="speak('Coral')"><h2>Coral</h2></div>
+            <div class="word-card l3" onclick="speak('Mango')"><h2>Mango</h2></div>
+            <div class="word-card l4" onclick="speak('Sweet')"><h2>Sweet</h2></div>
+            <div class="word-card l5" onclick="speak('Forest')"><h2>Forest</h2></div>
+        </div>
+        <div class="spelling-section">
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Seep')">🔊</button>
+                <input type="text" id="in-Seep" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Seep', 'Lareen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Coral')">🔊</button>
+                <input type="text" id="in-Coral" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Coral', 'Lareen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Mango')">🔊</button>
+                <input type="text" id="in-Mango" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Mango', 'Lareen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Sweet')">🔊</button>
+                <input type="text" id="in-Sweet" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Sweet', 'Lareen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Forest')">🔊</button>
+                <input type="text" id="in-Forest" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Forest', 'Lareen')">Check</button>
+            </div>
+        </div>
+        <br><button class="btn-back" onclick="showPage('lareen-subjects')">Back</button>
+    </div>
+
+    <div id="taleen-english" class="page">
+        <h1>English for Taleen ✨</h1>
+        <div class="container">
+            <div class="word-card t1" onclick="speak('Tag')"><h2>Tag</h2></div>
+            <div class="word-card t2" onclick="speak('Hold')"><h2>Hold</h2></div>
+            <div class="word-card t3" onclick="speak('Yawn')"><h2>Yawn</h2></div>
+            <div class="word-card t4" onclick="speak('Sharks')"><h2>Sharks</h2></div>
+            <div class="word-card t5" onclick="speak('Farmer')"><h2>Farmer</h2></div>
+            <div class="word-card t6" onclick="speak('Cozy')"><h2>Cozy</h2></div>
+        </div>
+        <div class="spelling-section">
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Tag')">🔊</button>
+                <input type="text" id="in-Tag" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Tag', 'Taleen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Hold')">🔊</button>
+                <input type="text" id="in-Hold" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Hold', 'Taleen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Yawn')">🔊</button>
+                <input type="text" id="in-Yawn" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Yawn', 'Taleen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Sharks')">🔊</button>
+                <input type="text" id="in-Sharks" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Sharks', 'Taleen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Farmer')">🔊</button>
+                <input type="text" id="in-Farmer" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Farmer', 'Taleen')">Check</button>
+            </div>
+            <div class="spelling-row">
+                <button class="btn-act btn-listen" onclick="speak('Cozy')">🔊</button>
+                <input type="text" id="in-Cozy" placeholder="type...">
+                <button class="btn-act btn-check" onclick="check('Cozy', 'Taleen')">Check</button>
+            </div>
+        </div>
+        <br><button class="btn-back" onclick="showPage('taleen-subjects')">Back</button>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function speak(word) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(word);
+            msg.lang = 'en-US';
+            msg.rate = 0.8;
+            window.speechSynthesis.speak(msg);
+        }
+
+        function check(word, kidName) {
+            let input = document.getElementById('in-' + word);
+            let val = input.value.trim().toLowerCase();
+            if (val === word.toLowerCase()) {
+                input.className = 'correct';
+                speak("Well done " + kidName + "!");
+            } else {
+                input.className = 'incorrect';
+                speak("Try again " + kidName);
+                setTimeout(() => { input.className = ''; }, 1000);
+            }
+        }
+
+        document.body.addEventListener('click', function() {
+            if (!window.welcomed) {
+                speak("Welcome to your school!");
+                window.welcomed = true;
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
