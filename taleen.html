@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English for Taleen</title>
+    <style>
+        body { 
+            text-align: center; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #fff9fe; /* لون مائل للزهري الفاتح */
+            padding: 20px; 
+            direction: ltr;
+        }
+        h1 { color: #6a1b9a; margin-bottom: 40px; font-size: 2.5rem; }
+        
+        .container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 15px; 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+        
+        /* بطاقات الكلمات الملونة لـ تالين */
+        .word-card { 
+            padding: 25px 15px; 
+            border-radius: 20px; 
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 130px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .word-card:hover { transform: scale(1.1); }
+        .word-card h2 { margin: 0; font-size: 1.6rem; }
+
+        /* ألوان منوعة وجذابة */
+        .c1 { background-color: #ff8a65; }
+        .c2 { background-color: #ba68c8; }
+        .c3 { background-color: #4db6ac; }
+        .c4 { background-color: #7986cb; }
+        .c5 { background-color: #f06292; }
+        .c6 { background-color: #aed581; }
+
+        /* قسم الإملاء */
+        .spelling-section {
+            margin-top: 50px;
+            padding: 30px;
+            background: white;
+            border-radius: 25px;
+            display: inline-block;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 2px solid #f3e5f5;
+        }
+        .spelling-row { 
+            margin: 15px 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+        }
+        
+        input { 
+            padding: 10px; 
+            font-size: 1.1rem; 
+            border: 2px solid #eee; 
+            border-radius: 10px; 
+            width: 150px; 
+            text-align: center;
+        }
+        input.correct { border-color: #2ecc71; background-color: #e8f5e9; }
+        input.incorrect { border-color: #e74c3c; background-color: #fdeaea; animation: shake 0.3s; }
+
+        button {
+            padding: 10px 18px;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-listen { background-color: #9c27b0; color: white; }
+        .btn-check { background-color: #ffd54f; color: #333; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome, Taleen! 👋</h1>
+
+    <div class="container">
+        <div class="word-card c1" onclick="speak('Tag')"><h2>Tag</h2></div>
+        <div class="word-card c2" onclick="speak('Hold')"><h2>Hold</h2></div>
+        <div class="word-card c3" onclick="speak('Yawn')"><h2>Yawn</h2></div>
+        <div class="word-card c4" onclick="speak('Sharks')"><h2>Sharks</h2></div>
+        <div class="word-card c5" onclick="speak('Farmer')"><h2>Farmer</h2></div>
+        <div class="word-card c6" onclick="speak('Cozy')"><h2>Cozy</h2></div>
+    </div>
+
+    <div class="spelling-section">
+        <h3>⌨️ Practice Time</h3>
+        
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Tag')">🔊 Listen</button>
+            <input type="text" id="in-Tag" placeholder="...">
+            <button class="btn-check" onclick="check('Tag')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Hold')">🔊 Listen</button>
+            <input type="text" id="in-Hold" placeholder="...">
+            <button class="btn-check" onclick="check('Hold')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Yawn')">🔊 Listen</button>
+            <input type="text" id="in-Yawn" placeholder="...">
+            <button class="btn-check" onclick="check('Yawn')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Sharks')">🔊 Listen</button>
+            <input type="text" id="in-Sharks" placeholder="...">
+            <button class="btn-check" onclick="check('Sharks')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Farmer')">🔊 Listen</button>
+            <input type="text" id="in-Farmer" placeholder="...">
+            <button class="btn-check" onclick="check('Farmer')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Cozy')">🔊 Listen</button>
+            <input type="text" id="in-Cozy" placeholder="...">
+            <button class="btn-check" onclick="check('Cozy')">Check</button>
+        </div>
+    </div>
+
+    <script>
+        function speak(word) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(word);
+            msg.lang = 'en-US';
+            msg.rate = 0.8; 
+            window.speechSynthesis.speak(msg);
+        }
+
+        function check(word) {
+            let input = document.getElementById('in-' + word);
+            let val = input.value.trim().toLowerCase();
+            
+            if (val === word.toLowerCase()) {
+                input.className = 'correct';
+                speak("Excellent Taleen!");
+            } else {
+                input.className = 'incorrect';
+                speak("Try again Taleen");
+                setTimeout(() => { input.className = ''; }, 1000);
+            }
+        }
+
+        // ترحيب خاص بـ تالين
+        document.body.addEventListener('click', function() {
+            if (!window.welcomed) {
+                speak("Hello Taleen, let's learn your new words today!");
+                window.welcomed = true;
+            }
+        }, { once: false });
+    </script>
+
+</body>
+</html>

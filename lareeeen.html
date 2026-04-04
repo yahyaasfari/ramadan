@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English for Larin</title>
+    <style>
+        body { 
+            text-align: center; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f8f9fa;
+            padding: 20px; 
+            direction: ltr;
+        }
+        h1 { color: #2c3e50; margin-bottom: 40px; font-size: 2.5rem; }
+        
+        .container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 15px; 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+        
+        /* تصميم البطاقات الملونة (بدون صور) */
+        .word-card { 
+            padding: 30px 20px; 
+            border-radius: 20px; 
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 140px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .word-card:hover { transform: scale(1.1); }
+        .word-card h2 { margin: 0; font-size: 1.8rem; }
+
+        /* ألوان مختلفة للبطاقات */
+        .bg-1 { background-color: #ff6b6b; }
+        .bg-2 { background-color: #4ecdc4; }
+        .bg-3 { background-color: #45b7d1; }
+        .bg-4 { background-color: #96ceb4; }
+        .bg-5 { background-color: #ffeead; color: #333; }
+
+        /* قسم الإملاء */
+        .spelling-section {
+            margin-top: 50px;
+            padding: 30px;
+            background: white;
+            border-radius: 25px;
+            display: inline-block;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 2px solid #eee;
+        }
+        .spelling-row { 
+            margin: 20px 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+        }
+        
+        input { 
+            padding: 12px; 
+            font-size: 1.2rem; 
+            border: 2px solid #ddd; 
+            border-radius: 10px; 
+            width: 160px; 
+            text-align: center;
+        }
+        input.correct { border-color: #2ecc71; background-color: #e8f5e9; }
+        input.incorrect { border-color: #e74c3c; background-color: #fdeaea; animation: shake 0.3s; }
+
+        button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-listen { background-color: #3498db; color: white; }
+        .btn-check { background-color: #f1c40f; color: #333; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome, Larin! 👋</h1>
+
+    <div class="container">
+        <div class="word-card bg-1" onclick="speak('Seep')"><h2>Seep</h2></div>
+        <div class="word-card bg-2" onclick="speak('Coral')"><h2>Coral</h2></div>
+        <div class="word-card bg-3" onclick="speak('Mango')"><h2>Mango</h2></div>
+        <div class="word-card bg-4" onclick="speak('Sweet')"><h2>Sweet</h2></div>
+        <div class="word-card bg-5" onclick="speak('Forest')"><h2>Forest</h2></div>
+    </div>
+
+    <div class="spelling-section">
+        <h3>⌨️ Spelling Practice</h3>
+        
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Seep')">🔊 Listen</button>
+            <input type="text" id="in-Seep" placeholder="...">
+            <button class="btn-check" onclick="check('Seep')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Coral')">🔊 Listen</button>
+            <input type="text" id="in-Coral" placeholder="...">
+            <button class="btn-check" onclick="check('Coral')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Mango')">🔊 Listen</button>
+            <input type="text" id="in-Mango" placeholder="...">
+            <button class="btn-check" onclick="check('Mango')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Sweet')">🔊 Listen</button>
+            <input type="text" id="in-Sweet" placeholder="...">
+            <button class="btn-check" onclick="check('Sweet')">Check</button>
+        </div>
+
+        <div class="spelling-row">
+            <button class="btn-listen" onclick="speak('Forest')">🔊 Listen</button>
+            <input type="text" id="in-Forest" placeholder="...">
+            <button class="btn-check" onclick="check('Forest')">Check</button>
+        </div>
+    </div>
+
+    <script>
+        function speak(word) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(word);
+            msg.lang = 'en-US';
+            msg.rate = 0.8; 
+            window.speechSynthesis.speak(msg);
+        }
+
+        function check(word) {
+            let input = document.getElementById('in-' + word);
+            let val = input.value.trim().toLowerCase();
+            
+            if (val === word.toLowerCase()) {
+                input.className = 'correct';
+                speak("Well done Larin!");
+            } else {
+                input.className = 'incorrect';
+                speak("Try again");
+                setTimeout(() => { input.className = ''; }, 1000);
+            }
+        }
+
+        // الترحيب عند التفاعل
+        document.body.addEventListener('click', function() {
+            if (!window.welcomed) {
+                speak("Hello Larin, let's practice your words!");
+                window.welcomed = true;
+            }
+        }, { once: false });
+    </script>
+
+</body>
+</html>
