@@ -7,7 +7,6 @@
     
     <meta name="description" content="أداة ذكية من موقع الأصفري لإنشاء بطاقات تهنئة لرمضان، عيد الفطر، والأعياد والمناسبات المختلفة باسمك الشخصي مجاناً.">
     <link rel="canonical" href="https://asfari.net/card">
-
     <link rel="alternate" hreflang="ar" href="https://asfari.net/card" />
     <link rel="alternate" hreflang="en" href="https://asfari.net/card" />
     <link rel="alternate" hreflang="x-default" href="https://asfari.net/card" />
@@ -229,7 +228,7 @@
         const bgImage = new Image();
         bgImage.crossOrigin = "anonymous";
 
-        // وظيفة الإرسال البرمجي لبيانات النموذج لنتلفاي
+        // وظيفة الإرسال الخلفي لنتلفاي
         function notifyNetlify(name, event, lang) {
             if (!name) return;
             fetch("/", {
@@ -241,7 +240,7 @@
                     "event-type": event,
                     "language": lang
                 }).toString(),
-            }).catch(err => console.log("Netlify submission failed silently"));
+            }).catch(err => console.log("Silent fail"));
         }
 
         const translations = {
@@ -252,6 +251,7 @@
                 seoFooter: "أداة مجانية من موقع الأصفري لتصميم بطاقات تهنئة إلكترونية باسمك لمختلف المناسبات كرمضان والأعياد، مع إمكانية التحميل والمشاركة الفورية.",
                 events: {
                     ramadan: "🌙 تهنئة رمضان", fitr: "🍬 تهنئة عيد الفطر", adha: "🐑 تهنئة عيد الأضحى",
+                    friday: "🕌 جمعة مباركة", success: "🎓 تهنئة نجاح",
                     hijri: "🕌 تهنئة العام الهجري", newyear: "🎄 تهنئة رأس السنة", birthday: "🎂 تهنئة عيد ميلاد"
                 }
             },
@@ -262,16 +262,20 @@
                 seoFooter: "Free tool by Asfari.net to design custom greeting cards for Ramadan, Eid, and special occasions with your name.",
                 events: {
                     ramadan: "🌙 Ramadan", fitr: "🍬 Eid Fitr", adha: "🐑 Eid Adha",
+                    friday: "🕌 Jumu'ah Mubarak", success: "🎓 Graduation",
                     hijri: "🕌 New Hijri Year", newyear: "🎄 New Year", birthday: "🎂 Birthday"
                 }
             }
         };
 
-        // تم تعديل قيم y لتتناسب مع الإطارات الذهبية في صورك بدقة
         const configs = {
             ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.72, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
             fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.945, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
             adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.88, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            // إضافة الجمعة والنجاح مع إحداثيات تقريبية (يرجى مراجعة أسماء الصور وتعديل y حسب التصميم)
+            friday: { bg: 'friday-bg.webp', color: '#ffffff', y: 0.85, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'جمعة مباركة 🕌' },
+            success: { bg: 'success-bg.webp', color: '#2c3e50', y: 0.80, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' },
+            
             hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
             newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
             birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.885, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' }
@@ -329,10 +333,7 @@
         function downloadCard() {
             const name = document.getElementById('nameInput').value.trim();
             if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم" : "Please enter name"); return; }
-            
-            // إرسال الاسم لنتلفاي عند التحميل
             notifyNetlify(name, currentEvent, currentLang);
-
             const link = document.createElement('a');
             link.download = `Asfari-${currentEvent}.png`;
             link.href = canvas.toDataURL('image/png', 1.0);
@@ -342,10 +343,7 @@
         async function shareCard() {
             const name = document.getElementById('nameInput').value.trim();
             if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم أولاً" : "Please enter name first"); return; }
-            
-            // إرسال الاسم لنتلفاي عند المشاركة
             notifyNetlify(name, currentEvent, currentLang);
-
             const config = configs[currentEvent];
             const dataUrl = canvas.toDataURL('image/png');
             const blob = await (await fetch(dataUrl)).blob();
