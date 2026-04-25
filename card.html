@@ -7,15 +7,6 @@
     
     <meta name="description" content="أداة ذكية من موقع الأصفري لإنشاء بطاقات تهنئة لرمضان، عيد الفطر، والأعياد والمناسبات المختلفة باسمك الشخصي مجاناً.">
     <link rel="canonical" href="https://asfari.net/card">
-    <link rel="alternate" hreflang="ar" href="https://asfari.net/card" />
-    <link rel="alternate" hreflang="en" href="https://asfari.net/card" />
-    <link rel="alternate" hreflang="x-default" href="https://asfari.net/card" />
-    
-    <meta property="og:title" content="صانع التهنئة الذكي | أصفري">
-    <meta property="og:description" content="اصنع بطاقة تهنئتك الخاصة لمختلف المناسبات وشاركها مع من تحب بسهولة.">
-    <meta property="og:image" content="https://asfari.net/og-image.webp"> 
-    <meta property="og:url" content="https://asfari.net/card">
-    <meta property="og:type" content="website">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -114,13 +105,6 @@
             background: rgba(255,255,255,0.95); 
             color: #1e293b; 
             font-weight: 800; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--secondary-turquoise);
-            transform: translateY(-2px);
         }
 
         .event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
@@ -132,52 +116,28 @@
             background: rgba(255,255,255,0.03); 
             color: #fff; 
             cursor: pointer; 
-            font-size: 0.9em; 
+            font-size: 0.85em; 
         }
 
         .event-btn.active { 
             background: linear-gradient(135deg, var(--primary-purple), var(--secondary-turquoise)); 
-            color: white; 
             font-weight: 800; 
-            border: none;
             transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+            border: none;
         }
 
         .action-btns { display: flex; gap: 12px; width: 100%; }
         .action-btns button { 
-            flex: 1; 
-            padding: 18px; 
-            border-radius: 20px; 
-            border: none; 
-            color: white; 
-            font-weight: 800; 
-            cursor: pointer; 
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            flex: 1; padding: 18px; border-radius: 20px; border: none; 
+            color: white; font-weight: 800; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
         #dlBtn { background: #27ae60; }
         #shBtn { background: #25D366; }
 
-        footer {
-            margin-top: 40px;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.4);
-            max-width: 500px;
-            line-height: 1.8;
-            padding: 0 20px;
-        }
-        
+        footer { margin-top: 40px; font-size: 0.85rem; color: rgba(255,255,255,0.4); padding: 0 20px; }
         #cardCanvas { display: none; }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 1.8rem; }
-            .main-container { padding: 20px; }
-        }
     </style>
 </head>
 <body>
@@ -193,29 +153,23 @@
             <a href="/" class="home-btn" id="homeBtn"><i class="fas fa-home"></i> الرئيسية</a>
             <button class="lang-btn" onclick="toggleLanguage()">English</button>
         </div>
-        <span style="font-weight: 800; color: var(--secondary-turquoise); letter-spacing: 1px;">asfari.net</span>
+        <span style="font-weight: 800; color: var(--secondary-turquoise);">asfari.net</span>
     </header>
 
     <h1 id="mainTitle">اصنع تهنئتك الخاصة</h1>
 
     <div class="main-container">
         <input type="text" id="nameInput" placeholder="أدخل الاسم هنا" oninput="updateLiveView()">
-        
-        <p id="chooseText" style="margin-bottom: 15px; font-weight: 300; font-size: 0.95em; opacity: 0.8;">اختر المناسبة:</p>
+        <p id="chooseText" style="margin-bottom: 15px; font-size: 0.9em; opacity: 0.8;">اختر المناسبة:</p>
         <div class="event-grid" id="eventGrid"></div>
-        
         <div class="action-btns">
-            <button id="dlBtn" onclick="downloadCard()">
-                <i class="fas fa-download"></i> <span id="dlText">تحميل</span>
-            </button>
-            <button id="shBtn" onclick="shareCard()">
-                <i class="fas fa-share-alt"></i> <span id="shText">مشاركة</span>
-            </button>
+            <button id="dlBtn" onclick="downloadCard()"><i class="fas fa-download"></i> <span id="dlText">تحميل</span></button>
+            <button id="shBtn" onclick="shareCard()"><i class="fas fa-share-alt"></i> <span id="shText">مشاركة</span></button>
         </div>
     </div>
 
     <footer>
-        <p id="seoFooter">أداة مجانية من موقع الأصفري لتصميم بطاقات تهنئة إلكترونية باسمك لمختلف المناسبات كرمضان والأعياد، مع إمكانية التحميل والمشاركة الفورية.</p>
+        <p id="seoFooter">أداة مجانية من موقع الأصفري لتصميم بطاقات تهنئة إلكترونية باسمك لمختلف المناسبات كرمضان والأعياد.</p>
     </footer>
 
     <canvas id="cardCanvas"></canvas>
@@ -228,58 +182,52 @@
         const bgImage = new Image();
         bgImage.crossOrigin = "anonymous";
 
-        // وظيفة الإرسال الخلفي لنتلفاي
-        function notifyNetlify(name, event, lang) {
-            if (!name) return;
-            fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({
-                    "form-name": "card-usage",
-                    "user-name": name,
-                    "event-type": event,
-                    "language": lang
-                }).toString(),
-            }).catch(err => console.log("Silent fail"));
-        }
+        // إعدادات البطاقات - تمت العودة لإحداثياتك الأصلية بدقة
+        const configs = {
+            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.72, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.945, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.88, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
+            newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
+            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.885, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' },
+            // البطاقات الجديدة (طولية)
+            friday: { bg: 'friday-bg.jpg', color: '#2c3e50', y: 0.825, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'جمعة مباركة 🕌' },
+            success: { bg: 'success-bg.jpg', color: '#2c3e50', y: 0.772, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' }
+        };
 
         const translations = {
             ar: {
                 mainTitle: "اصنع تهنئتك الخاصة", chooseText: "اختر المناسبة:",
                 dlBtn: "تحميل", shBtn: "مشاركة", homeBtn: "الرئيسية",
                 placeholder: "أدخل الاسم هنا", langBtn: "English",
-                seoFooter: "أداة مجانية من موقع الأصفري لتصميم بطاقات تهنئة إلكترونية باسمك لمختلف المناسبات كرمضان والأعياد، مع إمكانية التحميل والمشاركة الفورية.",
+                seoFooter: "أداة مجانية من موقع الأصفري لتصميم بطاقات تهنئة إلكترونية باسمك لمختلف المناسبات.",
                 events: {
                     ramadan: "🌙 تهنئة رمضان", fitr: "🍬 تهنئة عيد الفطر", adha: "🐑 تهنئة عيد الأضحى",
-                    friday: "🕌 جمعة مباركة", success: "🎓 تهنئة نجاح",
-                    hijri: "🕌 تهنئة العام الهجري", newyear: "🎄 تهنئة رأس السنة", birthday: "🎂 تهنئة عيد ميلاد"
+                    hijri: "🕌 تهنئة العام الهجري", newyear: "🎄 تهنئة رأس السنة", birthday: "🎂 تهنئة عيد ميلاد",
+                    friday: "🕌 جمعة مباركة", success: "🎓 تهنئة نجاح"
                 }
             },
             en: {
                 mainTitle: "Greeting Maker Pro", chooseText: "Choose Occasion:",
                 dlBtn: "Download", shBtn: "Share", homeBtn: "Home",
                 placeholder: "Enter name", langBtn: "عربي",
-                seoFooter: "Free tool by Asfari.net to design custom greeting cards for Ramadan, Eid, and special occasions with your name.",
+                seoFooter: "Free tool by Asfari.net to design custom greeting cards with your name.",
                 events: {
                     ramadan: "🌙 Ramadan", fitr: "🍬 Eid Fitr", adha: "🐑 Eid Adha",
-                    friday: "🕌 Jumu'ah Mubarak", success: "🎓 Graduation",
-                    hijri: "🕌 New Hijri Year", newyear: "🎄 New Year", birthday: "🎂 Birthday"
+                    hijri: "🕌 New Hijri Year", newyear: "🎄 New Year", birthday: "🎂 Birthday",
+                    friday: "🕌 Jumu'ah Mubarak", success: "🎓 Graduation"
                 }
             }
         };
 
-      const configs = {
-    ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.72, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
-    fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.945, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
-    adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.88, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
-    hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
-    newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
-    birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.885, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' },
-    
-    // الإضافات الجديدة فقط (بناءً على تجاربنا الأخيرة)
-    friday: { bg: 'friday-bg.jpg', color: '#2c3e50', y: 0.825, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'جمعة مباركة 🕌' },
-    success: { bg: 'success-bg.jpg', color: '#2c3e50', y: 0.772, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' }
-};
+        function notifyNetlify(name, event, lang) {
+            if (!name) return;
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ "form-name": "card-usage", "user-name": name, "event-type": event, "language": lang }).toString(),
+            }).catch(e => {});
+        }
 
         function renderButtons() {
             const grid = document.getElementById('eventGrid');
@@ -309,30 +257,28 @@
                 ctx.drawImage(bgImage, 0, 0);
                 const config = configs[currentEvent];
                 if (name) {
-                    const maxAllowedWidth = canvas.width * 0.45;
-                    let fontSize = Math.floor(canvas.width * 0.08); 
-                    ctx.font = `900 ${fontSize}px ${config.font}`;
+                    const maxW = canvas.width * 0.45;
+                    let fSize = Math.floor(canvas.width * 0.08); 
+                    ctx.font = `900 ${fSize}px ${config.font}`;
                     ctx.fillStyle = config.color;
                     ctx.textAlign = "center";
-                    let metrics = ctx.measureText(name);
-                    while (metrics.width > maxAllowedWidth && fontSize > 10) {
-                        fontSize -= 2;
-                        ctx.font = `900 ${fontSize}px ${config.font}`;
-                        metrics = ctx.measureText(name);
+                    while (ctx.measureText(name).width > maxW && fSize > 10) {
+                        fSize -= 2;
+                        ctx.font = `900 ${fSize}px ${config.font}`;
                     }
                     ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
                 }
-                const wmSize = Math.floor(canvas.width * 0.025);
-                ctx.font = `500 ${wmSize}px 'Tajawal'`;
+                const wmS = Math.floor(canvas.width * 0.025);
+                ctx.font = `500 ${wmS}px 'Tajawal'`;
                 ctx.textAlign = "left";
-                ctx.fillStyle = (config.wm === 'white') ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.6)";
-                ctx.fillText("asfari.net", wmSize, canvas.height - wmSize);
+                ctx.fillStyle = (config.wm === 'white') ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)";
+                ctx.fillText("asfari.net", wmS, canvas.height - wmS);
             }
         }
 
         function downloadCard() {
             const name = document.getElementById('nameInput').value.trim();
-            if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم" : "Please enter name"); return; }
+            if(!name) return alert(currentLang === 'ar' ? "يرجى كتابة الاسم" : "Enter name");
             notifyNetlify(name, currentEvent, currentLang);
             const link = document.createElement('a');
             link.download = `Asfari-${currentEvent}.png`;
@@ -342,23 +288,15 @@
 
         async function shareCard() {
             const name = document.getElementById('nameInput').value.trim();
-            if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم أولاً" : "Please enter name first"); return; }
+            if(!name) return alert(currentLang === 'ar' ? "يرجى كتابة الاسم" : "Enter name");
             notifyNetlify(name, currentEvent, currentLang);
-            const config = configs[currentEvent];
             const dataUrl = canvas.toDataURL('image/png');
             const blob = await (await fetch(dataUrl)).blob();
             const file = new File([blob], `Asfari-${currentEvent}.png`, { type: 'image/png' });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'تهنئة من asfari.net',
-                        text: `${config.waMsg} من ${name}`,
-                    });
-                } catch (err) { console.log('Share canceled'); }
+                await navigator.share({ files: [file], title: 'تهنئة asfari.net', text: `${configs[currentEvent].waMsg} من ${name}` });
             } else {
-                const text = `${config.waMsg} من ${name}\nصمم بطاقتك الخاصة عبر: ${window.location.origin}/card`;
-                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://wa.me/?text=${encodeURIComponent(configs[currentEvent].waMsg + " من " + name + "\n" + window.location.origin + "/card")}`, '_blank');
             }
         }
 
@@ -369,7 +307,6 @@
             document.getElementById('mainTitle').innerText = translations[currentLang].mainTitle;
             document.getElementById('chooseText').innerText = translations[currentLang].chooseText;
             document.getElementById('nameInput').placeholder = translations[currentLang].placeholder;
-            document.getElementById('seoFooter').innerText = translations[currentLang].seoFooter;
             document.getElementById('dlText').innerText = translations[currentLang].dlBtn;
             document.getElementById('shText').innerText = translations[currentLang].shBtn;
             document.querySelector('.lang-btn').innerText = translations[currentLang].langBtn;
