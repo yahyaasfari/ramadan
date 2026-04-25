@@ -5,23 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>صانع التهنئة الذكي | asfari.net</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&family=Cairo:wght@900&display=swap" rel="stylesheet">
+    <meta name="description" content="أداة ذكية من موقع الأصفري لإنشاء بطاقات تهنئة لرمضان، عيد الفطر، والأعياد والمناسبات المختلفة باسمك الشخصي مجاناً.">
+    <link rel="canonical" href="https://asfari.net/card">
+
+    <link rel="alternate" hreflang="ar" href="https://asfari.net/card" />
+    <link rel="alternate" hreflang="en" href="https://asfari.net/card" />
+    <link rel="alternate" hreflang="x-default" href="https://asfari.net/card" />
+    
+    <meta property="og:title" content="صانع التهنئة الذكي | أصفري">
+    <meta property="og:description" content="اصنع بطاقة تهنئتك الخاصة لمختلف المناسبات وشاركها مع من تحب بسهولة.">
+    <meta property="og:image" content="https://asfari.net/og-image.webp"> 
+    <meta property="og:url" content="https://asfari.net/card">
+    <meta property="og:type" content="website">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root {
             --primary-purple: #6c5ce7;
             --secondary-turquoise: #00cec9;
-            --dark-bg: #0f0c29;
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --dark-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         
         body { 
             padding: 20px; 
-            background: radial-gradient(circle at top right, #302b63, #0f0c29); 
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a); 
             color: white; 
             text-align: center; 
             min-height: 100vh; 
@@ -37,91 +52,104 @@
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 25px; 
+            padding: 10px;
         }
 
         .nav-links { display: flex; gap: 10px; align-items: center; }
         
         .home-btn { 
-            background: var(--glass); 
+            background: var(--glass-bg); 
             border: 1px solid var(--glass-border); 
             color: white; 
-            padding: 8px 15px; 
-            border-radius: 12px; 
+            padding: 8px 18px; 
+            border-radius: 15px; 
             text-decoration: none; 
             font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            backdrop-filter: blur(5px);
         }
 
         .lang-btn { 
             background: transparent; 
             border: 1px solid var(--secondary-turquoise); 
             color: var(--secondary-turquoise); 
-            padding: 7px 15px; 
-            border-radius: 12px; 
+            padding: 7px 18px; 
+            border-radius: 15px; 
             cursor: pointer; 
             font-size: 0.85rem;
+            font-weight: 800;
         }
 
         h1 { 
             margin: 10px 0 25px; 
-            font-weight: 800; 
-            font-size: 1.8rem; 
-            background: linear-gradient(to left, #fff, var(--secondary-turquoise));
+            font-weight: 900; 
+            font-size: 2.2rem; 
+            background: linear-gradient(135deg, #fff, var(--secondary-turquoise));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
 
         .main-container { 
-            background: var(--glass); 
+            background: var(--glass-bg); 
             backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border); 
-            padding: 25px; 
-            border-radius: 25px; 
+            padding: 30px; 
+            border-radius: 35px; 
             width: 100%; 
             max-width: 500px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4); 
         }
         
         input { 
             width: 100%; 
-            padding: 16px; 
-            border-radius: 15px; 
+            padding: 18px; 
+            border-radius: 20px; 
             border: 1px solid var(--glass-border);
             text-align: center; 
-            font-size: 1.1rem; 
-            margin-bottom: 20px; 
+            font-size: 1.2rem; 
+            margin-bottom: 25px; 
             background: rgba(255,255,255,0.95); 
-            color: #333; 
+            color: #1e293b; 
             font-weight: 800; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        input:focus {
+            outline: none;
+            border-color: var(--secondary-turquoise);
+            transform: translateY(-2px);
+        }
+
+        .event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
         
         .event-btn { 
-            padding: 12px; 
-            border-radius: 12px; 
+            padding: 14px; 
+            border-radius: 18px; 
             border: 1px solid var(--glass-border); 
-            background: var(--glass); 
+            background: rgba(255,255,255,0.03); 
             color: #fff; 
             cursor: pointer; 
             font-size: 0.9em; 
         }
 
         .event-btn.active { 
-            background: var(--secondary-turquoise); 
-            color: var(--dark-bg); 
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-turquoise)); 
+            color: white; 
             font-weight: 800; 
             border: none;
             transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
         }
 
-        .action-btns { display: flex; gap: 10px; width: 100%; margin-top: 5px; }
+        .action-btns { display: flex; gap: 12px; width: 100%; }
         .action-btns button { 
             flex: 1; 
-            padding: 15px; 
-            border-radius: 15px; 
+            padding: 18px; 
+            border-radius: 20px; 
             border: none; 
             color: white; 
             font-weight: 800; 
@@ -130,20 +158,43 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+        }
+
+        #dlBtn { background: #27ae60; }
+        #shBtn { background: #25D366; }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            max-width: 500px;
+            line-height: 1.8;
+            padding: 0 20px;
         }
         
         #cardCanvas { display: none; }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .main-container { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
+    <form name="card-usage" data-netlify="true" hidden>
+        <input type="text" name="user-name">
+        <input type="text" name="event-type">
+        <input type="text" name="language">
+    </form>
+
     <header>
         <div class="nav-links">
-            <a href="index.html" class="home-btn" id="homeBtn"><i class="fas fa-home"></i> الرئيسية</a>
+            <a href="/" class="home-btn" id="homeBtn"><i class="fas fa-home"></i> الرئيسية</a>
             <button class="lang-btn" onclick="toggleLanguage()">English</button>
         </div>
-        <span style="font-weight: 800; color: var(--secondary-turquoise);">asfari.net</span>
+        <span style="font-weight: 800; color: var(--secondary-turquoise); letter-spacing: 1px;">asfari.net</span>
     </header>
 
     <h1 id="mainTitle">اصنع تهنئتك الخاصة</h1>
@@ -151,18 +202,22 @@
     <div class="main-container">
         <input type="text" id="nameInput" placeholder="أدخل الاسم هنا" oninput="updateLiveView()">
         
-        <p id="chooseText" style="margin-bottom: 15px; font-weight: 300; font-size: 0.9em;">اختر المناسبة:</p>
+        <p id="chooseText" style="margin-bottom: 15px; font-weight: 300; font-size: 0.95em; opacity: 0.8;">اختر المناسبة:</p>
         <div class="event-grid" id="eventGrid"></div>
         
         <div class="action-btns">
-            <button id="dlBtn" onclick="downloadCard()" style="background: #27ae60;">
-                <i class="fas fa-download"></i> تحميل
+            <button id="dlBtn" onclick="downloadCard()">
+                <i class="fas fa-download"></i> <span id="dlText">تحميل</span>
             </button>
-            <button id="shBtn" onclick="shareCard()" style="background: #25D366;">
-                <i class="fas fa-share-alt"></i> مشاركة
+            <button id="shBtn" onclick="shareCard()">
+                <i class="fas fa-share-alt"></i> <span id="shText">مشاركة</span>
             </button>
         </div>
     </div>
+
+    <footer>
+        <p id="seoFooter">أداة مجانية من موقع الأصفري لتصميم بطاقات تهنئة إلكترونية باسمك لمختلف المناسبات كرمضان والأعياد، مع إمكانية التحميل والمشاركة الفورية.</p>
+    </footer>
 
     <canvas id="cardCanvas"></canvas>
 
@@ -174,34 +229,52 @@
         const bgImage = new Image();
         bgImage.crossOrigin = "anonymous";
 
+        // وظيفة الإرسال البرمجي لبيانات النموذج لنتلفاي
+        function notifyNetlify(name, event, lang) {
+            if (!name) return;
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    "form-name": "card-usage",
+                    "user-name": name,
+                    "event-type": event,
+                    "language": lang
+                }).toString(),
+            }).catch(err => console.log("Netlify submission failed silently"));
+        }
+
         const translations = {
             ar: {
                 mainTitle: "اصنع تهنئتك الخاصة", chooseText: "اختر المناسبة:",
                 dlBtn: "تحميل", shBtn: "مشاركة", homeBtn: "الرئيسية",
                 placeholder: "أدخل الاسم هنا", langBtn: "English",
+                seoFooter: "أداة مجانية من موقع الأصفري لتصميم بطاقات تهنئة إلكترونية باسمك لمختلف المناسبات كرمضان والأعياد، مع إمكانية التحميل والمشاركة الفورية.",
                 events: {
                     ramadan: "🌙 تهنئة رمضان", fitr: "🍬 تهنئة عيد الفطر", adha: "🐑 تهنئة عيد الأضحى",
                     hijri: "🕌 تهنئة العام الهجري", newyear: "🎄 تهنئة رأس السنة", birthday: "🎂 تهنئة عيد ميلاد"
                 }
             },
             en: {
-                mainTitle: "Greeting Maker", chooseText: "Choose Occasion:",
+                mainTitle: "Greeting Maker Pro", chooseText: "Choose Occasion:",
                 dlBtn: "Download", shBtn: "Share", homeBtn: "Home",
                 placeholder: "Enter name", langBtn: "عربي",
+                seoFooter: "Free tool by Asfari.net to design custom greeting cards for Ramadan, Eid, and special occasions with your name.",
                 events: {
                     ramadan: "🌙 Ramadan", fitr: "🍬 Eid Fitr", adha: "🐑 Eid Adha",
-                    hijri: "🕌 New year Hijri", newyear: "🎄 New Year", birthday: "🎂 Birthday"
+                    hijri: "🕌 New Hijri Year", newyear: "🎄 New Year", birthday: "🎂 Birthday"
                 }
             }
         };
 
+        // تم تعديل قيم y لتتناسب مع الإطارات الذهبية في صورك بدقة
         const configs = {
-            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
-            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
-            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.72, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.945, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.88, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
             hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
             newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
-            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.92, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'أتمنى لك عيد ميلاد سعيد 🎂' }
+            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.93, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' }
         };
 
         function renderButtons() {
@@ -230,39 +303,39 @@
                 canvas.height = bgImage.height;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(bgImage, 0, 0);
-
                 const config = configs[currentEvent];
-                
                 if (name) {
-                    const maxAllowedWidth = canvas.width * 0.35;
+                    const maxAllowedWidth = canvas.width * 0.45;
                     let fontSize = Math.floor(canvas.width * 0.08); 
-                    ctx.font = `bold ${fontSize}px ${config.font}`;
+                    ctx.font = `900 ${fontSize}px ${config.font}`;
                     ctx.fillStyle = config.color;
                     ctx.textAlign = "center";
-                    
                     let metrics = ctx.measureText(name);
                     while (metrics.width > maxAllowedWidth && fontSize > 10) {
                         fontSize -= 2;
-                        ctx.font = `bold ${fontSize}px ${config.font}`;
+                        ctx.font = `900 ${fontSize}px ${config.font}`;
                         metrics = ctx.measureText(name);
                     }
                     ctx.fillText(name, canvas.width / 2, canvas.height * config.y);
                 }
-
                 const wmSize = Math.floor(canvas.width * 0.025);
-                ctx.font = `bold ${wmSize}px 'Tajawal'`;
+                ctx.font = `500 ${wmSize}px 'Tajawal'`;
                 ctx.textAlign = "left";
                 ctx.fillStyle = (config.wm === 'white') ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.6)";
-                ctx.fillText("asfari.net", 0, canvas.height - (wmSize / 4));
+                ctx.fillText("asfari.net", wmSize, canvas.height - wmSize);
             }
         }
 
         function downloadCard() {
             const name = document.getElementById('nameInput').value.trim();
             if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم" : "Please enter name"); return; }
+            
+            // إرسال الاسم لنتلفاي عند التحميل
+            notifyNetlify(name, currentEvent, currentLang);
+
             const link = document.createElement('a');
             link.download = `Asfari-${currentEvent}.png`;
-            link.href = canvas.toDataURL('image/png');
+            link.href = canvas.toDataURL('image/png', 1.0);
             link.click();
         }
 
@@ -270,38 +343,39 @@
             const name = document.getElementById('nameInput').value.trim();
             if(!name) { alert(currentLang === 'ar' ? "يرجى كتابة الاسم أولاً" : "Please enter name first"); return; }
             
+            // إرسال الاسم لنتلفاي عند المشاركة
+            notifyNetlify(name, currentEvent, currentLang);
+
             const config = configs[currentEvent];
             const dataUrl = canvas.toDataURL('image/png');
             const blob = await (await fetch(dataUrl)).blob();
-            const file = new File([blob], `Asfari-${currentEvent}.png`, { type: blob.type });
-
-            // استخدام Web Share API لمشاركة الصورة كملف
+            const file = new File([blob], `Asfari-${currentEvent}.png`, { type: 'image/png' });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
                         files: [file],
                         title: 'تهنئة من asfari.net',
-                        text: name ? `${config.waMsg} من ${name}` : config.waMsg,
+                        text: `${config.waMsg} من ${name}`,
                     });
-                } catch (err) {
-                    console.log('Share failed:', err);
-                }
+                } catch (err) { console.log('Share canceled'); }
             } else {
-                // حل احتياطي: فتح واتساب بالنص في حال عدم دعم المتصفح لمشاركة الملفات
-                const greeting = name ? `${config.waMsg} من ${name}` : config.waMsg;
-                const text = `${greeting}\nقم بتحميل صورتك من هنا: ${window.location.href}`;
+                const text = `${config.waMsg} من ${name}\nصمم بطاقتك الخاصة عبر: ${window.location.origin}/card`;
                 window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
             }
         }
 
         function toggleLanguage() {
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
-            document.getElementById('mainHtml').setAttribute('lang', currentLang);
-            document.getElementById('mainHtml').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('mainHtml').lang = currentLang;
+            document.getElementById('mainHtml').dir = currentLang === 'ar' ? 'rtl' : 'ltr';
             document.getElementById('mainTitle').innerText = translations[currentLang].mainTitle;
             document.getElementById('chooseText').innerText = translations[currentLang].chooseText;
             document.getElementById('nameInput').placeholder = translations[currentLang].placeholder;
+            document.getElementById('seoFooter').innerText = translations[currentLang].seoFooter;
+            document.getElementById('dlText').innerText = translations[currentLang].dlBtn;
+            document.getElementById('shText').innerText = translations[currentLang].shBtn;
             document.querySelector('.lang-btn').innerText = translations[currentLang].langBtn;
+            document.getElementById('homeBtn').innerHTML = `<i class="fas fa-home"></i> ${translations[currentLang].homeBtn}`;
             renderButtons();
         }
 
