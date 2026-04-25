@@ -8,7 +8,31 @@
     <meta name="description" content="أداة ذكية من موقع الأصفري لإنشاء بطاقات تهنئة لرمضان، الأعياد، والنجاح باسمك الشخصي مجاناً.">
     <link rel="canonical" href="https://asfari.net/card">
     <meta property="og:title" content="صانع التهنئة الذكي | أصفري">
+    <meta property="og:description" content="اصنع بطاقة تهنئتك الخاصة لمختلف المناسبات وشاركها مع من تحب بسهولة عبر موقع الأصفري.">
     <meta property="og:image" content="https://asfari.net/og-image.webp">
+    <meta property="og:url" content="https://asfari.net/card">
+    <meta property="og:type" content="website">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "صانع التهنئة الذكي | asfari.net",
+      "description": "أداة مجانية لتصميم بطاقات تهنئة إلكترونية باسمك الشخصي لرمضان، الأعياد، والمناسبات.",
+      "url": "https://asfari.net/card",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "يحيى أصفري"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -153,17 +177,17 @@
         const bgImage = new Image();
         bgImage.crossOrigin = "anonymous";
 
-        // تم استعادة نِسب الإحداثيات (y) من الكود الأول لضمان الدقة
-       const configs = {
-    ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.667, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
-    fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.920, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
-    adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.913, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
-    hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.783, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
-    newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.760, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
-    birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.93, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' },
-    friday: { bg: 'friday-bg.webp', color: '#2c3e50', y: 0.828, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'جمعة مباركة 🕌' },
-    success: { bg: 'success-bg.webp', color: '#2c3e50', y: 0.772, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' }
-};
+        // الإعدادات المعتمدة والمصححة بناءً على تجاربك الأخيرة
+        const configs = {
+            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.667, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.920, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.913, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.783, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
+            newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.760, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
+            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.93, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' },
+            friday: { bg: 'friday-bg.webp', color: '#2c3e50', y: 0.828, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'جمعة مباركة 🕌' },
+            success: { bg: 'success-bg.webp', color: '#2c3e50', y: 0.772, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' }
+        };
 
         const translations = {
             ar: {
