@@ -269,17 +269,18 @@
         };
 
         const configs = {
-            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.72, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
-            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.945, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
-            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.88, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
-            // إضافة الجمعة والنجاح مع إحداثيات تقريبية (يرجى مراجعة أسماء الصور وتعديل y حسب التصميم)
-            friday: { bg: 'friday-bg.webp', color: '#2c3e50', y: 0.825, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'جمعة مباركة 🕌' },
-            success: { bg: 'success-bg.webp', color: '#2c3e50', y: 0.772, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' },
-            
-            hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
-            newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
-            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.885, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' }
-        };
+    // --- البطاقات القديمة (إحداثياتك الأصلية كما كانت) ---
+    ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.72, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+    fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.945, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+    adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.88, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+    hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
+    newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
+    birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.885, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' },
+
+    // --- البطاقات الجديدة (المقاس الطولي المحدث) ---
+    friday: { bg: 'friday-bg.jpg', color: '#2c3e50', y: 0.825, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'جمعة مباركة 🕌' },
+    success: { bg: 'success-bg.jpg', color: '#2c3e50', y: 0.772, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' }
+};
 
         function renderButtons() {
             const grid = document.getElementById('eventGrid');
