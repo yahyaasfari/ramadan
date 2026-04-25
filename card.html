@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>صانع التهنئة الذكي | asfari.net</title>
     
-    <meta name="description" content="أداة ذكية من موقع الأصفري لإنشاء بطاقات تهنئة لرمضان، عيد الفطر، والأعياد والمناسبات المختلفة باسمك الشخصي مجاناً.">
+    <meta name="description" content="أداة ذكية من موقع الأصفري لإنشاء بطاقات تهنئة لرمضان، الأعياد، والنجاح باسمك الشخصي مجاناً.">
     <link rel="canonical" href="https://asfari.net/card">
-    
+    <meta property="og:title" content="صانع التهنئة الذكي | أصفري">
+    <meta property="og:image" content="https://asfari.net/og-image.webp">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
@@ -36,94 +38,58 @@
         }
         
         header { 
-            width: 100%; 
-            max-width: 600px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 25px; 
-            padding: 10px;
+            width: 100%; max-width: 600px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 25px; padding: 10px;
         }
 
         .nav-links { display: flex; gap: 10px; align-items: center; }
         
         .home-btn { 
-            background: var(--glass-bg); 
-            border: 1px solid var(--glass-border); 
-            color: white; 
-            padding: 8px 18px; 
-            border-radius: 15px; 
-            text-decoration: none; 
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: var(--glass-bg); border: 1px solid var(--glass-border); 
+            color: white; padding: 8px 18px; border-radius: 15px; 
+            text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
             backdrop-filter: blur(5px);
         }
 
         .lang-btn { 
-            background: transparent; 
-            border: 1px solid var(--secondary-turquoise); 
-            color: var(--secondary-turquoise); 
-            padding: 7px 18px; 
-            border-radius: 15px; 
-            cursor: pointer; 
-            font-size: 0.85rem;
-            font-weight: 800;
+            background: transparent; border: 1px solid var(--secondary-turquoise); 
+            color: var(--secondary-turquoise); padding: 7px 18px; border-radius: 15px; 
+            cursor: pointer; font-size: 0.85rem; font-weight: 800;
         }
 
         h1 { 
-            margin: 10px 0 25px; 
-            font-weight: 900; 
-            font-size: 2.2rem; 
+            margin: 10px 0 25px; font-weight: 900; font-size: 2.2rem; 
             background: linear-gradient(135deg, #fff, var(--secondary-turquoise));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
         }
 
         .main-container { 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); 
-            padding: 30px; 
-            border-radius: 35px; 
-            width: 100%; 
-            max-width: 500px; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4); 
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); padding: 30px; border-radius: 35px; 
+            width: 100%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); 
         }
         
         input { 
-            width: 100%; 
-            padding: 18px; 
-            border-radius: 20px; 
-            border: 1px solid var(--glass-border);
-            text-align: center; 
-            font-size: 1.2rem; 
-            margin-bottom: 25px; 
-            background: rgba(255,255,255,0.95); 
-            color: #1e293b; 
-            font-weight: 800; 
+            width: 100%; padding: 18px; border-radius: 20px; border: 1px solid var(--glass-border);
+            text-align: center; font-size: 1.2rem; margin-bottom: 25px; 
+            background: rgba(255,255,255,0.95); color: #1e293b; font-weight: 800; 
         }
+
+        input:focus { outline: none; border-color: var(--secondary-turquoise); transform: translateY(-2px); }
 
         .event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
         
         .event-btn { 
-            padding: 14px; 
-            border-radius: 18px; 
-            border: 1px solid var(--glass-border); 
-            background: rgba(255,255,255,0.03); 
-            color: #fff; 
-            cursor: pointer; 
-            font-size: 0.85em; 
+            padding: 14px; border-radius: 18px; border: 1px solid var(--glass-border); 
+            background: rgba(255,255,255,0.03); color: #fff; cursor: pointer; font-size: 0.85em; 
         }
 
         .event-btn.active { 
             background: linear-gradient(135deg, var(--primary-purple), var(--secondary-turquoise)); 
-            font-weight: 800; 
-            transform: scale(1.05);
-            border: none;
+            font-weight: 800; transform: scale(1.05); border: none;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
         }
 
         .action-btns { display: flex; gap: 12px; width: 100%; }
@@ -136,8 +102,13 @@
         #dlBtn { background: #27ae60; }
         #shBtn { background: #25D366; }
 
-        footer { margin-top: 40px; font-size: 0.85rem; color: rgba(255,255,255,0.4); padding: 0 20px; }
+        footer { margin-top: 40px; font-size: 0.85rem; color: rgba(255,255,255,0.4); padding: 0 20px; line-height: 1.8; }
         #cardCanvas { display: none; }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .main-container { padding: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -153,14 +124,14 @@
             <a href="/" class="home-btn" id="homeBtn"><i class="fas fa-home"></i> الرئيسية</a>
             <button class="lang-btn" onclick="toggleLanguage()">English</button>
         </div>
-        <span style="font-weight: 800; color: var(--secondary-turquoise);">asfari.net</span>
+        <span style="font-weight: 800; color: var(--secondary-turquoise); letter-spacing: 1px;">asfari.net</span>
     </header>
 
     <h1 id="mainTitle">اصنع تهنئتك الخاصة</h1>
 
     <div class="main-container">
         <input type="text" id="nameInput" placeholder="أدخل الاسم هنا" oninput="updateLiveView()">
-        <p id="chooseText" style="margin-bottom: 15px; font-size: 0.9em; opacity: 0.8;">اختر المناسبة:</p>
+        <p id="chooseText" style="margin-bottom: 15px; font-weight: 300; font-size: 0.95em; opacity: 0.8;">اختر المناسبة:</p>
         <div class="event-grid" id="eventGrid"></div>
         <div class="action-btns">
             <button id="dlBtn" onclick="downloadCard()"><i class="fas fa-download"></i> <span id="dlText">تحميل</span></button>
@@ -182,15 +153,14 @@
         const bgImage = new Image();
         bgImage.crossOrigin = "anonymous";
 
-        // إعدادات البطاقات - تمت العودة لإحداثياتك الأصلية بدقة
+        // تم استعادة نِسب الإحداثيات (y) من الكود الأول لضمان الدقة
         const configs = {
-            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.72, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
-            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.945, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
-            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.88, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
+            ramadan: { bg: 'ramadan-bg.webp', color: '#2c3e50', y: 0.669, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'رمضان مبارك 🌙' },
+            fitr: { bg: 'eid-fitr.webp', color: '#ffffff', y: 0.92, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عيدكم مبارك 🍬' },
+            adha: { bg: 'eid-adha.webp', color: '#E5B49E', y: 0.90, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'أضحى مبارك 🐑' },
             hijri: { bg: 'hijri.webp', color: '#ffffff', y: 0.78, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام هجري مبارك 🕌' },
             newyear: { bg: 'new-year.webp', color: '#ffffff', y: 0.74, font: "'Cairo', sans-serif", wm: 'white', waMsg: 'عام جديد سعيد 🎄' },
-            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.885, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' },
-            // البطاقات الجديدة (طولية)
+            birthday: { bg: 'birthday.webp', color: '#2c3e50', y: 0.93, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'عيد ميلاد سعيد 🎂' },
             friday: { bg: 'friday-bg.jpg', color: '#2c3e50', y: 0.825, font: "'Cairo', sans-serif", wm: 'black', waMsg: 'جمعة مباركة 🕌' },
             success: { bg: 'success-bg.jpg', color: '#2c3e50', y: 0.772, font: "'Tajawal', sans-serif", wm: 'black', waMsg: 'مبارك النجاح 🎓' }
         };
