@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقياس أداء الشبكة | Asfari.net</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-purple: #6c5ce7;
+            --accent-turquoise: #00cec9;
+            --dark-bg: #0a0a12;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 206, 201, 0.1) 0%, transparent 40%);
+            color: #ffffff;
+            font-family: 'Tajawal', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 50px 30px;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-weight: 800; font-size: 1.8rem; margin-bottom: 5px; }
+        .sub-text { font-weight: 300; color: var(--accent-turquoise); font-size: 0.9rem; margin-bottom: 40px; display: block; }
+
+        /* منطقة العداد الرئيسي */
+        .gauge-wrapper {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .main-speed {
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, #fff, var(--accent-turquoise));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .unit { font-size: 1.2rem; color: #555; display: block; margin-top: 5px; letter-spacing: 2px; }
+
+        /* نتائج الفحص */
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 15px;
+        }
+
+        .label { font-size: 0.75rem; color: #aaa; margin-bottom: 5px; display: block; }
+        .val { font-size: 1.3rem; font-weight: 800; }
+        .val.dl { color: var(--accent-turquoise); }
+        .val.ul { color: var(--primary-purple); }
+
+        /* الزر */
+        .btn-test {
+            background: linear-gradient(135deg, var(--primary-purple), #8e44ad);
+            color: white;
+            border: none;
+            padding: 20px;
+            width: 100%;
+            border-radius: 50px;
+            font-family: 'Tajawal';
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-test:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(108, 92, 231, 0.5); }
+        .btn-test:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* صندوق التحليل */
+        #insightArea {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.02);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #b2bec3;
+            min-height: 60px;
+        }
+
+        .footer-branding { margin-top: 25px; font-size: 0.7rem; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>تحليل جودة الاتصال</h1>
+    <span class="sub-text">قياس أداء الإنترنت مقدم من موقع الأصفري</span>
+
+    <div class="gauge-wrapper">
+        <span id="liveVal" class="main-speed">0</span>
+        <span class="unit">Mbps</span>
+    </div>
+
+    <div class="results-grid">
+        <div class="result-item">
+            <span class="label">⬇ متوسط التنزيل</span>
+            <span class="val dl" id="dlFinal">0.0</span>
+        </div>
+        <div class="result-item">
+            <span class="label">⬆ سرعة الرفع (تقديري)</span>
+            <span class="val ul" id="ulFinal">0.0</span>
+        </div>
+    </div>
+
+    <button id="startBtn" class="btn-test" onclick="runAsfariTest()">بدء الفحص الشامل</button>
+
+    <div id="insightArea">جاهز لبدء فحص 5 مراحل لقياس دقة واتزان اتصالك..</div>
+
+    <div class="footer-branding">Asfari Digital Engine v1.1</div>
+</div>
+
+<script>
+    // الإعدادات - يرجى التأكد من وجود الصورة في هذا المسار على موقعك
+    const TEST_URL = "https://asfari.net/og-preview.webp";
+    const ITERATIONS = 5;
+
+    async function runAsfariTest() {
+        const btn = document.getElementById('startBtn');
+        const live = document.getElementById('liveVal');
+        const dlFinal = document.getElementById('dlFinal');
+        const ulFinal = document.getElementById('ulFinal');
+        const insight = document.getElementById('insightArea');
+
+        btn.disabled = true;
+        let totalSpeed = 0;
+        let successCount = 0;
+
+        try {
+            for (let i = 1; i <= ITERATIONS; i++) {
+                btn.innerText = `جاري الفحص (المرحلة ${i}/${ITERATIONS})`;
+                insight.innerText = `يتم الآن تحميل الملف وقياس استجابة السيرفر في المرحلة ${i}...`;
+
+                const start = performance.now();
+                // إضافة t لمنع الكاش نهائياً
+                const response = await fetch(TEST_URL + "?iteration=" + i + "&t=" + start);
+                
+                if (!response.ok) throw new Error();
+
+                const blob = await response.blob();
+                const end = performance.now();
+
+                const duration = (end - start) / 1000;
+                const mbps = (blob.size * 8) / (duration * 1024 * 1024);
+
+                totalSpeed += mbps;
+                successCount++;
+                live.innerText = mbps.toFixed(1);
+            }
+
+            const avgSpeed = (totalSpeed / successCount).toFixed(2);
+            const estUpload = (avgSpeed * 0.35).toFixed(2); // تقدير سرعة الرفع بناءً على التنزيل
+
+            live.innerText = avgSpeed;
+            dlFinal.innerText = avgSpeed;
+            ulFinal.innerText = estUpload;
+
+            // التحليل النهائي بصيغة المؤنث
+            if (avgSpeed > 50) {
+                insight.innerHTML = "✅ <strong>أداء احترافي:</strong> اتصالك ممتاز ومثالي لرفع وتحميل مشاريع المونتاج الضخمة بدون عوائق.";
+            } else if (avgSpeed > 20) {
+                insight.innerHTML = "⚠️ <strong>أداء جيد:</strong> السرعة مناسبة للتصفح، ولكن قد تحتاج وقتاً إضافياً عند رفع ملفات 4K.";
+            } else {
+                insight.innerHTML = "ℹ️ <strong>تنبيه:</strong> السرعة منخفضة حالياً، أنصحك بالتأكد من استقرار الشبكة لضمان أفضل تجربة معاينة.";
+            }
+
+        } catch (error) {
+            insight.innerHTML = "<span style='color:#ff7675;'>خطأ: تعذر الوصول لملف الفحص. يرجى التأكد من رفع og-preview.webp للمسار الرئيسي.</span>";
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "إعادة الفحص الشامل";
+        }
+    }
+</script>
+
+</body>
+</html>
