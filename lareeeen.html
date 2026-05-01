@@ -8,43 +8,53 @@
         body { 
             text-align: center; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f8f9fa;
+            background-color: #f0f7ff;
             padding: 20px; 
             direction: ltr;
         }
-        h1 { color: #2c3e50; margin-bottom: 40px; font-size: 2.5rem; }
+        h1 { color: #2c3e50; margin-bottom: 10px; font-size: 2.5rem; }
         
+        /* نظام النقاط */
+        .score-board {
+            background: #fff;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border: 3px solid #f1c40f;
+        }
+        .score-board span { font-size: 1.5rem; font-weight: bold; color: #f39c12; }
+
         .container { 
             display: flex; 
             flex-wrap: wrap; 
             justify-content: center; 
-            gap: 15px; 
-            max-width: 900px; 
+            gap: 12px; 
+            max-width: 1000px; 
             margin: 0 auto; 
         }
         
-        /* تصميم البطاقات الملونة (بدون صور) */
         .word-card { 
-            padding: 30px 20px; 
-            border-radius: 20px; 
+            padding: 20px 10px; 
+            border-radius: 15px; 
             cursor: pointer;
-            transition: transform 0.2s;
-            width: 140px;
+            transition: all 0.3s;
+            width: 120px;
             color: white;
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
         }
-        .word-card:hover { transform: scale(1.1); }
-        .word-card h2 { margin: 0; font-size: 1.8rem; }
+        .word-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+        .word-card h2 { margin: 0; font-size: 1.2rem; text-transform: capitalize; }
 
-        /* ألوان مختلفة للبطاقات */
-        .bg-1 { background-color: #ff6b6b; }
-        .bg-2 { background-color: #4ecdc4; }
-        .bg-3 { background-color: #45b7d1; }
-        .bg-4 { background-color: #96ceb4; }
-        .bg-5 { background-color: #ffeead; color: #333; }
+        .bg-0 { background-color: #ff6b6b; }
+        .bg-1 { background-color: #4ecdc4; }
+        .bg-2 { background-color: #45b7d1; }
+        .bg-3 { background-color: #96ceb4; }
+        .bg-4 { background-color: #f39c12; }
 
-        /* قسم الإملاء */
         .spelling-section {
             margin-top: 50px;
             padding: 30px;
@@ -53,91 +63,109 @@
             display: inline-block;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             border: 2px solid #eee;
+            width: 95%;
+            max-width: 600px;
         }
         .spelling-row { 
-            margin: 20px 0; 
+            margin: 15px 0; 
             display: flex; 
             align-items: center; 
-            justify-content: center; 
+            justify-content: space-between; 
             gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f1f1;
         }
         
         input { 
-            padding: 12px; 
-            font-size: 1.2rem; 
+            padding: 10px; 
+            font-size: 1.1rem; 
             border: 2px solid #ddd; 
             border-radius: 10px; 
-            width: 160px; 
+            width: 140px; 
             text-align: center;
+            outline: none;
         }
-        input.correct { border-color: #2ecc71; background-color: #e8f5e9; }
+        input.correct { border-color: #2ecc71; background-color: #e8f5e9; pointer-events: none; }
         input.incorrect { border-color: #e74c3c; background-color: #fdeaea; animation: shake 0.3s; }
 
         button {
-            padding: 12px 20px;
-            font-size: 1rem;
+            padding: 10px 15px;
+            font-size: 0.9rem;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
+            transition: background 0.2s;
         }
         .btn-listen { background-color: #3498db; color: white; }
         .btn-check { background-color: #f1c40f; color: #333; }
+        .btn-check:disabled { background-color: #ddd; cursor: not-allowed; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
+
+        /* احتفال النجاح */
+        .confetti {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            display: none;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Welcome, Lareen! 👋</h1>
-
-    <div class="container">
-        <div class="word-card bg-1" onclick="speak('Seep')"><h2>Seep</h2></div>
-        <div class="word-card bg-2" onclick="speak('Coral')"><h2>Coral</h2></div>
-        <div class="word-card bg-3" onclick="speak('Mango')"><h2>Mango</h2></div>
-        <div class="word-card bg-4" onclick="speak('Sweet')"><h2>Sweet</h2></div>
-        <div class="word-card bg-5" onclick="speak('Forest')"><h2>Forest</h2></div>
+    <h1>Great Job, Lareen! 🌟</h1>
+    
+    <div class="score-board">
+        <span>Stars: <span id="star-count">0</span> ⭐</span>
     </div>
+
+    <div class="container" id="cards-container"></div>
 
     <div class="spelling-section">
-        <h3>⌨️ Spelling Practice</h3>
-        
-        <div class="spelling-row">
-            <button class="btn-listen" onclick="speak('Seep')">🔊 Listen</button>
-            <input type="text" id="in-Seep" placeholder="...">
-            <button class="btn-check" onclick="check('Seep')">Check</button>
-        </div>
-
-        <div class="spelling-row">
-            <button class="btn-listen" onclick="speak('Coral')">🔊 Listen</button>
-            <input type="text" id="in-Coral" placeholder="...">
-            <button class="btn-check" onclick="check('Coral')">Check</button>
-        </div>
-
-        <div class="spelling-row">
-            <button class="btn-listen" onclick="speak('Mango')">🔊 Listen</button>
-            <input type="text" id="in-Mango" placeholder="...">
-            <button class="btn-check" onclick="check('Mango')">Check</button>
-        </div>
-
-        <div class="spelling-row">
-            <button class="btn-listen" onclick="speak('Sweet')">🔊 Listen</button>
-            <input type="text" id="in-Sweet" placeholder="...">
-            <button class="btn-check" onclick="check('Sweet')">Check</button>
-        </div>
-
-        <div class="spelling-row">
-            <button class="btn-listen" onclick="speak('Forest')">🔊 Listen</button>
-            <input type="text" id="in-Forest" placeholder="...">
-            <button class="btn-check" onclick="check('Forest')">Check</button>
-        </div>
+        <h3>⌨️ Spell the words</h3>
+        <div id="spelling-rows-container"></div>
     </div>
 
+    <div id="celebration" class="confetti">🌈✨</div>
+
     <script>
+        const words = [
+            "bait", "forest", "coral", "focus", "moment", "signal", 
+            "before", "kitchen", "seep", "faint", "goats", "ahead", 
+            "remind", "jangle", "ajar", "answer", "circus", "sugar", 
+            "sweet", "fruit", "woozy", "mango", "ahoy", "silver", "wheels"
+        ];
+
+        let stars = 0;
+        const cardsContainer = document.getElementById('cards-container');
+        const rowsContainer = document.getElementById('spelling-rows-container');
+        const starDisplay = document.getElementById('star-count');
+
+        words.forEach((word, index) => {
+            const colorClass = `bg-${index % 5}`;
+            cardsContainer.innerHTML += `
+                <div class="word-card ${colorClass}" onclick="speak('${word}')">
+                    <h2>${word}</h2>
+                </div>
+            `;
+
+            rowsContainer.innerHTML += `
+                <div class="spelling-row">
+                    <button class="btn-listen" onclick="speak('${word}')">🔊 Listen</button>
+                    <input type="text" id="in-${word}" placeholder="Type here...">
+                    <button class="btn-check" id="btn-${word}" onclick="check('${word}')">Check</button>
+                </div>
+            `;
+        });
+
         function speak(word) {
             window.speechSynthesis.cancel();
             let msg = new SpeechSynthesisUtterance(word);
@@ -148,25 +176,37 @@
 
         function check(word) {
             let input = document.getElementById('in-' + word);
+            let btn = document.getElementById('btn-' + word);
             let val = input.value.trim().toLowerCase();
             
             if (val === word.toLowerCase()) {
                 input.className = 'correct';
-                speak("Well done Lareen!");
+                btn.disabled = true;
+                stars++;
+                starDisplay.innerText = stars;
+                
+                // صوت النجاح والاحتفال
+                speak("Excellent, Lareen!");
+                showCelebration();
             } else {
                 input.className = 'incorrect';
                 speak("Try again");
-                setTimeout(() => { input.className = ''; }, 1000);
+                setTimeout(() => { if(input.className !== 'correct') input.className = ''; }, 1000);
             }
         }
 
-        // الترحيب عند التفاعل
+        function showCelebration() {
+            const el = document.getElementById('celebration');
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 1500);
+        }
+
         document.body.addEventListener('click', function() {
             if (!window.welcomed) {
-                speak("Hello Lareen, let's practice your words!");
+                speak("Hello Lareen, let's win some stars today!");
                 window.welcomed = true;
             }
-        }, { once: false });
+        }, { once: true });
     </script>
 
 </body>
