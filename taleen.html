@@ -8,12 +8,11 @@
         body { 
             text-align: center; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #fff9fe; /* خلفية زهرية فاتحة لتالين */
+            background-color: #fff9fe; 
             padding: 20px; 
             direction: ltr;
         }
 
-        /* زر الرجوع المخصص لتالين */
         .back-btn {
             position: absolute;
             top: 20px;
@@ -37,7 +36,6 @@
 
         h1 { color: #6a1b9a; margin-top: 50px; margin-bottom: 10px; font-size: 2.5rem; }
         
-        /* نظام النقاط لتالين */
         .score-board {
             background: #fff;
             padding: 15px 25px;
@@ -71,7 +69,6 @@
         .word-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(106, 27, 154, 0.2); }
         .word-card h2 { margin: 0; font-size: 1.1rem; text-transform: capitalize; }
 
-        /* ألوان جذابة لتالين */
         .c0 { background-color: #ff8a65; }
         .c1 { background-color: #ba68c8; }
         .c2 { background-color: #4db6ac; }
@@ -108,6 +105,7 @@
             text-align: center;
             outline: none;
         }
+        input:focus { border-color: #ba68c8; }
         input.correct { border-color: #2ecc71; background-color: #e8f5e9; pointer-events: none; }
         input.incorrect { border-color: #e74c3c; background-color: #fdeaea; animation: shake 0.3s; }
 
@@ -143,7 +141,6 @@
 </head>
 <body>
 
-    <!-- زر الرجوع إلى صفحة both.html -->
     <a href="both.html" class="back-btn">⬅ Back</a>
 
     <h1>Welcome, Taleen! 👋✨</h1>
@@ -162,21 +159,21 @@
     <div id="celebration" class="celebration-pop">💖🎀🌸</div>
 
     <script>
-        // كلمات تالين الـ 25
         const words = [
           "bait", "forest", "coral", "focus", "moment", "signal",
-
-            "before", "kitchen", "seep", "faint", "goats", "ahead",
-
-            "remind", "jangle", "ajar", "answer", "circus", "sugar",
-
-            "sweet", "fruit", "woozy", "mango", "ahoy", "silver", "wheels"
+          "before", "kitchen", "seep", "faint", "goats", "ahead",
+          "remind", "jangle", "ajar", "answer", "circus", "sugar",
+          "sweet", "fruit", "woozy", "mango", "ahoy", "silver", "wheels"
         ];
 
-        let stars = 0;
+        // استعادة نجوم تالين من الذاكرة
+        let stars = parseInt(localStorage.getItem('taleenStars')) || 0;
+        
         const cardsContainer = document.getElementById('cards-container');
         const rowsContainer = document.getElementById('spelling-rows-container');
         const starDisplay = document.getElementById('star-count');
+
+        starDisplay.innerText = stars;
 
         words.forEach((word, index) => {
             const colorClass = `c${index % 5}`;
@@ -189,7 +186,8 @@
             rowsContainer.innerHTML += `
                 <div class="spelling-row">
                     <button class="btn-listen" onclick="speak('${word}')">🔊 Listen</button>
-                    <input type="text" id="in-${word}" placeholder="...">
+                    <!-- دعم زر Enter لتالين أيضاً -->
+                    <input type="text" id="in-${word}" placeholder="..." onkeypress="if(event.key==='Enter') check('${word}')">
                     <button class="btn-check" id="btn-${word}" onclick="check('${word}')">Check</button>
                 </div>
             `;
@@ -199,7 +197,7 @@
             window.speechSynthesis.cancel();
             let msg = new SpeechSynthesisUtterance(word);
             msg.lang = 'en-US';
-            msg.rate = 0.8; 
+            msg.rate = 0.7; 
             window.speechSynthesis.speak(msg);
         }
 
@@ -213,6 +211,9 @@
                 btn.disabled = true;
                 stars++;
                 starDisplay.innerText = stars;
+                
+                // حفظ نجوم تالين
+                localStorage.setItem('taleenStars', stars);
                 
                 speak("Excellent Taleen! You are a star!");
                 showCelebration();
@@ -236,6 +237,5 @@
             }
         }, { once: true });
     </script>
-
 </body>
 </html>
