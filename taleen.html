@@ -8,7 +8,7 @@
         body { 
             text-align: center; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #fff9fe; /* لون مائل للزهري الفاتح */
+            background-color: #fff9fe; /* خلفية زهرية فاتحة لتالين */
             padding: 20px; 
             direction: ltr;
         }
@@ -48,7 +48,7 @@
         .word-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(106, 27, 154, 0.2); }
         .word-card h2 { margin: 0; font-size: 1.1rem; text-transform: capitalize; }
 
-        /* ألوان منوعة وجذابة لتالين */
+        /* ألوان جذابة لتالين */
         .c0 { background-color: #ff8a65; }
         .c1 { background-color: #ba68c8; }
         .c2 { background-color: #4db6ac; }
@@ -136,7 +136,7 @@
     <div id="celebration" class="celebration-pop">💖🎀🌸</div>
 
     <script>
-        // قائمة الكلمات الـ 25 الجديدة لتالين
+        // كلمات تالين الـ 25
         const words = [
             "faraway", "mermaid", "shouting", "avocado", "formation", "asleep", 
             "elephant", "garbage", "breakfast", "leather", "weather", "brilliant", 
@@ -149,7 +149,6 @@
         const rowsContainer = document.getElementById('spelling-rows-container');
         const starDisplay = document.getElementById('star-count');
 
-        // بناء الصفحة تلقائياً
         words.forEach((word, index) => {
             const colorClass = `c${index % 5}`;
             cardsContainer.innerHTML += `
@@ -186,11 +185,11 @@
                 stars++;
                 starDisplay.innerText = stars;
                 
-                speak("Excellent Taleen!");
+                speak("Excellent Taleen! You are a star!");
                 showCelebration();
             } else {
                 input.className = 'incorrect';
-                speak("Try again Taleen");
+                speak("Try again Taleen, you can do it");
                 setTimeout(() => { if(input.className !== 'correct') input.className = ''; }, 1000);
             }
         }
