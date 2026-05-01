@@ -8,13 +8,13 @@
         body { 
             text-align: center; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f7ff;
+            background-color: #f0f7ff; /* خلفية مريحة لـ لارين */
             padding: 20px; 
             direction: ltr;
         }
         h1 { color: #2c3e50; margin-bottom: 10px; font-size: 2.5rem; }
         
-        /* نظام النقاط */
+        /* نظام النقاط لـ لارين */
         .score-board {
             background: #fff;
             padding: 15px 25px;
@@ -44,11 +44,11 @@
             color: white;
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: relative;
         }
         .word-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
         .word-card h2 { margin: 0; font-size: 1.2rem; text-transform: capitalize; }
 
+        /* ألوان لارين المميزة */
         .bg-0 { background-color: #ff6b6b; }
         .bg-1 { background-color: #4ecdc4; }
         .bg-2 { background-color: #45b7d1; }
@@ -95,7 +95,6 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s;
         }
         .btn-listen { background-color: #3498db; color: white; }
         .btn-check { background-color: #f1c40f; color: #333; }
@@ -107,7 +106,6 @@
             75% { transform: translateX(5px); }
         }
 
-        /* احتفال النجاح */
         .confetti {
             position: fixed;
             top: 50%;
@@ -116,15 +114,16 @@
             font-size: 5rem;
             display: none;
             z-index: 100;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>Great Job, Lareen! 🌟</h1>
+    <h1>Great Job, Lareen! 👋🌟</h1>
     
     <div class="score-board">
-        <span>Stars: <span id="star-count">0</span> ⭐</span>
+        <span>Lareen's Stars: <span id="star-count">0</span> ⭐</span>
     </div>
 
     <div class="container" id="cards-container"></div>
@@ -134,9 +133,10 @@
         <div id="spelling-rows-container"></div>
     </div>
 
-    <div id="celebration" class="confetti">🌈✨</div>
+    <div id="celebration" class="confetti">🌈✨🏆</div>
 
     <script>
+        // كلمات لارين الـ 25
         const words = [
             "bait", "forest", "coral", "focus", "moment", "signal", 
             "before", "kitchen", "seep", "faint", "goats", "ahead", 
@@ -160,7 +160,7 @@
             rowsContainer.innerHTML += `
                 <div class="spelling-row">
                     <button class="btn-listen" onclick="speak('${word}')">🔊 Listen</button>
-                    <input type="text" id="in-${word}" placeholder="Type here...">
+                    <input type="text" id="in-${word}" placeholder="...">
                     <button class="btn-check" id="btn-${word}" onclick="check('${word}')">Check</button>
                 </div>
             `;
@@ -185,12 +185,11 @@
                 stars++;
                 starDisplay.innerText = stars;
                 
-                // صوت النجاح والاحتفال
-                speak("Excellent, Lareen!");
+                speak("Excellent, Lareen! Well done!");
                 showCelebration();
             } else {
                 input.className = 'incorrect';
-                speak("Try again");
+                speak("Try again Lareen");
                 setTimeout(() => { if(input.className !== 'correct') input.className = ''; }, 1000);
             }
         }
@@ -203,7 +202,7 @@
 
         document.body.addEventListener('click', function() {
             if (!window.welcomed) {
-                speak("Hello Lareen, let's win some stars today!");
+                speak("Hello Lareen, let's practice your words and win some stars!");
                 window.welcomed = true;
             }
         }, { once: true });
