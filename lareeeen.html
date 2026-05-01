@@ -8,13 +8,35 @@
         body { 
             text-align: center; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f7ff; /* خلفية مريحة لـ لارين */
+            background-color: #f0f7ff; 
             padding: 20px; 
             direction: ltr;
         }
-        h1 { color: #2c3e50; margin-bottom: 10px; font-size: 2.5rem; }
         
-        /* نظام النقاط لـ لارين */
+        /* زر الرجوع */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        h1 { color: #2c3e50; margin-top: 50px; margin-bottom: 10px; font-size: 2.5rem; }
+        
         .score-board {
             background: #fff;
             padding: 15px 25px;
@@ -48,7 +70,6 @@
         .word-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
         .word-card h2 { margin: 0; font-size: 1.2rem; text-transform: capitalize; }
 
-        /* ألوان لارين المميزة */
         .bg-0 { background-color: #ff6b6b; }
         .bg-1 { background-color: #4ecdc4; }
         .bg-2 { background-color: #45b7d1; }
@@ -120,6 +141,9 @@
 </head>
 <body>
 
+    <!-- زر الرجوع إلى صفحة both.html -->
+    <a href="both.html" class="back-btn">⬅ Back</a>
+
     <h1>Great Job, Lareen! 👋🌟</h1>
     
     <div class="score-board">
@@ -138,7 +162,7 @@
     <script>
         // كلمات لارين الـ 25
         const words = [
-        "faraway", "mermaid", "shouting", "avocado", "formation", "asleep", 
+            "faraway", "mermaid", "shouting", "avocado", "formation", "asleep", 
             "elephant", "garbage", "breakfast", "leather", "weather", "brilliant", 
             "wooden", "valiant", "surprise", "countess", "eaten", "raise", 
             "february", "chocolate", "leaning", "unicorn", "cartwheel", "nervous", "acrobat"
