@@ -13,7 +13,6 @@
             direction: ltr;
         }
         
-        /* زر الرجوع */
         .back-btn {
             position: absolute;
             top: 20px;
@@ -68,7 +67,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .word-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
-        .word-card h2 { margin: 0; font-size: 1.2rem; text-transform: capitalize; }
+        .word-card h2 { margin: 0; font-size: 1.1rem; text-transform: capitalize; }
 
         .bg-0 { background-color: #ff6b6b; }
         .bg-1 { background-color: #4ecdc4; }
@@ -102,7 +101,7 @@
             font-size: 1.1rem; 
             border: 2px solid #ddd; 
             border-radius: 10px; 
-            width: 140px; 
+            width: 150px; 
             text-align: center;
             outline: none;
         }
@@ -121,27 +120,12 @@
         .btn-check { background-color: #f1c40f; color: #333; }
         .btn-check:disabled { background-color: #ddd; cursor: not-allowed; }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .confetti {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 5rem;
-            display: none;
-            z-index: 100;
-            pointer-events: none;
-        }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .confetti { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 5rem; display: none; z-index: 100; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <!-- زر الرجوع إلى صفحة both.html -->
     <a href="both.html" class="back-btn">⬅ Back</a>
 
     <h1>Great Job, Lareen! 👋🌟</h1>
@@ -160,18 +144,20 @@
     <div id="celebration" class="confetti">🌈✨🏆</div>
 
     <script>
-        // كلمات لارين الـ 25
+        // كلمات لارين الـ 25 الصحيحة
         const words = [
-            "faraway", "mermaid", "shouting", "avocado", "formation", "asleep", 
-            "elephant", "garbage", "breakfast", "leather", "weather", "brilliant", 
-            "wooden", "valiant", "surprise", "countess", "eaten", "raise", 
-            "february", "chocolate", "leaning", "unicorn", "cartwheel", "nervous", "acrobat"
+            "Faraway", "mermaid", "shouting", "avocado", "formation", "asleep", 
+            "elephant", "Garbage", "breakfast", "leather", "weather", "brilliant", 
+            "wooden", "valiant", "Surprise", "countess", "eaten", "raise", 
+            "february", "chocolate", "Leaning", "unicorn", "cartwheel", "nervous", "acrobat"
         ];
 
-        let stars = 0;
+        let stars = parseInt(localStorage.getItem('lareenStars')) || 0;
         const cardsContainer = document.getElementById('cards-container');
         const rowsContainer = document.getElementById('spelling-rows-container');
         const starDisplay = document.getElementById('star-count');
+
+        starDisplay.innerText = stars;
 
         words.forEach((word, index) => {
             const colorClass = `bg-${index % 5}`;
@@ -184,7 +170,7 @@
             rowsContainer.innerHTML += `
                 <div class="spelling-row">
                     <button class="btn-listen" onclick="speak('${word}')">🔊 Listen</button>
-                    <input type="text" id="in-${word}" placeholder="...">
+                    <input type="text" id="in-${word}" placeholder="..." onkeypress="if(event.key==='Enter') check('${word}')">
                     <button class="btn-check" id="btn-${word}" onclick="check('${word}')">Check</button>
                 </div>
             `;
@@ -194,7 +180,7 @@
             window.speechSynthesis.cancel();
             let msg = new SpeechSynthesisUtterance(word);
             msg.lang = 'en-US';
-            msg.rate = 0.8; 
+            msg.rate = 0.7; 
             window.speechSynthesis.speak(msg);
         }
 
@@ -208,7 +194,7 @@
                 btn.disabled = true;
                 stars++;
                 starDisplay.innerText = stars;
-                
+                localStorage.setItem('lareenStars', stars);
                 speak("Excellent, Lareen! Well done!");
                 showCelebration();
             } else {
@@ -231,6 +217,5 @@
             }
         }, { once: true });
     </script>
-
 </body>
 </html>
