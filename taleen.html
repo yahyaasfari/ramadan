@@ -144,13 +144,13 @@
     <div id="celebration" class="celebration-pop">💖🎀🌸</div>
 
     <script>
-        // القائمة الكاملة المكونة من 50 كلمة كما أرسلتها يا بشمهندس
+        // القائمة المحدثة بالكلمات الـ 25 المرقمة فقط
         const words = [
-            "bait", "forest", "baffling", "search", "coral", "blossoms", "focus", "moment", "triple", "signal", 
-            "dollop", "before", "kitchen", "seep", "faint", "goats", "ahead", "lure", "hollow", "sizzling", 
-            "remind", "jangle", "swampy", "distress", "ajar", "satin", "answer", "minnows", "circus", "sugar", 
-            "sweet", "fruit", "woozy", "señor", "cluster", "spinning", "hoist", "mango", "shimmer", "studded", 
-            "lessons", "basil", "ahoy", "shuffle", "silver", "writing", "awkward", "wheels", "roam", "limbs"
+            "bait", "forest", "coral", "focus", "moment", 
+            "signal", "before", "kitchen", "seep", "faint", 
+            "goats", "ahead", "remind", "jangle", "ajar", 
+            "answer", "circus", "sugar", "sweet", "fruit", 
+            "woozy", "mango", "ahoy", "silver", "wheels"
         ];
 
         let stars = parseInt(localStorage.getItem('taleenStars')) || 0;
@@ -190,8 +190,7 @@
             let btn = document.getElementById('btn-' + word);
             let val = input.value.trim().toLowerCase();
             
-            // التعامل مع كلمة señor لتسهيلها على تالين (تقبل señor أو senor)
-            let isCorrect = (val === word.toLowerCase()) || (word === "señor" && val === "senor");
+            let isCorrect = (val === word.toLowerCase());
 
             if (isCorrect) {
                 input.className = 'correct';
@@ -216,7 +215,7 @@
 
         document.body.addEventListener('click', function() {
             if (!window.welcomed) {
-                speak("Hello Taleen, let's learn your fifty new words today!");
+                speak("Hello Taleen, let's learn your new words!");
                 window.welcomed = true;
             }
         }, { once: true });
